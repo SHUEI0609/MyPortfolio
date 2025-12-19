@@ -1,0 +1,236 @@
+<!DOCTYPE html>
+<html lang="ja">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SHUEI KOMURO | PORTFOLIO</title>
+
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+
+    <!-- Lucide Icons -->
+    <script src="https://unpkg.com/lucide@latest"></script>
+
+    <!-- Custom CSS -->
+    <link rel="stylesheet" href="style.css">
+</head>
+
+<body class="bg-[#F5F5F5] text-black font-sans selection:bg-black selection:text-white overflow-x-hidden">
+
+    <!-- Loading Screen -->
+    <div id="loading-screen"
+        class="fixed inset-0 z-[100] bg-black flex flex-col items-center justify-center text-white transition-transform duration-700 ease-in-out">
+        <div id="loading-progress" class="text-9xl font-black tracking-tighter tabular-nums">0%</div>
+        <div class="mt-4 text-xs font-bold tracking-[0.5em] animate-pulse">LOADING PORTFOLIO</div>
+    </div>
+
+    <!-- Dynamic Background -->
+    <canvas id="bg-canvas" class="fixed inset-0 z-0 pointer-events-none opacity-60"></canvas>
+
+    <!-- Header -->
+    <header
+        class="fixed top-0 left-0 right-0 z-50 flex justify-between items-center px-6 py-6 transition-all duration-300 mix-blend-difference text-white animate-init delay-500">
+        <div class="text-xl font-black tracking-tighter cursor-pointer" onclick="handleBackToHome()">
+            SHUEI<span class="opacity-50">.PF</span>
+        </div>
+        <nav class="hidden md:flex gap-8 text-xs font-bold tracking-widest">
+            <a href="#about" class="hover:opacity-50 transition-opacity cursor-pointer"
+                onclick="smoothScroll(event, 'about')">ABOUT</a>
+            <a href="#projects" class="hover:opacity-50 transition-opacity cursor-pointer"
+                onclick="smoothScroll(event, 'projects')">PROJECTS</a>
+            <a href="#contact" class="hover:opacity-50 transition-opacity cursor-pointer"
+                onclick="smoothScroll(event, 'contact')">CONTACT</a>
+        </nav>
+        <div class="md:hidden">
+            <div class="w-8 h-8 flex flex-col justify-center gap-1.5">
+                <span class="w-full h-0.5 bg-white"></span>
+                <span class="w-full h-0.5 bg-white"></span>
+            </div>
+        </div>
+    </header>
+
+    <!-- Main View -->
+    <main id="main-view" class="relative z-10 transition-opacity duration-500">
+
+        <!-- HERO -->
+        <section
+            class="flex flex-col justify-between pt-24 pb-12 px-6 overflow-hidden min-h-screen border-b-2 border-black">
+            <div class="flex flex-col z-10">
+                <div class="flex items-center gap-4 animate-init delay-200">
+                    <div class="w-2 h-2 bg-black"></div>
+                    <span class="text-xs font-bold tracking-[0.2em]">PORTFOLIO 2026</span>
+                </div>
+                <h1
+                    class="-mt-8 md:-mt-16 text-[15vw] leading-[0.8] font-black tracking-tighter uppercase whitespace-pre-line animate-init delay-400">
+                    BRINGING ART
+                    CLOSER TO YOU.</h1>
+            </div>
+            <div class="flex flex-col md:flex-row justify-between items-end gap-8 z-10">
+                <div
+                    class="text-xl md:text-2xl font-bold leading-relaxed max-w-xl whitespace-pre-line animate-init delay-600">
+                    AI時代の
+                    創造性教育を研究。</div>
+                <div
+                    class="text-[10vw] md:text-6xl font-black opacity-10 md:opacity-100 flex flex-col items-end leading-none animate-init delay-800">
+                    <span>WE ARE</span>
+                    <span>CREATIVE.</span>
+                </div>
+            </div>
+        </section>
+
+        <!-- ABOUT -->
+        <section id="about" class="py-24 px-6">
+            <div
+                class="border-t-2 border-black pt-4 mb-16 flex flex-col md:flex-row md:items-baseline justify-between gap-4 animate-on-scroll opacity-0 translate-y-8 transition-all duration-1000">
+                <div class="text-4xl md:text-8xl font-black tracking-tighter uppercase leading-none">ABOUT ME</div>
+                <div class="text-sm font-bold tracking-widest uppercase md:text-right">私について</div>
+            </div>
+
+            <div class="grid md:grid-cols-2 gap-12 border-b-2 border-black pb-24">
+                <div
+                    class="relative aspect-[3/4] bg-zinc-200 group overflow-hidden flex items-center justify-center animate-on-scroll opacity-0 translate-y-8 transition-all duration-1000">
+                    <span
+                        class="text-9xl font-black text-zinc-300 select-none group-hover:scale-110 transition-transform duration-700">IMG</span>
+                    <div
+                        class="absolute bottom-0 left-0 right-0 p-6 bg-gradient-to-t from-black/80 to-transparent text-white">
+                        <h3 class="text-2xl font-black">SHUEI KOMURO</h3>
+                        <p class="text-xs font-mono opacity-70">ENGINEER / BASSIST</p>
+                    </div>
+                </div>
+                <div class="flex flex-col justify-between">
+                    <div class="space-y-16">
+                        <!-- Biography -->
+                        <div class="animate-on-scroll opacity-0 translate-y-8 transition-all duration-1000 delay-100">
+                            <h4 class="text-xl font-black mb-6 uppercase border-l-4 border-black pl-4">Biography</h4>
+                            <div id="history-list" class="space-y-4 max-h-80 overflow-y-auto pr-4 custom-scrollbar">
+                                <!-- History items will be injected by JS -->
+                            </div>
+                        </div>
+                        <!-- Skills -->
+                        <div class="animate-on-scroll opacity-0 translate-y-8 transition-all duration-1000 delay-200">
+                            <h4 class="text-xl font-black mb-6 uppercase border-l-4 border-black pl-4">Skill Set</h4>
+                            <div id="skills-list" class="flex flex-wrap gap-2">
+                                <!-- Skills will be injected by JS -->
+                            </div>
+                        </div>
+                        <!-- Certification -->
+                        <div class="animate-on-scroll opacity-0 translate-y-8 transition-all duration-1000 delay-300">
+                            <h4 class="text-xl font-black mb-6 uppercase border-l-4 border-black pl-4">Certification
+                            </h4>
+                            <div class="text-sm font-medium leading-loose">
+                                <ul class="list-disc list-inside space-y-1">
+                                    <li>Nothing-to-have</li>
+                                    <li>Nothing-to-have</li>
+                                    <li>Nothing-to-have</li>
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- PROJECTS LIST -->
+        <section id="projects" class="py-24 px-6">
+            <div
+                class="border-t-2 border-black pt-4 mb-16 flex flex-col md:flex-row md:items-baseline justify-between gap-4 animate-on-scroll opacity-0 translate-y-8 transition-all duration-1000">
+                <div class="text-4xl md:text-8xl font-black tracking-tighter uppercase leading-none">PROJECT</div>
+                <div class="text-sm font-bold tracking-widest uppercase md:text-right">成果物</div>
+            </div>
+
+            <div id="projects-container" class="pb-24">
+                <!-- Project Rows will be injected by JS -->
+            </div>
+        </section>
+
+        <!-- CONTACT -->
+        <section id="contact" class="py-24 px-6 bg-black text-white relative flex flex-col justify-center">
+            <div class="relative z-10 w-full">
+                <div
+                    class="border-t-2 border-white pt-4 mb-16 flex flex-col md:flex-row md:items-baseline justify-between gap-4">
+                    <div class="text-4xl md:text-8xl font-black tracking-tighter uppercase leading-none">CONTACTS</div>
+                    <div class="text-sm font-bold tracking-widest uppercase md:text-right">連絡</div>
+                </div>
+
+                <div class="grid md:grid-cols-2 gap-12 items-end">
+                    <div class="animate-on-scroll opacity-0 translate-y-8 transition-all duration-1000">
+                        <h3 class="text-4xl md:text-6xl font-black leading-none mb-8">
+                            CONNECT<br>WITH ME.
+                        </h3>
+                        <p class="text-sm opacity-70 mb-12 max-w-md leading-relaxed">
+                            プロジェクトのご相談、採用についてのお問い合わせ、
+                            その他どのようなことでもお気軽にご連絡ください。
+                        </p>
+                        <div class="flex flex-col gap-4">
+                            <a href="mailto:rq23056h@st.omu.ac.jp"
+                                class="text-2xl md:text-4xl font-bold border-b border-white pb-2 hover:opacity-50 transition-opacity w-fit flex items-center gap-4">
+                                rq23056h@st.omu.ac.jp <i data-lucide="arrow-up-right"></i>
+                            </a>
+                        </div>
+                    </div>
+                    <div
+                        class="flex flex-col gap-6 md:items-end animate-on-scroll opacity-0 translate-y-8 transition-all duration-1000 delay-200">
+                        <div class="text-xs font-bold tracking-widest opacity-50">SOCIAL</div>
+                        <div class="flex gap-4">
+                            <a href="https://twitter.com" target="_blank"
+                                class="w-12 h-12 border border-white flex items-center justify-center rounded-full hover:bg-white hover:text-black transition-colors">
+                                <i data-lucide="twitter"></i>
+                            </a>
+                            <a href="https://github.com/shuei0609" target="_blank"
+                                class="w-12 h-12 border border-white flex items-center justify-center rounded-full hover:bg-white hover:text-black transition-colors">
+                                <i data-lucide="github"></i>
+                            </a>
+                        </div>
+                        <div class="mt-12 text-xs font-mono opacity-50 text-right">
+                            © <span id="current-year"></span> SHUEI KOMURO PORTFOLIO.
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <!-- Detailed View (Hidden by default) -->
+    <div id="detail-view" class="hidden min-h-screen bg-[#F5F5F5] text-black pt-32 animate-fade-in relative z-20">
+        <!-- Header / Back Button -->
+        <div class="container mx-auto px-6 mb-12">
+            <button onclick="handleBackToHome()"
+                class="flex items-center gap-2 text-xs font-bold tracking-widest hover:opacity-50 transition-opacity">
+                <i data-lucide="arrow-left" class="w-4 h-4"></i> BACK TO LIST
+            </button>
+        </div>
+
+        <!-- Detail Content Container -->
+        <div id="detail-content">
+            <!-- Content injected by JS -->
+        </div>
+
+        <!-- Next Project Nav -->
+        <div id="next-project-nav" onclick="handleNextProject()"
+            class="w-full bg-black text-white py-24 md:py-40 px-6 cursor-pointer group relative overflow-hidden transition-colors hover:bg-zinc-900">
+            <div class="container mx-auto relative z-10 text-center">
+                <p
+                    class="text-xs md:text-sm font-bold tracking-[0.5em] mb-4 md:mb-8 text-zinc-400 group-hover:text-white transition-colors">
+                    NEXT PROJECT</p>
+                <h2 id="next-project-title"
+                    class="text-5xl md:text-8xl font-black uppercase tracking-tighter group-hover:scale-105 transition-transform duration-700 ease-out">
+                    <!-- Next Title -->
+                </h2>
+                <div
+                    class="mt-8 opacity-0 group-hover:opacity-100 transition-all duration-500 transform translate-y-4 group-hover:translate-y-0">
+                    <span class="inline-flex items-center gap-2 text-sm font-bold border-b border-white pb-1">
+                        VIEW PROJECT <i data-lucide="arrow-right" class="w-4 h-4"></i>
+                    </span>
+                </div>
+            </div>
+            <div
+                class="absolute inset-0 bg-zinc-800 transform scale-x-0 group-hover:scale-x-100 transition-transform duration-500 origin-left -z-0 opacity-10">
+            </div>
+        </div>
+    </div>
+
+    <script src="script.js"></script>
+</body>
+
+</html>
