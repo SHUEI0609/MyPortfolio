@@ -1,50 +1,87 @@
 // --- Data ---
-
 const HISTORY = [
-    { year: "2025", title: "Deep Learning Contest 1次審査突破", desc: "Backend Engineering / Go Language / Microservices Architecture" },
-    { year: "2025", title: "Deep Learning Contest 出場", desc: "Team Leader / Hackathon / Product Development" },
-    { year: "2025", title: "TypeScript React Next.js学習開始", desc: "Backend Engineering / Go Language / Microservices Architecture" },
-    { year: "2025", title: "松尾・岩澤研究室　DL基礎講座修了", desc: "Backend Engineering / Go Language / Microservices Architecture" },
-    { year: "2025", title: "松尾・岩澤研究室　DL基礎講座受講開始", desc: "Backend Engineering / Go Language / Microservices Architecture" },
-    { year: "2025", title: "ニュージーランドに短期留学", desc: "Backend Engineering / Go Language / Microservices Architecture" },
-    { year: "2024", title: "HACK Uに参加", desc: "Team Leader / Hackathon / Product Development" },
-    { year: "2024", title: "Python Go学習開始", desc: "Sound Design / Indie Games / Soundscape" },
-    { year: "2024", title: "知能情報コース進学", desc: "Sound Design / Indie Games / Soundscape" },
-    { year: "2023", title: "大阪公立大学工業高等専門学校入学", desc: "Dept. of Information Technology" },
+    { year: "2025", title: "Deep Learning Contest", sub: "1st Round Passed", desc: "1次審査を突破。" },
+    { year: "2025", title: "Deep Learning Contest", sub: "Team Leader", desc: "3人チームAIエンジニアとして参加。モデル選定から実装までを主導し、実践的な開発知見を獲得。（Project 04参照）" },
+    { year: "2025", title: "Skill Acquisition", sub: "Next.js / TypeScript", desc: "モダンフロントエンド技術の習得。SSG/SSRを用いたパフォーマンス最適化手法を研究・実践。" },
+    { year: "2025", title: "Matsuo Lab", sub: "DL Fundamentals", desc: "東京大学 松尾・岩澤研究室主催 DL基礎講座修了。CNN, RNN, Transformer等のアーキテクチャおよび実装技術を習得。" },
+    { year: "2025", title: "Study Abroad", sub: "New Zealand", desc: "ニュージーランド短期留学。現地での共同プロジェクト等を通じ、技術英語とコミュニケーション能力を向上。" },
+    { year: "2024", title: "HACK U", sub: "Participant", desc: "LINEヤフー主催ハッカソン参加。PythonでDiscord Botを開発し、ハードウェアとのリアルタイム通信基盤を構築。" },
+    { year: "2024", title: "Informatics Intelligence Course", sub: "Advancement", desc: "知能情報コース進学。情報工学およびAI・データサイエンス分野を専攻。" },
+    { year: "2023", title: "OMU College of Technology", sub: "Enrollment", desc: "大阪公立大学工業高等専門学校 入学。" },
 ];
 
 const SKILLS = [
-    { name: "TYPESCRIPT", type: "LANG" },
-    { name: "GO", type: "LANG" },
-    { name: "PYTHON", type: "LANG" },
-    { name: "REACT / NEXT.JS", type: "FRAMEWORK" },
-    { name: "PLAYING BASS", type: "CREATIVE" },
-    { name: "DOCKER", type: "INFRA" },
+    { name: "TypeScript", type: "LANG" },
+    { name: "Go", type: "LANG" },
+    { name: "Python", type: "LANG" },
+    { name: "C++", type: "LANG" },
+    { name: "React / Next.js", type: "FRAMEWORK" },
+    { name: "Deep Learning", type: "AI" },
+    { name: "Docker", type: "INFRA" },
+    { name: "Git / GitHub", type: "TOOL" },
+    { name: "Hugging Face", type: "TOOL" },
 ];
 
 const PROJECTS = [
     {
         id: "01",
-        title: "classify season in sentence",
+        title: "Classify Season",
         category: "DeepLearning",
         desc: "文章の季節感を判断するAI",
-        tech: "Python",
-        fullDesc: "任意の文章を入力し，季節感を判断します．",
-        year: "2025"
+        tech: "Python, TensorFlow, Flask",
+        fullDesc: "任意の文章を入力し、その文章が持つ「季節感（春夏秋冬）」を確信度と共に判定するWebアプリケーションです。\n\n自然言語処理（NLP）技術を用い、季節語だけでなく文脈に含まれるニュアンスを学習させました。APIサーバーとしてFlaskを採用し、軽量なフロントエンドと連携させています。文章に対する精度やデータセットの不足や不適からなる課題を抱えていますが、より多くのデータを用いて学習させることで改善を図ります。",
+        year: "2025",
+        HuggingFace: "https://huggingface.co/spaces/SHU-KOSEN/season/tree/main",
+        GoogleColab: "https://colab.research.google.com/drive/1gwn5tZdAme4SkE4YPDazogSCeDBO9tOA?usp=sharing",
+        images: ["image/season1.png", "image/season2.png", "image/season3.png"]
     },
+    // {
+    //     id: "02",
+    //     title: "Teachable Calligraphy",
+    //     category: "Robotics / EdTech",
+    //     desc: "ロボット × AI で書道を学ぶシステム",
+    //     tech: "Python, Dobot Magician, OpenCV",
+    //     fullDesc: "「動的に書道を学ぶ」をコンセプトに開発した教育支援ロボットシステムです。\n\nDeepLearningによる文字認識と、ロボットアーム（Magician Lite）の制御を組み合わせ、ユーザーが書いた文字をリアルタイムで解析・添削、あるいはロボットが手本を書いて見せる機能を実現しました。（現在プロトタイプが稼働中。更なる精度向上のためシステム改善を続けています）",
+    //     year: "2025",
+    //     github: "https://github.com/shuei0609" // Dummy Link
+    // },
     {
         id: "02",
-        title: "Teachable caligraphy machine",
-        category: "machine",
-        desc: "ロボット × AI で動的に書道を学ぶことができるロボット",
-        tech: "Python , Magician Lite",
-        fullDesc: "DeepLearningとMagician Liteを用いて動的に書道を学ぶことができるロボットをチームで作成しました．ロボットアームの動かす筆を持つことで筆の動かし方を学ぶことができます",
-        year: "2025"
-    }
+        title: "MusToDo",
+        category: "TypeScript / React",
+        desc: "Reactを用いて作成したToDoアプリ",
+        tech: "TypeScript, React, HTML, CSS",
+        fullDesc: "ReactのHooks（useState, useEffect）等の基礎概念習得を目的に開発したToDoアプリです。\n部活動での楽曲進行管理という実用的な課題解決も兼ねており、実際の運用を想定したUI設計を行っています。",
+        year: "2025",
+        github: "https://github.com/SHUEI0609/MusToDo",
+        images: ["image/Todo1.png", "image/Todo2.png", "image/Todo3.png"]
+    },
+    {
+        id: "03",
+        title: "My BLOG",
+        category: "TypeScript / Next.js / Prisma",
+        desc: "Next.jsを用いて作成した私のブログ",
+        tech: "TypeScript, Next.js, Prisma",
+        fullDesc: "Next.js ブログプラットフォーム構築プロジェクト フロントエンドからバックエンドまでを一気通貫で開発するスキルを磨くために制作。 Next.jsのエコシステムを活用しつつ、Prismaを用いたデータベース連携や、APIのテスト駆動開発（httpYac）にも挑戦しています。現在は基本機能の実装に加え、自分好みの機能を拡張できるよう設計を見直しながら開発を進めています。",
+        year: "2026",
+        github: "https://github.com/shuei0609/next-blog-app",
+        images: ["image/blog1.png", "image/blog2.png", "image/blog3.png", "image/blog4.png", "image/blog5.png", "image/blog6.png", "image/blog7.png", "image/blog8.png"]
+    },
+    {
+        id: "04",
+        title: "Distance AI",
+        category: "DeepLearning",
+        desc: "ResNet50を用いて撮影物から人の距離を推定するAI",
+        tech: "Python, Deep Learning",
+        fullDesc: "ResNet50を用いた回帰モデルで作成した距離推定AIです．最初にNYU Depth Datasetというデータセットを用いて学習させたのちに，自分たちで収集したDatasetでファインチューニングしています．1m以内であれば精度は出ますが1m以上は全く精度が出ません．",
+        year: "2026",
+        github: "https://github.com/SHUEI0609/Distance"
+    },
 ];
 
 // --- State ---
 let currentProjectId = null;
+let currentSlideIndex = 0;
 
 // --- Initialization ---
 
@@ -56,33 +93,30 @@ document.addEventListener('DOMContentLoaded', () => {
     renderSkills();
     renderProjects();
     initScrollObserver();
-
     document.getElementById('current-year').textContent = new Date().getFullYear();
 });
 
 // --- Loading Screen ---
-
 function initLoading() {
     const loadingScreen = document.getElementById('loading-screen');
     const progressEl = document.getElementById('loading-progress');
     let progress = 0;
-
-    // Disable scroll during loading
     document.body.style.overflow = 'hidden';
 
     const interval = setInterval(() => {
-        progress++;
+        progress += Math.floor(Math.random() * 5) + 1;
+        if (progress > 100) progress = 100;
         progressEl.textContent = `${progress}%`;
 
         if (progress >= 100) {
             clearInterval(interval);
             setTimeout(() => {
                 loadingScreen.classList.add('loading-exit');
-                document.body.style.overflow = ''; // Enable scroll
+                document.body.style.overflow = '';
                 document.body.classList.add('loaded');
             }, 200);
         }
-    }, 20); // 20ms * 100 = 2000ms total
+    }, 30);
 }
 
 // --- Render Functions ---
@@ -90,29 +124,65 @@ function initLoading() {
 function renderHistory() {
     const container = document.getElementById('history-list');
     container.innerHTML = HISTORY.map(h => `
-        <div class="flex gap-4 border-b border-gray-300 pb-4 last:border-0">
-            <span class="font-mono font-bold w-16 pt-1 shrink-0">${h.year}</span>
-            <div>
-                <div class="font-bold uppercase">${h.title}</div>
-                <div class="text-xs text-gray-600 mt-1">${h.desc}</div>
+        <div class="relative pl-8 group">
+            <div class="absolute -left-[5px] top-1.5 w-2.5 h-2.5 bg-white border-2 border-zinc-300 rounded-full group-hover:border-black group-hover:bg-black transition-colors z-10"></div>
+            
+            <div class="grid md:grid-cols-4 gap-2 mb-2 items-baseline">
+                <div class="md:col-span-1 font-mono text-xs font-bold text-zinc-400">${h.year}</div>
+                <div class="md:col-span-3">
+                    <h5 class="font-bold text-lg leading-tight">${h.title}</h5>
+                    <div class="text-xs font-bold text-zinc-500 uppercase tracking-wider mb-2">${h.sub ? h.sub : ''}</div>
+                    <p class="text-sm text-zinc-600 leading-relaxed">${h.desc}</p>
+                </div>
             </div>
         </div>
     `).join('');
 }
 
 function renderSkills() {
-    const container = document.getElementById('skills-list');
-    container.innerHTML = SKILLS.map(s => `
-        <span class="px-3 py-1 border border-black text-xs font-bold hover:bg-black hover:text-white transition-colors cursor-default">
-            ${s.name}
-        </span>
-    `).join('');
+    const container = document.getElementById('skills-container');
+    const categories = {
+        'LANG': 'Languages',
+        'FRAMEWORK': 'Frameworks',
+        'AI': 'AI / Science',
+        'INFRA': 'DevOps / Tools',
+        'TOOL': 'DevOps / Tools'
+    };
+
+    const grouped = SKILLS.reduce((acc, skill) => {
+        const type = (skill.type === 'TOOL') ? 'INFRA' : skill.type;
+        (acc[type] = acc[type] || []).push(skill);
+        return acc;
+    }, {});
+
+    const order = ['LANG', 'FRAMEWORK', 'AI', 'INFRA'];
+    let html = '';
+
+    order.forEach(type => {
+        if (grouped[type]) {
+            html += `
+                <div class="grid md:grid-cols-4 gap-4 items-start group">
+                    <div class="md:col-span-1 pt-1">
+                        <h5 class="text-xs font-bold text-zinc-400 uppercase tracking-widest group-hover:text-black transition-colors">${categories[type]}</h5>
+                    </div>
+                    <div class="md:col-span-3 flex flex-wrap gap-2">
+                        ${grouped[type].map(s => `
+                            <span class="px-3 py-1 bg-zinc-50 text-sm font-bold text-zinc-700 border border-zinc-200 rounded-sm hover:border-black hover:bg-white transition-all cursor-default">
+                                ${s.name}
+                            </span>
+                        `).join('')}
+                    </div>
+                </div>
+            `;
+        }
+    });
+
+    container.innerHTML = html;
 }
 
 function renderProjects() {
     const container = document.getElementById('projects-container');
     container.innerHTML = PROJECTS.map((p, index) => {
-        // Create marquee text (repeated 4 times)
         const marqueeText = Array(4).fill(`
             <span class="text-7xl md:text-9xl font-black uppercase px-8 tracking-tighter">
                 ${p.title}
@@ -124,10 +194,9 @@ function renderProjects() {
 
         return `
         <div onclick="handleProjectClick('${p.id}')"
-             class="group relative border-t border-black transition-all duration-500 hover:bg-black hover:text-white cursor-pointer animate-on-scroll opacity-0 translate-y-8 overflow-hidden py-12 hover:py-16"
-             style="transition-delay: ${index * 100}ms">
+            class="group relative border-t border-black transition-all duration-500 hover:bg-black hover:text-white cursor-pointer animate-on-scroll opacity-0 translate-y-8 overflow-hidden py-12 hover:py-16"
+            style="transition-delay: ${index * 100}ms">
             
-            <!-- Default Content -->
             <div class="container mx-auto px-6 flex flex-col md:flex-row gap-8 items-start md:items-center justify-between relative z-10 transition-opacity duration-300 group-hover:opacity-0">
                 <div class="flex flex-col gap-2 md:w-1/3">
                     <div class="flex items-center gap-4">
@@ -149,7 +218,6 @@ function renderProjects() {
                 </div>
             </div>
 
-            <!-- Hover Marquee -->
             <div class="absolute inset-0 flex items-center justify-center overflow-hidden pointer-events-none transition-opacity duration-300 opacity-0 group-hover:opacity-100">
                 <div class="animate-marquee whitespace-nowrap flex items-center">
                     ${marqueeText}
@@ -158,8 +226,6 @@ function renderProjects() {
         </div>
         `;
     }).join('');
-
-    // Re-initialize icons for dynamic content
     lucide.createIcons();
 }
 
@@ -171,8 +237,91 @@ function handleProjectClick(id) {
     const nextIndex = (PROJECTS.findIndex(p => p.id === id) + 1) % PROJECTS.length;
     const nextProject = PROJECTS[nextIndex];
 
-    // Render Detail Content
     const contentContainer = document.getElementById('detail-content');
+
+    // GitHub Link Conditional Logic
+    let githubLinkHtml = '';
+    if (project.github) {
+        githubLinkHtml = `
+            <div>
+                <h3 class="text-xs font-bold tracking-widest border-b border-black pb-2 mb-4">SOURCE</h3>
+                <a href="${project.github}" target="_blank" class="inline-flex items-center gap-2 text-lg font-bold hover:underline">
+                    <i data-lucide="github" class="w-5 h-5"></i>
+                    View on GitHub
+                </a>
+            </div>
+        `;
+    }
+
+    // Hugging Face Link Conditional Logic
+    let huggingFaceLinkHtml = '';
+    if (project.HuggingFace) {
+        huggingFaceLinkHtml = `
+            <div>
+                <h3 class="text-xs font-bold tracking-widest border-b border-black pb-2 mb-4">HuggingFace</h3>
+                <a href="${project.HuggingFace}" target="_blank" class="inline-flex items-center gap-2 text-lg font-bold hover:underline">
+                    <i data-lucide="bot" class="w-5 h-5"></i>
+                    View on HuggingFace
+                </a>
+            </div>
+        `;
+    }
+
+    // Google Colab Link Conditional Logic
+    let googleColabLinkHtml = '';
+    if (project.GoogleColab) {
+        googleColabLinkHtml = `
+            <div>
+                <h3 class="text-xs font-bold tracking-widest border-b border-black pb-2 mb-4">Colab</h3>
+                <a href="${project.GoogleColab}" target="_blank" class="inline-flex items-center gap-2 text-lg font-bold hover:underline">
+                    <i data-lucide="file-code-2" class="w-5 h-5"></i>
+                    View on Colab
+                </a>
+            </div>
+        `;
+    }
+
+    // Image Slider Logic
+    let imageSectionHtml = '';
+    if (project.images && project.images.length > 0) {
+        currentSlideIndex = 0;
+        const slidesHtml = project.images.map((img, i) => `
+            <div class="min-w-full h-full relative flex items-center justify-center bg-zinc-100 p-8 md:p-12">
+                <img src="${img}" class="h-full w-auto object-contain max-h-full drop-shadow-2xl border-[8px] border-white bg-white" alt="${project.title} Image ${i + 1}">
+            </div>
+        `).join('');
+
+        imageSectionHtml = `
+            <div class="w-full aspect-video bg-zinc-200 mb-16 relative group overflow-hidden border border-zinc-200">
+                <div id="slider-track" class="flex h-full transition-transform duration-500 ease-in-out">
+                    ${slidesHtml}
+                </div>
+                
+                <!-- Navigation Arrows -->
+                <button onclick="changeSlide(-1)" class="absolute left-4 top-1/2 -translate-y-1/2 w-12 h-12 bg-black/50 text-white flex items-center justify-center rounded-full opacity-0 group-hover:opacity-100 transition-opacity hover:bg-black">
+                    <i data-lucide="chevron-left" class="w-6 h-6"></i>
+                </button>
+                <button onclick="changeSlide(1)" class="absolute right-4 top-1/2 -translate-y-1/2 w-12 h-12 bg-black/50 text-white flex items-center justify-center rounded-full opacity-0 group-hover:opacity-100 transition-opacity hover:bg-black">
+                    <i data-lucide="chevron-right" class="w-6 h-6"></i>
+                </button>
+                
+                <!-- Indicators -->
+                <div class="absolute bottom-4 left-1/2 -translate-x-1/2 flex gap-2">
+                    ${project.images.map((_, i) => `
+                        <div id="indicator-${i}" class="w-2 h-2 rounded-full bg-white/50 transition-colors ${i === 0 ? 'bg-white' : ''}"></div>
+                    `).join('')}
+                </div>
+            </div>
+        `;
+    } else {
+        imageSectionHtml = `
+            <div class="w-full aspect-video bg-zinc-200 mb-16 flex items-center justify-center overflow-hidden relative">
+                <span class="text-[10vw] font-black text-zinc-300 opacity-50 select-none">PROJECT IMG</span>
+                <div class="absolute inset-0 bg-black/5"></div>
+            </div>
+        `;
+    }
+
     contentContainer.innerHTML = `
         <div class="container mx-auto px-6 border-t-2 border-black pt-8 mb-24">
             <div class="flex flex-col md:flex-row justify-between items-start md:items-end gap-8 mb-12">
@@ -187,10 +336,7 @@ function handleProjectClick(id) {
                 </div>
             </div>
 
-            <div class="w-full aspect-video bg-zinc-200 mb-16 flex items-center justify-center overflow-hidden relative">
-                <span class="text-[10vw] font-black text-zinc-300 opacity-50 select-none">PROJECT IMG</span>
-                <div class="absolute inset-0 bg-black/5"></div>
-            </div>
+            ${imageSectionHtml}
 
             <div class="grid md:grid-cols-12 gap-12">
                 <div class="md:col-span-4 space-y-8">
@@ -202,10 +348,16 @@ function handleProjectClick(id) {
                         <h3 class="text-xs font-bold tracking-widest border-b border-black pb-2 mb-4">ROLE</h3>
                         <p class="text-lg font-bold">Design / Development</p>
                     </div>
+                    <!-- GitHub Link Section -->
+                    ${githubLinkHtml}
+                    <!-- Hugging Face Link Section -->
+                    ${huggingFaceLinkHtml}
+                    <!-- Google Colab Link Section -->
+                    ${googleColabLinkHtml}
                 </div>
                 <div class="md:col-span-8">
                     <h3 class="text-xs font-bold tracking-widest border-b border-black pb-2 mb-6">DESCRIPTION</h3>
-                    <p class="text-xl md:text-2xl font-medium leading-relaxed whitespace-pre-line">
+                    <p class="text-xl md:text-2xl font-medium leading-relaxed whitespace-pre-line text-justify-inter-character">
                         ${project.fullDesc || project.desc}
                     </p>
                 </div>
@@ -213,10 +365,7 @@ function handleProjectClick(id) {
         </div>
     `;
 
-    // Update Next Link
     document.getElementById('next-project-title').textContent = nextProject.title;
-
-    // Switch View
     document.getElementById('main-view').classList.add('hidden');
     document.getElementById('detail-view').classList.remove('hidden');
     window.scrollTo(0, 0);
@@ -227,8 +376,6 @@ function handleBackToHome() {
     currentProjectId = null;
     document.getElementById('detail-view').classList.add('hidden');
     document.getElementById('main-view').classList.remove('hidden');
-
-    // Optional: scroll back to project list position
     const projectsEl = document.getElementById('projects');
     if (projectsEl) projectsEl.scrollIntoView({ behavior: 'auto' });
 }
@@ -254,8 +401,36 @@ function smoothScroll(e, targetId) {
     }
 }
 
-// --- Scroll Observer ---
+function changeSlide(direction) {
+    if (!currentProjectId) return;
+    const project = PROJECTS.find(p => p.id === currentProjectId);
+    if (!project || !project.images) return;
 
+    currentSlideIndex += direction;
+    if (currentSlideIndex < 0) currentSlideIndex = project.images.length - 1;
+    if (currentSlideIndex >= project.images.length) currentSlideIndex = 0;
+
+    const track = document.getElementById('slider-track');
+    if (track) {
+        track.style.transform = `translateX(-${currentSlideIndex * 100}%)`;
+    }
+
+    // Update Indicators
+    project.images.forEach((_, i) => {
+        const indicator = document.getElementById(`indicator-${i}`);
+        if (indicator) {
+            if (i === currentSlideIndex) {
+                indicator.classList.remove('bg-white/50');
+                indicator.classList.add('bg-white');
+            } else {
+                indicator.classList.remove('bg-white');
+                indicator.classList.add('bg-white/50');
+            }
+        }
+    });
+}
+
+// --- Scroll Observer ---
 function initScrollObserver() {
     const observer = new IntersectionObserver((entries) => {
         entries.forEach(entry => {
@@ -266,17 +441,13 @@ function initScrollObserver() {
         });
     }, { threshold: 0.1 });
 
-    // Observe initial elements (in HTML)
     document.querySelectorAll('.animate-on-scroll').forEach(el => observer.observe(el));
-
-    // Also observe dynamically generated project items after a slight delay
     setTimeout(() => {
         document.querySelectorAll('#projects-container .animate-on-scroll').forEach(el => observer.observe(el));
     }, 100);
 }
 
-// --- Canvas Particles ---
-
+// --- Canvas ---
 function initCanvas() {
     const canvas = document.getElementById('bg-canvas');
     if (!canvas) return;
@@ -292,7 +463,6 @@ function initCanvas() {
     const initParticles = () => {
         particles = [];
         const particleCount = Math.floor((window.innerWidth * window.innerHeight) / 15000);
-
         for (let i = 0; i < particleCount; i++) {
             particles.push({
                 x: Math.random() * canvas.width,
@@ -307,22 +477,18 @@ function initCanvas() {
 
     const drawParticles = () => {
         ctx.clearRect(0, 0, canvas.width, canvas.height);
-
         particles.forEach(p => {
             p.x += p.vx;
             p.y += p.vy;
-
             if (p.x < 0) p.x = canvas.width;
             if (p.x > canvas.width) p.x = 0;
             if (p.y < 0) p.y = canvas.height;
             if (p.y > canvas.height) p.y = 0;
-
             ctx.beginPath();
             ctx.arc(p.x, p.y, p.size, 0, Math.PI * 2);
             ctx.fillStyle = `rgba(0, 0, 0, ${p.opacity})`;
             ctx.fill();
         });
-
         requestAnimationFrame(drawParticles);
     };
 

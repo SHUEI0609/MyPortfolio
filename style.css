@@ -1,7 +1,8 @@
-/* Global Styles */
+/* --- Global Styles --- */
 body {
-    background-color: #F5F5F5;
+    background-color: #FAFAFA;
     color: #111;
+    font-family: 'Inter', 'Noto Sans JP', sans-serif;
 }
 
 ::selection {
@@ -9,7 +10,7 @@ body {
     color: #fff;
 }
 
-/* Custom Scrollbar */
+/* --- Custom Scrollbar --- */
 ::-webkit-scrollbar {
     width: 8px;
 }
@@ -26,21 +27,7 @@ body {
     background: #333;
 }
 
-/* Specific Scrollbar for History List */
-.custom-scrollbar::-webkit-scrollbar {
-    width: 4px;
-}
-
-.custom-scrollbar::-webkit-scrollbar-track {
-    background: transparent;
-}
-
-.custom-scrollbar::-webkit-scrollbar-thumb {
-    background: #ccc;
-    border-radius: 2px;
-}
-
-/* Animations */
+/* --- Animations --- */
 @keyframes fadeInUp {
     from {
         opacity: 0;
@@ -61,9 +48,6 @@ body.loaded .animate-init {
     animation: fadeInUp 1s cubic-bezier(0.16, 1, 0.3, 1) forwards;
 }
 
-/* Utility to control delay via classes is handled in Tailwind (delay-X) or can be manual */
-/* .delay-200 { animation-delay: 0.2s; } */
-
 @keyframes fadeIn {
     from {
         opacity: 0;
@@ -78,7 +62,7 @@ body.loaded .animate-init {
     animation: fadeIn 0.5s ease-out forwards;
 }
 
-/* Marquee Animation */
+/* Marquee Animation (Projects) */
 @keyframes marquee {
     0% {
         transform: translateX(0);
@@ -103,4 +87,10 @@ body.loaded .animate-init {
 /* Loading Screen Transition */
 .loading-exit {
     transform: translateY(-100%);
+}
+
+/* Text Utilities */
+.text-justify-inter-character {
+    text-align: justify;
+    text-justify: inter-character;
 }
