@@ -12,15 +12,15 @@ const HISTORY = [
 ];
 
 const SKILLS = [
-    { name: "TypeScript", type: "LANG" },
-    { name: "Go", type: "LANG" },
-    { name: "Python", type: "LANG" },
-    { name: "C++", type: "LANG" },
-    { name: "React / Next.js / React", type: "FRAMEWORK" },
-    { name: "Deep Learning", type: "AI" },
-    { name: "Docker", type: "INFRA" },
-    { name: "Git / GitHub", type: "TOOL" },
-    { name: "Hugging Face", type: "TOOL" },
+    { name: "TypeScript", type: "LANG", info: "フロントエンドやバックエンドに使用。(参照: Project03)" },
+    { name: "Go", type: "LANG", info: "Atcoderにて使用。" },
+    { name: "Python", type: "LANG", info: "深層学習モデルの研究開発。(参照: Project04)" },
+    { name: "C++", type: "LANG", info: "アルゴリズムの勉強に使用。" },
+    { name: "React / Next.js", type: "FRAMEWORK", info: "コンポーネント指向による効率的なUI構築に使用。(参照: Project03)" },
+    { name: "Deep Learning", type: "AI", info: "PyTorch/TensorFlowを用いたモデル構築。CNN, Transformer等の理解。" },
+    { name: "Docker", type: "INFRA", info: "再現性のある開発環境の構築に使用。" },
+    { name: "Git / GitHub", type: "TOOL", info: "チーム開発におけるバージョン管理に使用。" },
+    { name: "Hugging Face", type: "TOOL", info: "学習済みモデルの管理やSpacesを用いたデモ公開に使用。(参照: Project04)" },
 ];
 
 const PROJECTS = [
@@ -76,7 +76,8 @@ const PROJECTS = [
         tech: "Python, Deep Learning",
         fullDesc: "ResNet50を用いた回帰モデルで作成した距離推定AIです。最初にNYU Depth Datasetというデータセットを用いて学習させたのちに、自分たちで収集したDatasetでファインチューニングしています。1m以内であれば精度は出ますが1m以上は全く精度が出ません。",
         year: "2026",
-        github: "https://github.com/SHUEI0609/Distance"
+        github: "https://github.com/SHUEI0609/Distance",
+        images: ["image/dis1.png"]
     },
 ];
 
@@ -168,9 +169,15 @@ function renderSkills() {
                     </div>
                     <div class="md:col-span-3 flex flex-wrap gap-2">
                         ${grouped[type].map(s => `
-                            <span class="px-3 py-1 bg-zinc-50 text-sm font-bold text-zinc-700 border border-zinc-200 rounded-sm hover:border-black hover:bg-white transition-all cursor-default">
-                                ${s.name}
-                            </span>
+                            <div class="relative group/skill cursor-help">
+                                <span class="px-3 py-1 bg-zinc-50 text-sm font-bold text-zinc-700 border border-zinc-200 rounded-sm group-hover/skill:border-black group-hover/skill:bg-white transition-all block">
+                                    ${s.name}
+                                </span>
+                                <!-- Tooltip -->
+                                <div class="absolute bottom-full left-1/2 -translate-x-1/2 mb-2 w-max max-w-[200px] px-3 py-2 bg-black text-white text-xs rounded opacity-0 invisible group-hover/skill:opacity-100 group-hover/skill:visible transition-all duration-300 z-20 pointer-events-none text-center after:content-[''] after:absolute after:top-full after:left-1/2 after:-translate-x-1/2 after:border-4 after:border-transparent after:border-t-black">
+                                    ${s.info}
+                                </div>
+                            </div>
                         `).join('')}
                     </div>
                 </div>
