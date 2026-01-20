@@ -1,11 +1,12 @@
 // --- Data ---
 const HISTORY = [
     { year: "2025", title: "Deep Learning Contest", sub: "1st Round Passed", desc: "1次審査を突破。" },
-    { year: "2025", title: "Deep Learning Contest", sub: "Team Leader", desc: "3人チームAIエンジニアとして参加。モデル選定から実装までを主導し、実践的な開発知見を獲得。（Project 04参照）" },
-    { year: "2025", title: "Skill Acquisition", sub: "Next.js / TypeScript", desc: "モダンフロントエンド技術の習得。SSG/SSRを用いたパフォーマンス最適化手法を研究・実践。" },
-    { year: "2025", title: "Matsuo Lab", sub: "DL Fundamentals", desc: "東京大学 松尾・岩澤研究室主催 DL基礎講座修了。CNN, RNN, Transformer等のアーキテクチャおよび実装技術を習得。" },
-    { year: "2025", title: "Study Abroad", sub: "New Zealand", desc: "ニュージーランド短期留学。現地での共同プロジェクト等を通じ、技術英語とコミュニケーション能力を向上。" },
-    { year: "2024", title: "HACK U", sub: "Participant", desc: "LINEヤフー主催ハッカソン参加。PythonでDiscord Botを開発し、ハードウェアとのリアルタイム通信基盤を構築。" },
+    { year: "2025", title: "Deep Learning Contest", sub: "Team Project", desc: "3人チームのAIエンジニアとして参加。モデル選定から実装までを主導し、実践的な開発知見を獲得。（Project 04参照）" },
+    { year: "2025", title: "Started Learning", sub: "React / Next.js / TypeScript", desc: "モダンフロントエンド技術の習得を始める。" },
+    { year: "2025", title: "Matsuo Lab", sub: "DL Fundamentals", desc: "東京大学 松尾・岩澤研究室主催 DL基礎講座修了。CNN, Transformer等のアーキテクチャおよび実装技術を習得。" },
+    { year: "2025", title: "Study Abroad", sub: "New Zealand", desc: "ニュージーランド短期留学。現地での工学研修を通じ、技術英語とコミュニケーション能力を向上。" },
+    { year: "2024", title: "HACK U", sub: "Team Project", desc: "LINEヤフー主催ハッカソン参加。チームで開閉監視可能なスマートキーを開発。私はPythonでDiscord Botを作成し、スマートキーとのリアルタイム通信基盤を構築。" },
+    { year: "2024", title: "Started Learning", sub: "Python / Go", desc: "バックエンド開発やAI技術への関心を広げ、PythonとGoの学習を開始。" },
     { year: "2024", title: "Informatics Intelligence Course", sub: "Advancement", desc: "知能情報コース進学。情報工学およびAI・データサイエンス分野を専攻。" },
     { year: "2023", title: "OMU College of Technology", sub: "Enrollment", desc: "大阪公立大学工業高等専門学校 入学。" },
 ];
@@ -15,7 +16,7 @@ const SKILLS = [
     { name: "Go", type: "LANG" },
     { name: "Python", type: "LANG" },
     { name: "C++", type: "LANG" },
-    { name: "React / Next.js", type: "FRAMEWORK" },
+    { name: "React / Next.js / React", type: "FRAMEWORK" },
     { name: "Deep Learning", type: "AI" },
     { name: "Docker", type: "INFRA" },
     { name: "Git / GitHub", type: "TOOL" },
@@ -29,7 +30,7 @@ const PROJECTS = [
         category: "DeepLearning",
         desc: "文章の季節感を判断するAI",
         tech: "Python, TensorFlow, Flask",
-        fullDesc: "任意の文章を入力し、その文章が持つ「季節感（春夏秋冬）」を確信度と共に判定するWebアプリケーションです。\n\n自然言語処理（NLP）技術を用い、季節語だけでなく文脈に含まれるニュアンスを学習させました。APIサーバーとしてFlaskを採用し、軽量なフロントエンドと連携させています。文章に対する精度やデータセットの不足や不適からなる課題を抱えていますが、より多くのデータを用いて学習させることで改善を図ります。",
+        fullDesc: "任意の文章を入力し、その文章が持つ「季節感（春夏秋冬）」を確信度と共に判定するWebアプリケーションです。\n\n自然言語処理（NLP）技術を用い、季節語だけでなく文脈に含まれるニュアンスを学習させました。APIサーバーとしてFlaskを採用し、軽量なフロントエンドと連携させています。データの不足や不適による精度面の課題を抱えていますが、より多くのデータを用いて学習させることで改善を図ります。",
         year: "2025",
         HuggingFace: "https://huggingface.co/spaces/SHU-KOSEN/season/tree/main",
         GoogleColab: "https://colab.research.google.com/drive/1gwn5tZdAme4SkE4YPDazogSCeDBO9tOA?usp=sharing",
@@ -62,7 +63,7 @@ const PROJECTS = [
         category: "TypeScript / Next.js / Prisma",
         desc: "Next.jsを用いて作成した私のブログ",
         tech: "TypeScript, Next.js, Prisma",
-        fullDesc: "Next.js ブログプラットフォーム構築プロジェクト フロントエンドからバックエンドまでを一気通貫で開発するスキルを磨くために制作。 Next.jsのエコシステムを活用しつつ、Prismaを用いたデータベース連携や、APIのテスト駆動開発（httpYac）にも挑戦しています。現在は基本機能の実装に加え、自分好みの機能を拡張できるよう設計を見直しながら開発を進めています。",
+        fullDesc: "Next.jsによるブログプラットフォーム構築プロジェクト。フロントエンドからバックエンドまでを一気通貫で開発するスキルを磨くために制作。 Next.jsのエコシステムを活用しつつ、Prismaを用いたデータベース連携や、APIのテスト駆動開発（httpYac）にも挑戦しています。現在は基本機能の実装に加え、自分好みの機能を拡張できるよう設計を見直しながら開発を進めています。",
         year: "2026",
         github: "https://github.com/shuei0609/next-blog-app",
         images: ["image/blog1.png", "image/blog2.png", "image/blog3.png", "image/blog4.png", "image/blog5.png", "image/blog6.png", "image/blog7.png", "image/blog8.png"]
@@ -73,7 +74,7 @@ const PROJECTS = [
         category: "DeepLearning",
         desc: "ResNet50を用いて撮影物から人の距離を推定するAI",
         tech: "Python, Deep Learning",
-        fullDesc: "ResNet50を用いた回帰モデルで作成した距離推定AIです．最初にNYU Depth Datasetというデータセットを用いて学習させたのちに，自分たちで収集したDatasetでファインチューニングしています．1m以内であれば精度は出ますが1m以上は全く精度が出ません．",
+        fullDesc: "ResNet50を用いた回帰モデルで作成した距離推定AIです。最初にNYU Depth Datasetというデータセットを用いて学習させたのちに、自分たちで収集したDatasetでファインチューニングしています。1m以内であれば精度は出ますが1m以上は全く精度が出ません。",
         year: "2026",
         github: "https://github.com/SHUEI0609/Distance"
     },
