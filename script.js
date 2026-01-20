@@ -74,7 +74,7 @@ const PROJECTS = [
         category: "DeepLearning",
         desc: "ResNet50を用いて撮影物から人の距離を推定するAI",
         tech: "Python, Deep Learning",
-        fullDesc: "ResNet50を用いた回帰モデルで作成した距離推定AIです。最初にNYU Depth Datasetというデータセットを用いて学習させたのちに、自分たちで収集したDatasetでファインチューニングしています。1m以内であれば精度は出ますが1m以上は全く精度が出ません。",
+        fullDesc: "ResNet50を用いた回帰モデルで作成した距離推定AIです。最初にNYU Depth Datasetというデータセットを用いて学習させたのちに、自分たちで収集したDatasetでファインチューニングしています。1m以内であれば精度は出ますが1m以上は全く精度が出ません。学習の構造やデータセットを見直すことで改善を図ります。",
         year: "2026",
         github: "https://github.com/SHUEI0609/Distance",
         images: ["image/dis1.png"]
