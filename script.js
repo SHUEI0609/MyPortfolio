@@ -1,5 +1,6 @@
 // --- Data ---
 const HISTORY = [
+    { year: "2026", title: "Entered AffinityNexa", sub: "Internship", desc: "株式会社AffinityNexaにてインターンシップを開始。実践的な開発業務を通じて、エンジニアとしての実務経験とスキルを積む。" },
     { year: "2025", title: "Deep Learning Contest", sub: "1st Round Passed", desc: "1次審査を突破。" },
     { year: "2025", title: "Deep Learning Contest", sub: "Team Project", desc: "3人チームのAIエンジニアとして参加。モデル選定から実装までを主導し、実践的な開発知見を獲得。（Project 04参照）" },
     { year: "2025", title: "Started Learning", sub: "React / Next.js / TypeScript", desc: "モダンフロントエンド技術の習得を始める。" },
