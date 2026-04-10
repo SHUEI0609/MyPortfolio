@@ -1,0 +1,38 @@
+<!-- Detailed View (Hidden by default) -->
+<div id="detail-view" class="hidden min-h-screen bg-[#F5F5F5] text-black pt-32 animate-fade-in relative z-20">
+    <!-- Header / Back Button -->
+    <div class="container mx-auto px-6 mb-12">
+        <button onclick="handleBackToHome()"
+            class="flex items-center gap-2 text-xs font-bold tracking-widest hover:opacity-50 transition-opacity">
+            <i data-lucide="arrow-left" class="w-4 h-4"></i> BACK TO LIST
+        </button>
+    </div>
+
+    <!-- Detail Content Container -->
+    <div id="detail-content">
+        <!-- Content injected by JS -->
+    </div>
+
+    <!-- Next Project Nav -->
+    <div id="next-project-nav" onclick="handleNextProject()"
+        class="w-full bg-black text-white py-24 md:py-40 px-6 cursor-pointer group relative overflow-hidden transition-colors hover:bg-zinc-900">
+        <div class="container mx-auto relative z-10 text-center">
+            <p
+                class="text-xs md:text-sm font-bold tracking-[0.5em] mb-4 md:mb-8 text-zinc-400 group-hover:text-white transition-colors">
+                NEXT PROJECT</p>
+            <h2 id="next-project-title"
+                class="text-5xl md:text-8xl font-black uppercase tracking-tighter group-hover:scale-105 transition-transform duration-700 ease-out">
+                <!-- Next Title -->
+            </h2>
+            <div
+                class="mt-8 opacity-0 group-hover:opacity-100 transition-all duration-500 transform translate-y-4 group-hover:translate-y-0">
+                <span class="inline-flex items-center gap-2 text-sm font-bold border-b border-white pb-1">
+                    VIEW PROJECT <i data-lucide="arrow-right" class="w-4 h-4"></i>
+                </span>
+            </div>
+        </div>
+        <div
+            class="absolute inset-0 bg-zinc-800 transform scale-x-0 group-hover:scale-x-100 transition-transform duration-500 origin-left -z-0 opacity-10">
+        </div>
+    </div>
+</div>

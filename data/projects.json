@@ -1,0 +1,47 @@
+[
+    {
+        "id": "01",
+        "title": "Classify Season",
+        "category": "DeepLearning",
+        "desc": "文章の季節感を判断するAI",
+        "tech": "Python, TensorFlow, Flask",
+        "fullDesc": "任意の文章を入力し、その文章が持つ「季節感（春夏秋冬）」を確信度と共に判定するWebアプリケーションです。\n\n自然言語処理（NLP）技術を用い、季節語だけでなく文脈に含まれるニュアンスを学習させました。APIサーバーとしてFlaskを採用し、軽量なフロントエンドと連携させています。データの不足や不適による精度面の課題を抱えていますが、より多くのデータを用いて学習させることで改善を図ります。",
+        "year": "2025",
+        "HuggingFace": "https://huggingface.co/spaces/SHU-KOSEN/season/tree/main",
+        "GoogleColab": "https://colab.research.google.com/drive/1gwn5tZdAme4SkE4YPDazogSCeDBO9tOA?usp=sharing",
+        "images": ["image/season1.png", "image/season2.png", "image/season3.png"]
+    },
+    {
+        "id": "02",
+        "title": "MusToDo",
+        "category": "TypeScript / React",
+        "desc": "Reactを用いて作成したToDoアプリ",
+        "tech": "TypeScript, React, HTML, CSS",
+        "fullDesc": "ReactのHooks（useState, useEffect）等の基礎概念習得を目的に開発したToDoアプリです。\n部活動での楽曲進行管理という実用的な課題解決も兼ねており、実際の運用を想定したUI設計を行っています。",
+        "year": "2025",
+        "github": "https://github.com/SHUEI0609/MusToDo",
+        "images": ["image/Todo1.png", "image/Todo2.png", "image/Todo3.png"]
+    },
+    {
+        "id": "03",
+        "title": "My BLOG",
+        "category": "TypeScript / Next.js / Prisma",
+        "desc": "Next.jsを用いて作成した私のブログ",
+        "tech": "TypeScript, Next.js, Prisma",
+        "fullDesc": "Next.jsによるブログプラットフォーム構築プロジェクト。フロントエンドからバックエンドまでを一気通貫で開発するスキルを磨くために制作。 Next.jsのエコシステムを活用しつつ、Prismaを用いたデータベース連携や、APIのテスト駆動開発（httpYac）にも挑戦しています。現在は基本機能の実装に加え、自分好みの機能を拡張できるよう設計を見直しながら開発を進めています。",
+        "year": "2026",
+        "github": "https://github.com/shuei0609/next-blog-app",
+        "images": ["image/blog1.png", "image/blog2.png", "image/blog3.png", "image/blog4.png", "image/blog5.png", "image/blog6.png", "image/blog7.png", "image/blog8.png"]
+    },
+    {
+        "id": "04",
+        "title": "Distance AI",
+        "category": "DeepLearning",
+        "desc": "ResNet50を用いて撮影物から人の距離を推定するAI",
+        "tech": "Python, Deep Learning",
+        "fullDesc": "ResNet50を用いた回帰モデルで作成した距離推定AIです。最初にNYU Depth Datasetというデータセットを用いて学習させたのちに、自分たちで収集したDatasetでファインチューニングしています。1m以内であれば精度は出ますが1m以上は全く精度が出ません。学習の構造やデータセットを見直すことで改善を図ります。",
+        "year": "2026",
+        "github": "https://github.com/SHUEI0609/Distance",
+        "images": ["image/dis1.png"]
+    }
+]

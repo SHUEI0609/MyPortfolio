@@ -1,0 +1,6 @@
+name = "my-portfolio"
+compatibility_date = "2024-12-01"
+
+[[kv_namespaces]]
+binding = "PORTFOLIO_DATA"
+id = "c31e5bdc37584e2e808628ee075c2852"

@@ -1,0 +1,25 @@
+{
+	"compatibility_date": "2026-04-10",
+	"compatibility_flags": [
+		"global_fetch_strictly_public"
+	],
+	"name": "my-portfolio",
+	"main": "@astrojs/cloudflare/entrypoints/server",
+	"assets": {
+		"directory": "./dist",
+		"binding": "ASSETS"
+	},
+	"observability": {
+		"enabled": true
+	},
+	"kv_namespaces": [
+		{
+			"binding": "PORTFOLIO_DATA",
+			"id": "c31e5bdc37584e2e808628ee075c2852"
+		},
+		{
+			"binding": "SESSION",
+			"id": "8cfbc3a5d2864405b22362ff88b4d82e"
+		}
+	]
+}

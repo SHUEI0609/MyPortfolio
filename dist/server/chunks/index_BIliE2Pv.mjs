@@ -1,0 +1,80 @@
+globalThis.process ??= {};
+globalThis.process.env ??= {};
+import { c as createComponent } from "./astro-component_CaMfsBuC.mjs";
+import { m as maybeRenderHead, r as renderTemplate, k as renderComponent } from "./worker-entry_0pxKtCdY.mjs";
+import { $ as $$BaseLayout } from "./BaseLayout_C0iVFRVd.mjs";
+const $$LoadingScreen = createComponent(($$result, $$props, $$slots) => {
+  return renderTemplate`<!-- Loading Screen -->${maybeRenderHead()}<div id="loading-screen" class="fixed inset-0 z-[100] bg-black flex flex-col items-center justify-center text-white transition-transform duration-700 ease-in-out"> <div id="loading-progress" class="text-9xl font-black tracking-tighter tabular-nums">0%</div> <div class="mt-4 text-xs font-bold tracking-[0.5em] animate-pulse">LOADING PORTFOLIO</div> </div>`;
+}, "/Users/shuei/Documents/MyPortfolio/src/components/LoadingScreen.astro", void 0);
+const $$BackgroundCanvas = createComponent(($$result, $$props, $$slots) => {
+  return renderTemplate`<!-- Dynamic Background -->${maybeRenderHead()}<canvas id="bg-canvas" class="fixed inset-0 z-0 pointer-events-none opacity-40"></canvas>`;
+}, "/Users/shuei/Documents/MyPortfolio/src/components/BackgroundCanvas.astro", void 0);
+const $$Header = createComponent(($$result, $$props, $$slots) => {
+  return renderTemplate`<!-- Header -->${maybeRenderHead()}<header class="fixed top-0 left-0 right-0 z-50 flex justify-between items-center px-6 py-6 transition-all duration-300 mix-blend-difference text-white animate-init delay-500"> <div class="text-xl font-black tracking-tighter cursor-pointer flex items-center gap-2" onclick="handleBackToHome()"> <div class="w-3 h-3 bg-white"></div>
+SHUEI<span class="opacity-50">.PF</span> </div> <nav class="hidden md:flex gap-8 text-xs font-bold tracking-widest"> <a href="#about" class="hover:opacity-50 transition-opacity cursor-pointer" onclick="smoothScroll(event, 'about')">ABOUT</a> <a href="#projects" class="hover:opacity-50 transition-opacity cursor-pointer" onclick="smoothScroll(event, 'projects')">PROJECTS</a> <a href="#contact" class="hover:opacity-50 transition-opacity cursor-pointer" onclick="smoothScroll(event, 'contact')">CONTACT</a> </nav> <div class="md:hidden"> <div class="w-8 h-8 flex flex-col justify-center gap-1.5"> <span class="w-full h-0.5 bg-white"></span> <span class="w-full h-0.5 bg-white"></span> </div> </div> </header>`;
+}, "/Users/shuei/Documents/MyPortfolio/src/components/Header.astro", void 0);
+const $$Hero = createComponent(($$result, $$props, $$slots) => {
+  return renderTemplate`<!-- HERO -->${maybeRenderHead()}<section class="relative pt-32 pb-20 px-6 min-h-[90vh] flex flex-col justify-center border-b-2 border-black overflow-hidden"> <div class="max-w-7xl mx-auto w-full z-10"> <!-- Top Label --> <div class="flex items-center gap-3 mb-8 animate-init delay-200"> <span class="w-2 h-2 bg-black rounded-full"></span> <span class="text-xs font-bold tracking-[0.2em] uppercase text-zinc-500">Portfolio 2026</span> </div> <!-- Main Headline --> <h1 class="text-5xl md:text-8xl font-black tracking-tighter leading-[0.9] mb-8 animate-init delay-400">
+ENGINEER <span class="text-zinc-300">/</span><br>
+STUDENT<br>
+RESEARCHER.
+</h1> <!-- Sub Description & Tags --> <div class="flex flex-col md:flex-row justify-between items-end gap-12 animate-init delay-600"> <div class="max-w-xl"> <!-- Tech Tags in Hero (High Priority Info) --> <div class="flex flex-wrap gap-2"> <span class="px-4 py-1.5 bg-black text-white text-xs font-bold tracking-wider uppercase rounded-full">Go</span> <span class="px-4 py-1.5 bg-black text-white text-xs font-bold tracking-wider uppercase rounded-full">Python</span> <span class="px-4 py-1.5 bg-black text-white text-xs font-bold tracking-wider uppercase rounded-full">TypeScript</span> <span class="px-4 py-1.5 bg-black text-white text-xs font-bold tracking-wider uppercase rounded-full">Deep
+                        Learning</span> </div> </div> <!-- CTA --> <div class="w-full md:w-auto"> <button onclick="smoothScroll(event, 'projects')" class="w-full md:w-auto group border-2 border-black px-8 py-4 font-bold text-sm tracking-widest hover:bg-black hover:text-white transition-all flex items-center justify-center gap-4">
+VIEW PROJECTS
+<i data-lucide="arrow-down" class="w-4 h-4 group-hover:translate-y-1 transition-transform"></i> </button> </div> </div> </div> <!-- Decorative Background Element --> <div class="absolute right-0 bottom-0 opacity-[0.03] pointer-events-none z-0"> <span class="text-[20vw] font-black leading-none text-black select-none">DEV</span> </div> </section>`;
+}, "/Users/shuei/Documents/MyPortfolio/src/components/Hero.astro", void 0);
+const $$About = createComponent(($$result, $$props, $$slots) => {
+  return renderTemplate`<!-- ABOUT -->${maybeRenderHead()}<section id="about" class="py-24 px-6 bg-white border-b-2 border-black"> <div class="max-w-7xl mx-auto"> <!-- Title Block --> <div class="flex flex-col md:flex-row md:items-baseline justify-between gap-4 mb-20 animate-on-scroll opacity-0 translate-y-8 transition-all duration-1000"> <h2 class="text-6xl md:text-8xl font-black tracking-tighter uppercase leading-none">ABOUT ME</h2> <div class="text-sm font-bold tracking-widest uppercase md:text-right text-zinc-400">エンジニアとしての背景
+</div> </div> <div class="grid md:grid-cols-12 gap-16"> <!-- Left: Image & Stats (Sticky) --> <div class="md:col-span-5 relative animate-on-scroll opacity-0 translate-y-8 transition-all duration-1000"> <div class="sticky top-32 space-y-8"> <!-- Image Card --> <div class="bg-zinc-100 p-2 border border-zinc-200 shadow-sm rotate-1 hover:rotate-0 transition-transform duration-500"> <div class="aspect-[3/4] bg-zinc-200 relative overflow-hidden group"> <img src="/image/mine.jpg" alt="SHUEI KOMURO" class="absolute inset-0 w-full h-full object-cover"> <div class="absolute inset-0 bg-gradient-to-t from-black/60 to-transparent opacity-60"></div> <div class="absolute bottom-6 left-6 text-white"> <h3 class="text-2xl font-black tracking-tight">SHUEI KOMURO <span class="text-lg font-normal ml-2">18歳</span></h3> <p class="text-xs font-mono opacity-80 mt-1">Osaka, Japan</p> </div> </div> </div> <!-- Mini Stats --> <div class="grid grid-cols-2 gap-4"> <div class="p-5 bg-zinc-50 border border-zinc-100"> <div class="text-[10px] font-bold text-zinc-400 tracking-widest mb-2 uppercase">Role
+</div> <div class="font-bold text-sm">AI Engineer</div> </div> <div class="p-5 bg-zinc-50 border border-zinc-100"> <div class="text-[10px] font-bold text-zinc-400 tracking-widest mb-2 uppercase">
+Focus</div> <div class="font-bold text-sm">EdTech / Art</div> </div> </div> </div> </div> <!-- Right: Content --> <div class="md:col-span-7 flex flex-col gap-20"> <!-- Intro --> <div class="animate-on-scroll opacity-0 translate-y-8 transition-all duration-1000 delay-100"> <h3 class="text-3xl md:text-5xl font-black leading-tight mb-8 tracking-tight">
+Logic meets<br>Creativity.
+</h3> <div class="prose prose-lg text-zinc-600 leading-loose text-justify-inter-character"> <p>
+大阪公立大学工業高等専門学校　知能情報コース所属。<br>
+AI技術と芸術分野の掛け合わせによる新たな可能性を探求しています。 将来は、テクノロジーによって画一化されるのではなく、
+                            一人ひとりの感性や個性を最大限に引き出す「AI×芸術教育」の事業化を目指しています。
+                            また、現代音楽部ではベーシストとして活動しており、技術と感性の両面からアプローチできることが強みです。
+</p> </div> </div> <!-- Tech Stack (Grouped List) --> <div class="animate-on-scroll opacity-0 translate-y-8 transition-all duration-1000 delay-200"> <div class="flex items-center gap-4 mb-8 border-b border-black pb-4"> <i data-lucide="cpu" class="w-5 h-5"></i> <h4 class="text-sm font-black tracking-widest uppercase">Technology Stack</h4> </div> <div id="skills-container" class="space-y-8"> <!-- Skills Injected Here --> </div> </div> <!-- Timeline (Clean) --> <div class="animate-on-scroll opacity-0 translate-y-8 transition-all duration-1000 delay-300"> <div class="flex items-center gap-4 mb-8 border-b border-black pb-4"> <i data-lucide="history" class="w-5 h-5"></i> <h4 class="text-sm font-black tracking-widest uppercase">Timeline</h4> </div> <div id="history-list" class="relative pl-4 space-y-10 border-l border-zinc-200 ml-2"> <!-- Timeline Items Injected Here --> </div> </div> </div> </div> </div> </section>`;
+}, "/Users/shuei/Documents/MyPortfolio/src/components/About.astro", void 0);
+const $$Topics = createComponent(($$result, $$props, $$slots) => {
+  return renderTemplate`${maybeRenderHead()}<section id="topics" class="py-12 overflow-hidden border-t border-b border-zinc-200 bg-white relative"> <div class="flex items-center gap-4 mb-6 px-6"> <h4 class="text-xs font-bold tracking-widest text-zinc-400 uppercase whitespace-nowrap">TOPICS</h4> <div class="h-px bg-zinc-200 flex-1"></div> </div> <div class="topic-ticker-wrapper"> <div id="topics-track" class="topic-ticker-track"> <!-- Topics injected by JS --> </div> </div> </section>`;
+}, "/Users/shuei/Documents/MyPortfolio/src/components/Topics.astro", void 0);
+const $$ProjectList = createComponent(($$result, $$props, $$slots) => {
+  return renderTemplate`<!-- PROJECTS LIST -->${maybeRenderHead()}<section id="projects" class="py-24 px-6"> <div class="max-w-7xl mx-auto"> <div class="border-t-2 border-black pt-4 mb-16 flex flex-col md:flex-row md:items-baseline justify-between gap-4 animate-on-scroll opacity-0 translate-y-8 transition-all duration-1000"> <div class="text-4xl md:text-8xl font-black tracking-tighter uppercase leading-none">PROJECT</div> <div class="text-sm font-bold tracking-widest uppercase md:text-right">成果物</div> </div> </div> <div id="projects-container" class="pb-24 border-b-2 border-black"> <!-- Projects will be injected by JS --> </div> </section>`;
+}, "/Users/shuei/Documents/MyPortfolio/src/components/ProjectList.astro", void 0);
+const $$ProjectDetail = createComponent(($$result, $$props, $$slots) => {
+  return renderTemplate`<!-- Detailed View (Hidden by default) -->${maybeRenderHead()}<div id="detail-view" class="hidden min-h-screen bg-[#F5F5F5] text-black pt-32 animate-fade-in relative z-20"> <!-- Header / Back Button --> <div class="container mx-auto px-6 mb-12"> <button onclick="handleBackToHome()" class="flex items-center gap-2 text-xs font-bold tracking-widest hover:opacity-50 transition-opacity"> <i data-lucide="arrow-left" class="w-4 h-4"></i> BACK TO LIST
+</button> </div> <!-- Detail Content Container --> <div id="detail-content"> <!-- Content injected by JS --> </div> <!-- Next Project Nav --> <div id="next-project-nav" onclick="handleNextProject()" class="w-full bg-black text-white py-24 md:py-40 px-6 cursor-pointer group relative overflow-hidden transition-colors hover:bg-zinc-900"> <div class="container mx-auto relative z-10 text-center"> <p class="text-xs md:text-sm font-bold tracking-[0.5em] mb-4 md:mb-8 text-zinc-400 group-hover:text-white transition-colors">
+NEXT PROJECT</p> <h2 id="next-project-title" class="text-5xl md:text-8xl font-black uppercase tracking-tighter group-hover:scale-105 transition-transform duration-700 ease-out"> <!-- Next Title --> </h2> <div class="mt-8 opacity-0 group-hover:opacity-100 transition-all duration-500 transform translate-y-4 group-hover:translate-y-0"> <span class="inline-flex items-center gap-2 text-sm font-bold border-b border-white pb-1">
+VIEW PROJECT <i data-lucide="arrow-right" class="w-4 h-4"></i> </span> </div> </div> <div class="absolute inset-0 bg-zinc-800 transform scale-x-0 group-hover:scale-x-100 transition-transform duration-500 origin-left -z-0 opacity-10"></div> </div> </div>`;
+}, "/Users/shuei/Documents/MyPortfolio/src/components/ProjectDetail.astro", void 0);
+const $$Contact = createComponent(($$result, $$props, $$slots) => {
+  return renderTemplate`<!-- CONTACT -->${maybeRenderHead()}<section id="contact" class="py-24 px-6 bg-black text-white relative flex flex-col justify-center"> <div class="relative z-10 w-full max-w-7xl mx-auto"> <div class="border-t-2 border-white pt-4 mb-16 flex flex-col md:flex-row md:items-baseline justify-between gap-4"> <div class="text-4xl md:text-8xl font-black tracking-tighter uppercase leading-none">CONTACTS</div> <div class="text-sm font-bold tracking-widest uppercase md:text-right">連絡</div> </div> <div class="grid md:grid-cols-2 gap-12 items-end"> <div class="animate-on-scroll opacity-0 translate-y-8 transition-all duration-1000"> <h3 class="text-4xl md:text-6xl font-black leading-none mb-8">
+CONNECT<br>WITH ME.
+</h3> <p class="text-sm opacity-70 mb-12 max-w-md leading-relaxed">
+プロジェクトのご相談、採用についてのお問い合わせ、
+                    その他どのようなことでもお気軽にご連絡ください。
+</p> <div class="flex flex-col gap-4"> <a href="mailto:rq23056h@st.omu.ac.jp" class="text-2xl md:text-4xl font-bold border-b border-white pb-2 hover:opacity-50 transition-opacity w-fit flex items-center gap-4">
+rq23056h@st.omu.ac.jp <i data-lucide="arrow-up-right"></i> </a> </div> </div> <div class="flex flex-col gap-6 md:items-end animate-on-scroll opacity-0 translate-y-8 transition-all duration-1000 delay-200"> <div class="text-xs font-bold tracking-widest opacity-50">SOCIAL</div> <div class="flex gap-4"> <a href="https://twitter.com" target="_blank" class="w-12 h-12 border border-white flex items-center justify-center rounded-full hover:bg-white hover:text-black transition-colors"> <i data-lucide="twitter"></i> </a> <a href="https://github.com/shuei0609" target="_blank" class="w-12 h-12 border border-white flex items-center justify-center rounded-full hover:bg-white hover:text-black transition-colors"> <i data-lucide="github"></i> </a> </div> <div class="mt-12 text-xs font-mono opacity-50 text-right">
+© <span id="current-year"></span> SHUEI KOMURO PORTFOLIO.
+</div> </div> </div> </div> </section>`;
+}, "/Users/shuei/Documents/MyPortfolio/src/components/Contact.astro", void 0);
+var __freeze = Object.freeze;
+var __defProp = Object.defineProperty;
+var __template = (cooked, raw) => __freeze(__defProp(cooked, "raw", { value: __freeze(cooked.slice()) }));
+var _a;
+const $$Index = createComponent(($$result, $$props, $$slots) => {
+  return renderTemplate`${renderComponent($$result, "BaseLayout", $$BaseLayout, {}, { "default": ($$result2) => renderTemplate(_a || (_a = __template([" ", " ", " ", "  ", '<main id="main-view" class="relative z-10 transition-opacity duration-500"> ', " ", " ", " ", " ", " </main> ", ' <script src="/portfolio.js"><\/script> '])), renderComponent($$result2, "LoadingScreen", $$LoadingScreen, {}), renderComponent($$result2, "BackgroundCanvas", $$BackgroundCanvas, {}), renderComponent($$result2, "Header", $$Header, {}), maybeRenderHead(), renderComponent($$result2, "Hero", $$Hero, {}), renderComponent($$result2, "About", $$About, {}), renderComponent($$result2, "Topics", $$Topics, {}), renderComponent($$result2, "ProjectList", $$ProjectList, {}), renderComponent($$result2, "Contact", $$Contact, {}), renderComponent($$result2, "ProjectDetail", $$ProjectDetail, {})) })}`;
+}, "/Users/shuei/Documents/MyPortfolio/src/pages/index.astro", void 0);
+const $$file = "/Users/shuei/Documents/MyPortfolio/src/pages/index.astro";
+const $$url = "";
+const _page = /* @__PURE__ */ Object.freeze(/* @__PURE__ */ Object.defineProperty({
+  __proto__: null,
+  default: $$Index,
+  file: $$file,
+  url: $$url
+}, Symbol.toStringTag, { value: "Module" }));
+const page = () => _page;
+export {
+  page
+};

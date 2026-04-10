@@ -1,0 +1,47 @@
+globalThis.process ??= {};
+globalThis.process.env ??= {};
+import { c as createComponent } from "./astro-component_CaMfsBuC.mjs";
+import { k as renderComponent, r as renderTemplate, m as maybeRenderHead } from "./worker-entry_0pxKtCdY.mjs";
+import { $ as $$BaseLayout } from "./BaseLayout_C0iVFRVd.mjs";
+var __freeze = Object.freeze;
+var __defProp = Object.defineProperty;
+var __template = (cooked, raw) => __freeze(__defProp(cooked, "raw", { value: __freeze(cooked.slice()) }));
+var _a;
+const $$Admin = createComponent(($$result, $$props, $$slots) => {
+  return renderTemplate`${renderComponent($$result, "BaseLayout", $$BaseLayout, { "title": "PORTFOLIO CMS | Admin" }, { "default": ($$result2) => renderTemplate(_a || (_a = __template([' <link rel="stylesheet" href="/admin.css">  ', `<div id="login-screen" class="min-h-screen bg-black flex items-center justify-center"> <div class="w-full max-w-sm px-6"> <div class="text-center mb-12"> <div class="text-white text-2xl font-black tracking-tighter mb-2 flex items-center justify-center gap-2"> <div class="w-3 h-3 bg-white"></div>
+SHUEI<span class="opacity-50">.CMS</span> </div> <p class="text-zinc-500 text-xs font-bold tracking-widest">PORTFOLIO MANAGEMENT</p> </div> <form id="login-form" class="space-y-6"> <div> <label class="text-zinc-400 text-xs font-bold tracking-widest block mb-2">PASSWORD</label> <input type="password" id="login-password" class="w-full bg-zinc-900 border border-zinc-800 text-white px-4 py-3 text-sm font-mono focus:outline-none focus:border-white transition-colors" placeholder="Enter admin password" autocomplete="current-password"> </div> <button type="submit" class="w-full bg-white text-black font-bold text-sm tracking-widest py-3 hover:bg-zinc-200 transition-colors">
+LOGIN
+</button> <p id="login-error" class="text-red-400 text-xs text-center hidden">パスワードが正しくありません</p> </form> </div> </div>  <div id="admin-dashboard" class="hidden min-h-screen bg-[#FAFAFA]"> <!-- Admin Header --> <header class="bg-black text-white px-6 py-4 flex justify-between items-center sticky top-0 z-50"> <div class="flex items-center gap-3"> <div class="w-3 h-3 bg-white"></div> <span class="font-black tracking-tighter">SHUEI<span class="opacity-50">.CMS</span></span> </div> <div class="flex items-center gap-4"> <a href="/" target="_blank" class="text-xs font-bold tracking-widest text-zinc-400 hover:text-white transition-colors flex items-center gap-1">
+VIEW SITE <i data-lucide="external-link" class="w-3 h-3"></i> </a> <button onclick="handleLogout()" class="text-xs font-bold tracking-widest text-zinc-400 hover:text-white transition-colors">
+LOGOUT
+</button> </div> </header> <!-- Tabs --> <div class="border-b border-zinc-200 bg-white"> <div class="max-w-5xl mx-auto px-6 flex"> <button onclick="switchTab('history')" id="tab-history" class="admin-tab active px-6 py-4 text-xs font-bold tracking-widest border-b-2 border-black transition-colors">
+HISTORY
+</button> <button onclick="switchTab('skills')" id="tab-skills" class="admin-tab px-6 py-4 text-xs font-bold tracking-widest border-b-2 border-transparent text-zinc-400 hover:text-black transition-colors">
+SKILLS
+</button> <button onclick="switchTab('projects')" id="tab-projects" class="admin-tab px-6 py-4 text-xs font-bold tracking-widest border-b-2 border-transparent text-zinc-400 hover:text-black transition-colors">
+PROJECTS
+</button> <button onclick="switchTab('topics')" id="tab-topics" class="admin-tab px-6 py-4 text-xs font-bold tracking-widest border-b-2 border-transparent text-zinc-400 hover:text-black transition-colors">
+TOPICS
+</button> </div> </div> <!-- Content Area --> <div class="max-w-5xl mx-auto px-6 py-8"> <!-- Action Bar --> <div class="flex justify-between items-center mb-8"> <h2 id="section-title" class="text-2xl font-black tracking-tight">History</h2> <button onclick="handleAdd()" class="bg-black text-white px-6 py-2.5 text-xs font-bold tracking-widest hover:bg-zinc-800 transition-colors flex items-center gap-2"> <i data-lucide="plus" class="w-4 h-4"></i> 新規追加
+</button> </div> <!-- Data List --> <div id="data-list" class="space-y-3"> <!-- Items injected here --> </div> </div> </div>  <div id="modal-overlay" class="hidden fixed inset-0 bg-black/60 z-[100] flex items-center justify-center p-4"> <div class="bg-white w-full max-w-lg max-h-[90vh] overflow-y-auto shadow-2xl"> <div class="flex justify-between items-center px-6 py-4 border-b border-zinc-200"> <h3 id="modal-title" class="font-bold text-lg">編集</h3> <button onclick="closeModal()" class="text-zinc-400 hover:text-black transition-colors"> <i data-lucide="x" class="w-5 h-5"></i> </button> </div> <form id="modal-form" class="p-6 space-y-4"> <div id="modal-fields"> <!-- Form fields injected here --> </div> <div class="flex gap-3 pt-4 border-t border-zinc-100"> <button type="submit" class="flex-1 bg-black text-white py-3 text-xs font-bold tracking-widest hover:bg-zinc-800 transition-colors">
+保存
+</button> <button type="button" onclick="closeModal()" class="px-6 py-3 border border-zinc-200 text-xs font-bold tracking-widest text-zinc-500 hover:border-black hover:text-black transition-colors">
+キャンセル
+</button> </div> </form> </div> </div>  <div id="delete-overlay" class="hidden fixed inset-0 bg-black/60 z-[100] flex items-center justify-center p-4"> <div class="bg-white w-full max-w-sm shadow-2xl p-6 text-center"> <div class="w-12 h-12 bg-red-50 rounded-full flex items-center justify-center mx-auto mb-4"> <i data-lucide="trash-2" class="w-5 h-5 text-red-500"></i> </div> <h3 class="font-bold text-lg mb-2">削除の確認</h3> <p class="text-sm text-zinc-500 mb-6">この項目を削除しますか？この操作は取り消せません。</p> <div class="flex gap-3"> <button onclick="confirmDelete()" class="flex-1 bg-red-500 text-white py-3 text-xs font-bold tracking-widest hover:bg-red-600 transition-colors">
+削除する
+</button> <button onclick="closeDeleteModal()" class="flex-1 border border-zinc-200 py-3 text-xs font-bold tracking-widest text-zinc-500 hover:border-black hover:text-black transition-colors">
+キャンセル
+</button> </div> </div> </div> <script src="/admin.js"><\/script> `])), maybeRenderHead()) })}`;
+}, "/Users/shuei/Documents/MyPortfolio/src/pages/admin.astro", void 0);
+const $$file = "/Users/shuei/Documents/MyPortfolio/src/pages/admin.astro";
+const $$url = "/admin";
+const _page = /* @__PURE__ */ Object.freeze(/* @__PURE__ */ Object.defineProperty({
+  __proto__: null,
+  default: $$Admin,
+  file: $$file,
+  url: $$url
+}, Symbol.toStringTag, { value: "Module" }));
+const page = () => _page;
+export {
+  page
+};

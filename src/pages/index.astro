@@ -1,0 +1,31 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+import LoadingScreen from '../components/LoadingScreen.astro';
+import BackgroundCanvas from '../components/BackgroundCanvas.astro';
+import Header from '../components/Header.astro';
+import Hero from '../components/Hero.astro';
+import About from '../components/About.astro';
+import Topics from '../components/Topics.astro';
+import ProjectList from '../components/ProjectList.astro';
+import ProjectDetail from '../components/ProjectDetail.astro';
+import Contact from '../components/Contact.astro';
+---
+
+<BaseLayout>
+    <LoadingScreen />
+    <BackgroundCanvas />
+    <Header />
+
+    <!-- Main View -->
+    <main id="main-view" class="relative z-10 transition-opacity duration-500">
+        <Hero />
+        <About />
+        <Topics />
+        <ProjectList />
+        <Contact />
+    </main>
+
+    <ProjectDetail />
+
+    <script is:inline src="/portfolio.js"></script>
+</BaseLayout>
