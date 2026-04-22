@@ -1,6 +1,6 @@
 globalThis.process ??= {};
 globalThis.process.env ??= {};
-import { h as historyData } from "./history_D8na7bUS.mjs";
+import { h as historyData } from "./history_cVNaS2H_.mjs";
 const ADMIN_PASSWORD = "0566";
 let memoryCache = null;
 function verifyAuth(request) {

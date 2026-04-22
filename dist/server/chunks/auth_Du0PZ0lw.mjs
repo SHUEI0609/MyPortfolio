@@ -5,11 +5,7 @@ function generateToken(password) {
   return btoa(payload);
 }
 function getAdminPassword() {
-  try {
-    return "0566";
-  } catch {
-    return "0566";
-  }
+  return "0566";
 }
 const POST = async ({ request }) => {
   try {

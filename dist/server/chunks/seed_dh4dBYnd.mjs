@@ -1,6 +1,6 @@
 globalThis.process ??= {};
 globalThis.process.env ??= {};
-import { h as historyData } from "./history_D8na7bUS.mjs";
+import { h as historyData } from "./history_cVNaS2H_.mjs";
 import { s as skillsData } from "./skills_hDREXqGS.mjs";
 import { p as projectsData } from "./projects_lnHvERnJ.mjs";
 import { t as topicsData } from "./topics_B_oeesir.mjs";

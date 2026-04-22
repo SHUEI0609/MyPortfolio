@@ -1,8 +1,8 @@
 globalThis.process ??= {};
 globalThis.process.env ??= {};
-import { c as createComponent } from "./astro-component_CaMfsBuC.mjs";
-import { m as maybeRenderHead, r as renderTemplate, k as renderComponent } from "./worker-entry_0pxKtCdY.mjs";
-import { $ as $$BaseLayout } from "./BaseLayout_C0iVFRVd.mjs";
+import { c as createComponent } from "./astro-component_BgPMITeR.mjs";
+import { m as maybeRenderHead, r as renderTemplate, k as renderComponent } from "./worker-entry_DysXgCnK.mjs";
+import { $ as $$BaseLayout } from "./BaseLayout_Deg8jdHk.mjs";
 const $$LoadingScreen = createComponent(($$result, $$props, $$slots) => {
   return renderTemplate`<!-- Loading Screen -->${maybeRenderHead()}<div id="loading-screen" class="fixed inset-0 z-[100] bg-black flex flex-col items-center justify-center text-white transition-transform duration-700 ease-in-out"> <div id="loading-progress" class="text-9xl font-black tracking-tighter tabular-nums">0%</div> <div class="mt-4 text-xs font-bold tracking-[0.5em] animate-pulse">LOADING PORTFOLIO</div> </div>`;
 }, "/Users/shuei/Documents/MyPortfolio/src/components/LoadingScreen.astro", void 0);
@@ -15,13 +15,15 @@ SHUEI<span class="opacity-50">.PF</span> </div> <nav class="hidden md:flex gap-8
 }, "/Users/shuei/Documents/MyPortfolio/src/components/Header.astro", void 0);
 const $$Hero = createComponent(($$result, $$props, $$slots) => {
   return renderTemplate`<!-- HERO -->${maybeRenderHead()}<section class="relative pt-32 pb-20 px-6 min-h-[90vh] flex flex-col justify-center border-b-2 border-black overflow-hidden"> <div class="max-w-7xl mx-auto w-full z-10"> <!-- Top Label --> <div class="flex items-center gap-3 mb-8 animate-init delay-200"> <span class="w-2 h-2 bg-black rounded-full"></span> <span class="text-xs font-bold tracking-[0.2em] uppercase text-zinc-500">Portfolio 2026</span> </div> <!-- Main Headline --> <h1 class="text-5xl md:text-8xl font-black tracking-tighter leading-[0.9] mb-8 animate-init delay-400">
-ENGINEER <span class="text-zinc-300">/</span><br>
-STUDENT<br>
+AI ENGINEER <span class="text-zinc-300">/</span><br>
+EdTech × Art<br>
 RESEARCHER.
 </h1> <!-- Sub Description & Tags --> <div class="flex flex-col md:flex-row justify-between items-end gap-12 animate-init delay-600"> <div class="max-w-xl"> <!-- Tech Tags in Hero (High Priority Info) --> <div class="flex flex-wrap gap-2"> <span class="px-4 py-1.5 bg-black text-white text-xs font-bold tracking-wider uppercase rounded-full">Go</span> <span class="px-4 py-1.5 bg-black text-white text-xs font-bold tracking-wider uppercase rounded-full">Python</span> <span class="px-4 py-1.5 bg-black text-white text-xs font-bold tracking-wider uppercase rounded-full">TypeScript</span> <span class="px-4 py-1.5 bg-black text-white text-xs font-bold tracking-wider uppercase rounded-full">Deep
-                        Learning</span> </div> </div> <!-- CTA --> <div class="w-full md:w-auto"> <button onclick="smoothScroll(event, 'projects')" class="w-full md:w-auto group border-2 border-black px-8 py-4 font-bold text-sm tracking-widest hover:bg-black hover:text-white transition-all flex items-center justify-center gap-4">
+                        Learning</span> </div> </div> <!-- CTA --> <div class="w-full md:w-auto flex flex-col sm:flex-row gap-3"> <button onclick="smoothScroll(event, 'projects')" class="w-full md:w-auto group border-2 border-black px-8 py-4 font-bold text-sm tracking-widest hover:bg-black hover:text-white transition-all flex items-center justify-center gap-4">
 VIEW PROJECTS
-<i data-lucide="arrow-down" class="w-4 h-4 group-hover:translate-y-1 transition-transform"></i> </button> </div> </div> </div> <!-- Decorative Background Element --> <div class="absolute right-0 bottom-0 opacity-[0.03] pointer-events-none z-0"> <span class="text-[20vw] font-black leading-none text-black select-none">DEV</span> </div> </section>`;
+<i data-lucide="arrow-down" class="w-4 h-4 group-hover:translate-y-1 transition-transform"></i> </button> <a href="/resume.pdf" download class="w-full md:w-auto group border-2 border-black px-8 py-4 font-bold text-sm tracking-widest hover:bg-black hover:text-white transition-all flex items-center justify-center gap-4">
+DOWNLOAD CV
+<i data-lucide="download" class="w-4 h-4"></i> </a> </div> </div> </div> <!-- Decorative Background Element --> <div class="absolute right-0 bottom-0 opacity-[0.03] pointer-events-none z-0"> <span class="text-[20vw] font-black leading-none text-black select-none">DEV</span> </div> </section>`;
 }, "/Users/shuei/Documents/MyPortfolio/src/components/Hero.astro", void 0);
 const $$About = createComponent(($$result, $$props, $$slots) => {
   return renderTemplate`<!-- ABOUT -->${maybeRenderHead()}<section id="about" class="py-24 px-6 bg-white border-b-2 border-black"> <div class="max-w-7xl mx-auto"> <!-- Title Block --> <div class="flex flex-col md:flex-row md:items-baseline justify-between gap-4 mb-20 animate-on-scroll opacity-0 translate-y-8 transition-all duration-1000"> <h2 class="text-6xl md:text-8xl font-black tracking-tighter uppercase leading-none">ABOUT ME</h2> <div class="text-sm font-bold tracking-widest uppercase md:text-right text-zinc-400">エンジニアとしての背景
@@ -34,6 +36,13 @@ Logic meets<br>Creativity.
 AI技術と芸術分野の掛け合わせによる新たな可能性を探求しています。 将来は、テクノロジーによって画一化されるのではなく、
                             一人ひとりの感性や個性を最大限に引き出す「AI×芸術教育」の事業化を目指しています。
                             また、現代音楽部ではベーシストとして活動しており、技術と感性の両面からアプローチできることが強みです。
+</p> </div> <div class="prose prose-sm text-zinc-400 leading-relaxed mt-4 border-l-2 border-zinc-200 pl-4"> <p>
+Student at Osaka Metropolitan University College of Technology, specializing in
+                            Informatics Intelligence. Exploring new possibilities at the intersection of AI and
+                            the arts. My goal is to build a business around "AI × Art Education" — technology
+                            that amplifies each person's unique sensibility rather than standardizing it.
+                            Also active as a bassist in the contemporary music club, bringing both technical
+                            and creative perspectives to my work.
 </p> </div> </div> <!-- Tech Stack (Grouped List) --> <div class="animate-on-scroll opacity-0 translate-y-8 transition-all duration-1000 delay-200"> <div class="flex items-center gap-4 mb-8 border-b border-black pb-4"> <i data-lucide="cpu" class="w-5 h-5"></i> <h4 class="text-sm font-black tracking-widest uppercase">Technology Stack</h4> </div> <div id="skills-container" class="space-y-8"> <!-- Skills Injected Here --> </div> </div> <!-- Timeline (Clean) --> <div class="animate-on-scroll opacity-0 translate-y-8 transition-all duration-1000 delay-300"> <div class="flex items-center gap-4 mb-8 border-b border-black pb-4"> <i data-lucide="history" class="w-5 h-5"></i> <h4 class="text-sm font-black tracking-widest uppercase">Timeline</h4> </div> <div id="history-list" class="relative pl-4 space-y-10 border-l border-zinc-200 ml-2"> <!-- Timeline Items Injected Here --> </div> </div> </div> </div> </div> </section>`;
 }, "/Users/shuei/Documents/MyPortfolio/src/components/About.astro", void 0);
 const $$Topics = createComponent(($$result, $$props, $$slots) => {
@@ -55,7 +64,9 @@ CONNECT<br>WITH ME.
 プロジェクトのご相談、採用についてのお問い合わせ、
                     その他どのようなことでもお気軽にご連絡ください。
 </p> <div class="flex flex-col gap-4"> <a href="mailto:rq23056h@st.omu.ac.jp" class="text-2xl md:text-4xl font-bold border-b border-white pb-2 hover:opacity-50 transition-opacity w-fit flex items-center gap-4">
-rq23056h@st.omu.ac.jp <i data-lucide="arrow-up-right"></i> </a> </div> </div> <div class="flex flex-col gap-6 md:items-end animate-on-scroll opacity-0 translate-y-8 transition-all duration-1000 delay-200"> <div class="text-xs font-bold tracking-widest opacity-50">SOCIAL</div> <div class="flex gap-4"> <a href="https://twitter.com" target="_blank" class="w-12 h-12 border border-white flex items-center justify-center rounded-full hover:bg-white hover:text-black transition-colors"> <i data-lucide="twitter"></i> </a> <a href="https://github.com/shuei0609" target="_blank" class="w-12 h-12 border border-white flex items-center justify-center rounded-full hover:bg-white hover:text-black transition-colors"> <i data-lucide="github"></i> </a> </div> <div class="mt-12 text-xs font-mono opacity-50 text-right">
+rq23056h@st.omu.ac.jp <i data-lucide="arrow-up-right"></i> </a> <a href="/resume.pdf" download class="text-sm font-bold border border-white px-6 py-3 hover:bg-white hover:text-black transition-colors w-fit flex items-center gap-3 tracking-widest uppercase"> <i data-lucide="download" class="w-4 h-4"></i>
+Download CV
+</a> </div> </div> <div class="flex flex-col gap-6 md:items-end animate-on-scroll opacity-0 translate-y-8 transition-all duration-1000 delay-200"> <div class="text-xs font-bold tracking-widest opacity-50">SOCIAL</div> <div class="flex gap-4"> <a href="https://github.com/shuei0609" target="_blank" class="w-12 h-12 border border-white flex items-center justify-center rounded-full hover:bg-white hover:text-black transition-colors"> <i data-lucide="github"></i> </a> </div> <div class="mt-12 text-xs font-mono opacity-50 text-right">
 © <span id="current-year"></span> SHUEI KOMURO PORTFOLIO.
 </div> </div> </div> </div> </section>`;
 }, "/Users/shuei/Documents/MyPortfolio/src/components/Contact.astro", void 0);

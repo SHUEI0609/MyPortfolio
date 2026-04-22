@@ -7,14 +7,7 @@ function generateToken(password: string): string {
 }
 
 function getAdminPassword(): string {
-    try {
-        // Astro v6 / Cloudflare Workers pattern
-        // In production: set ADMIN_PASSWORD as environment variable in Cloudflare
-        // In dev: fallback to default
-        return '0566';
-    } catch {
-        return '0566';
-    }
+    return import.meta.env.ADMIN_PASSWORD || '';
 }
 
 export const POST: APIRoute = async ({ request }) => {

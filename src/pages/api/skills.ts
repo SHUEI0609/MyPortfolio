@@ -1,7 +1,7 @@
 import type { APIRoute } from 'astro';
 import skillsData from '../../../data/skills.json';
 
-const ADMIN_PASSWORD = '0566';
+const ADMIN_PASSWORD = import.meta.env.ADMIN_PASSWORD || '';
 
 let memoryCache: any[] | null = null;
 

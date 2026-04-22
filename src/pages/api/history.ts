@@ -1,7 +1,7 @@
 import type { APIRoute } from 'astro';
 import historyData from '../../../data/history.json';
 
-const ADMIN_PASSWORD = '0566';
+const ADMIN_PASSWORD = import.meta.env.ADMIN_PASSWORD || '';
 
 // In-memory cache for development (persists until server restart)
 let memoryCache: any[] | null = null;

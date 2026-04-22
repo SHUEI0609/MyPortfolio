@@ -11,13 +11,7 @@ const historyData = [
     year: "2025",
     title: "Deep Learning Contest",
     sub: "1st Round Passed",
-    desc: "1次審査を突破。"
-  },
-  {
-    year: "2025",
-    title: "Deep Learning Contest",
-    sub: "Team Project",
-    desc: "3人チームのAIエンジニアとして参加。モデル選定から実装までを主導し、実践的な開発知見を獲得。（Project 04参照）"
+    desc: "3名チームのリードエンジニアとして参加。ResNet50ベースの距離推定AIの設計・実装・チューニングを主導し、チームを1次審査通過に導いた。（Project 04参照）"
   },
   {
     year: "2025",
@@ -29,19 +23,19 @@ const historyData = [
     year: "2025",
     title: "Matsuo Lab",
     sub: "DL Fundamentals",
-    desc: "東京大学 松尾・岩澤研究室主催 DL基礎講座修了。CNN, Transformer等のアーキテクチャおよび実装技術を習得。"
+    desc: "東京大学 松尾・岩澤研究室主催 DL基礎講座を修了。選抜制プログラムにてCNN・Transformerのアーキテクチャと実装技術を習得し、修了証を取得。"
   },
   {
     year: "2025",
     title: "Study Abroad",
     sub: "New Zealand",
-    desc: "ニュージーランド短期留学。現地での工学研修を通じ、技術英語とコミュニケーション能力を向上。"
+    desc: "ニュージーランド短期留学。工学研修プログラムへの参加を通じ、英語での技術的コミュニケーション能力を実践的に向上。"
   },
   {
     year: "2024",
     title: "HACK U",
     sub: "Team Project",
-    desc: "LINEヤフー主催ハッカソン参加。チームで開閉監視可能なスマートキーを開発。私はPythonでDiscord Botを作成し、スマートキーとのリアルタイム通信基盤を構築。"
+    desc: "LINEヤフー主催ハッカソン参加。リアルタイム開閉監視スマートキーをチームで開発。Python製 Discord Bot による通信基盤の設計・実装を単独で担当。"
   },
   {
     year: "2024",

@@ -1,8 +1,8 @@
 globalThis.process ??= {};
 globalThis.process.env ??= {};
 import { env } from "cloudflare:workers";
-import { A as AstroError, N as NoImageMetadata, F as FailedToFetchRemoteImageDimensions, i as isRemoteAllowed, R as RemoteImageNotAllowed, j as joinPaths, E as ExpectedImage, a as isRemotePath, L as LocalImageUsedWrongly, M as MissingImageDimension, U as UnsupportedImageFormat, I as IncompatibleDescriptorOptions, b as UnsupportedImageConversion, c as ExpectedImageOptions, d as ExpectedNotESMImage, e as InvalidImageService, f as ImageMissingAlt, m as maybeRenderHead, g as addAttribute, s as spreadAttributes, r as renderTemplate, h as FontFamilyNotFound, u as unescapeHTML } from "./worker-entry_0pxKtCdY.mjs";
-import { c as createComponent } from "./astro-component_CaMfsBuC.mjs";
+import { A as AstroError, N as NoImageMetadata, F as FailedToFetchRemoteImageDimensions, i as isRemoteAllowed, R as RemoteImageNotAllowed, j as joinPaths, E as ExpectedImage, a as isRemotePath, L as LocalImageUsedWrongly, M as MissingImageDimension, U as UnsupportedImageFormat, I as IncompatibleDescriptorOptions, b as UnsupportedImageConversion, c as ExpectedImageOptions, d as ExpectedNotESMImage, e as InvalidImageService, f as ImageMissingAlt, m as maybeRenderHead, g as addAttribute, s as spreadAttributes, r as renderTemplate, h as FontFamilyNotFound, u as unescapeHTML } from "./worker-entry_DysXgCnK.mjs";
+import { c as createComponent } from "./astro-component_BgPMITeR.mjs";
 const VALID_SUPPORTED_FORMATS = [
   "jpeg",
   "jpg",
@@ -1417,7 +1417,7 @@ async function getConfiguredImageService() {
   if (!globalThis?.astroAsset?.imageService) {
     const { default: service } = await import(
       // @ts-expect-error
-      "./image-service-workerd_B6oyzPCW.mjs"
+      "./image-service-workerd_BDQjAYjw.mjs"
     ).catch((e) => {
       const error = new AstroError(InvalidImageService);
       error.cause = e;

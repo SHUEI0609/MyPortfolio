@@ -1,8 +1,8 @@
 globalThis.process ??= {};
 globalThis.process.env ??= {};
-import { c as createComponent } from "./astro-component_CaMfsBuC.mjs";
-import { k as renderComponent, r as renderTemplate, m as maybeRenderHead } from "./worker-entry_0pxKtCdY.mjs";
-import { $ as $$BaseLayout } from "./BaseLayout_C0iVFRVd.mjs";
+import { c as createComponent } from "./astro-component_BgPMITeR.mjs";
+import { k as renderComponent, r as renderTemplate, m as maybeRenderHead } from "./worker-entry_DysXgCnK.mjs";
+import { $ as $$BaseLayout } from "./BaseLayout_Deg8jdHk.mjs";
 var __freeze = Object.freeze;
 var __defProp = Object.defineProperty;
 var __template = (cooked, raw) => __freeze(__defProp(cooked, "raw", { value: __freeze(cooked.slice()) }));

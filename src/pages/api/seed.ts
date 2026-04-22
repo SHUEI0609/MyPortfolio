@@ -4,7 +4,7 @@ import skillsData from '../../../data/skills.json';
 import projectsData from '../../../data/projects.json';
 import topicsData from '../../../data/topics.json';
 
-const ADMIN_PASSWORD = '0566';
+const ADMIN_PASSWORD = import.meta.env.ADMIN_PASSWORD || '';
 
 function verifyAuth(request: Request): boolean {
     const authHeader = request.headers.get('Authorization');
