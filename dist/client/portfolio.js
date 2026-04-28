@@ -137,31 +137,52 @@ function renderSkills() {
 }
 
 function renderTopics() {
-    const track = document.getElementById('topics-track');
-    if (!track || TOPICS.length === 0) return;
+    const track1 = document.getElementById('topics-track-1');
+    const track2 = document.getElementById('topics-track-2');
+    const countEl = document.getElementById('topics-count');
 
-    // Build single set of cards
-    const buildCards = (items) => items.map(t => {
-        const imgHtml = t.image && t.image.trim() !== '' 
-            ? `<div class="w-full h-32 mb-4 bg-zinc-100 overflow-hidden border border-zinc-200"><img src="${t.image}" alt="" class="w-full h-full object-cover"></div>` 
-            : `<div class="w-full h-32 mb-4 bg-zinc-50 border border-zinc-200 flex items-center justify-center">
-                   <span class="text-[10px] font-bold tracking-[0.2em] text-zinc-300 uppercase">No Image</span>
-               </div>`;
-        return `
-        <div class="topic-card flex flex-col justify-center">
-            ${imgHtml}
-            <div class="flex items-center gap-2 mb-2">
-                <span class="text-[10px] font-bold tracking-widest text-zinc-400 uppercase bg-zinc-100 px-2 py-0.5">${t.tag}</span>
-                <span class="text-[10px] font-mono text-zinc-300">${t.date}</span>
-            </div>
-            <h5 class="text-sm font-bold text-zinc-800 leading-snug">${t.title}</h5>
-        </div>
-        `;
-    }).join('');
+    if (!track1 || TOPICS.length === 0) return;
 
-    // Duplicate for infinite scroll (need at least 2 copies)
-    const cards = buildCards(TOPICS);
-    track.innerHTML = cards + cards;
+    if (countEl) {
+        countEl.textContent = `${String(TOPICS.length).padStart(2, '0')} entries`;
+        countEl.classList.remove('hidden');
+    }
+
+    const buildCard = (t) => {
+        const rawImg = t.image && t.image.trim() !== '' ? t.image.trim() : null;
+        const imgSrc = rawImg
+            ? (rawImg.startsWith('http') || rawImg.startsWith('/') ? rawImg : `/${rawImg}`)
+            : null;
+
+        if (imgSrc) {
+            return `<div class="topic-card topic-card--image" data-tag="${t.tag}">
+                <div class="topic-card-bg" style="background-image:url('${imgSrc}')"></div>
+                <div class="topic-card-overlay"></div>
+                <div class="topic-card-content">
+                    <div class="topic-card-meta">
+                        <span class="topic-tag-badge">${t.tag}</span>
+                        <span class="topic-date">${t.date}</span>
+                    </div>
+                    <h5 class="topic-title">${t.title}</h5>
+                </div>
+            </div>`;
+        } else {
+            const initial = t.tag ? t.tag.charAt(0).toUpperCase() : '#';
+            return `<div class="topic-card topic-card--text" data-tag="${t.tag}">
+                <div class="topic-card-initial" aria-hidden="true">${initial}</div>
+                <div class="topic-card-content">
+                    <div class="topic-card-meta">
+                        <span class="topic-tag-badge">${t.tag}</span>
+                        <span class="topic-date">${t.date}</span>
+                    </div>
+                    <h5 class="topic-title">${t.title}</h5>
+                </div>
+            </div>`;
+        }
+    };
+
+    const forward = TOPICS.map(buildCard).join('');
+    track1.innerHTML = forward + forward;
 }
 
 function renderProjects() {
@@ -283,11 +304,11 @@ function handleProjectClick(id) {
                 </div>
                 
                 <!-- Navigation Arrows -->
-                <button onclick="changeSlide(-1)" class="absolute left-4 top-1/2 -translate-y-1/2 w-12 h-12 bg-black/50 text-white flex items-center justify-center rounded-full opacity-0 group-hover:opacity-100 transition-opacity hover:bg-black">
-                    <i data-lucide="chevron-left" class="w-6 h-6"></i>
+                <button onclick="changeSlide(-1)" class="absolute left-3 top-1/2 -translate-y-1/2 w-10 h-10 md:w-12 md:h-12 bg-black/60 text-white flex items-center justify-center rounded-full opacity-100 md:opacity-0 group-hover:opacity-100 transition-opacity hover:bg-black">
+                    <i data-lucide="chevron-left" class="w-5 h-5"></i>
                 </button>
-                <button onclick="changeSlide(1)" class="absolute right-4 top-1/2 -translate-y-1/2 w-12 h-12 bg-black/50 text-white flex items-center justify-center rounded-full opacity-0 group-hover:opacity-100 transition-opacity hover:bg-black">
-                    <i data-lucide="chevron-right" class="w-6 h-6"></i>
+                <button onclick="changeSlide(1)" class="absolute right-3 top-1/2 -translate-y-1/2 w-10 h-10 md:w-12 md:h-12 bg-black/60 text-white flex items-center justify-center rounded-full opacity-100 md:opacity-0 group-hover:opacity-100 transition-opacity hover:bg-black">
+                    <i data-lucide="chevron-right" class="w-5 h-5"></i>
                 </button>
                 
                 <!-- Indicators -->
@@ -310,7 +331,7 @@ function handleProjectClick(id) {
     contentContainer.innerHTML = `
         <div class="container mx-auto px-6 border-t-2 border-black pt-8 mb-24">
             <div class="flex flex-col md:flex-row justify-between items-start md:items-end gap-8 mb-12">
-                <h1 class="text-6xl md:text-9xl font-black uppercase tracking-tighter leading-[0.8]">
+                <h1 class="text-4xl sm:text-6xl md:text-9xl font-black uppercase tracking-tighter leading-[0.85] break-words">
                     ${project.title}
                 </h1>
                 <div class="flex flex-col items-end text-right">
@@ -430,6 +451,20 @@ function initScrollObserver() {
     setTimeout(() => {
         document.querySelectorAll('#projects-container .animate-on-scroll').forEach(el => observer.observe(el));
     }, 100);
+}
+
+// --- Mobile Menu ---
+function toggleMobileMenu() {
+    const menu = document.getElementById('mobile-menu');
+    if (!menu) return;
+    const isOpen = !menu.classList.contains('translate-x-full');
+    if (isOpen) {
+        menu.classList.add('translate-x-full');
+        document.body.style.overflow = '';
+    } else {
+        menu.classList.remove('translate-x-full');
+        document.body.style.overflow = 'hidden';
+    }
 }
 
 // --- Canvas ---

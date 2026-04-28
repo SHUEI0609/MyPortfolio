@@ -7,6 +7,36 @@ function generateToken(password) {
 function getAdminPassword() {
   return "0566";
 }
+const GET = async ({ request }) => {
+  const authHeader = request.headers.get("Authorization");
+  if (!authHeader || !authHeader.startsWith("Bearer ")) {
+    return new Response(JSON.stringify({ error: "Unauthorized" }), {
+      status: 401,
+      headers: { "Content-Type": "application/json" }
+    });
+  }
+  const token = authHeader.slice(7);
+  try {
+    const decoded = atob(token);
+    const colonIndex = decoded.indexOf(":");
+    if (colonIndex === -1) throw new Error("invalid token");
+    const timestamp = decoded.substring(0, colonIndex);
+    const password = decoded.substring(colonIndex + 1);
+    const tokenAge = Date.now() - parseInt(timestamp);
+    const adminPassword = getAdminPassword();
+    if (adminPassword && password === adminPassword && tokenAge < 24 * 60 * 60 * 1e3) {
+      return new Response(JSON.stringify({ ok: true }), {
+        status: 200,
+        headers: { "Content-Type": "application/json" }
+      });
+    }
+  } catch {
+  }
+  return new Response(JSON.stringify({ error: "Unauthorized" }), {
+    status: 401,
+    headers: { "Content-Type": "application/json" }
+  });
+};
 const POST = async ({ request }) => {
   try {
     const text = await request.text();
@@ -39,6 +69,7 @@ const POST = async ({ request }) => {
 };
 const _page = /* @__PURE__ */ Object.freeze(/* @__PURE__ */ Object.defineProperty({
   __proto__: null,
+  GET,
   POST
 }, Symbol.toStringTag, { value: "Module" }));
 const page = () => _page;

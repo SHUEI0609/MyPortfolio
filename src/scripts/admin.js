@@ -2,7 +2,7 @@
 
 let authToken = localStorage.getItem('admin_token') || null;
 let currentTab = 'history';
-let currentData = { history: [], skills: [], projects: [] };
+let currentData = { history: [], skills: [], projects: [], topics: [] };
 let editIndex = null; // null = add mode, number = edit mode
 let deleteIndex = null;
 
@@ -36,7 +36,13 @@ const FIELDS = {
         { key: 'github', label: 'GitHub URL', type: 'text', placeholder: 'https://github.com/...' },
         { key: 'HuggingFace', label: 'HuggingFace URL', type: 'text', placeholder: 'https://huggingface.co/...' },
         { key: 'GoogleColab', label: 'Google Colab URL', type: 'text', placeholder: 'https://colab.research.google.com/...' },
-        { key: 'images', label: 'Images (comma separated)', type: 'text', placeholder: 'image/pic1.png, image/pic2.png' },
+        { key: 'images', label: 'Images (Upload or path)', type: 'image_list' },
+    ],
+    topics: [
+        { key: 'title', label: 'Title', type: 'text', placeholder: 'Topic Title' },
+        { key: 'image', label: 'Image', type: 'image_single' },
+        { key: 'tag', label: 'Tag', type: 'text', placeholder: 'AI / Work / Hackathon' },
+        { key: 'date', label: 'Date', type: 'text', placeholder: '2026-01' },
     ],
 };
 
@@ -44,6 +50,7 @@ const SECTION_TITLES = {
     history: 'History',
     skills: 'Skills',
     projects: 'Projects',
+    topics: 'Topics',
 };
 
 // --- Init ---
@@ -111,14 +118,16 @@ async function showDashboard() {
 
 async function loadAllData() {
     try {
-        const [historyRes, skillsRes, projectsRes] = await Promise.all([
+        const [historyRes, skillsRes, projectsRes, topicsRes] = await Promise.all([
             fetch('/api/history'),
             fetch('/api/skills'),
             fetch('/api/projects'),
+            fetch('/api/topics'),
         ]);
         currentData.history = await historyRes.json();
         currentData.skills = await skillsRes.json();
         currentData.projects = await projectsRes.json();
+        currentData.topics = await topicsRes.json();
     } catch (e) {
         showToast('データ読み込みに失敗しました', 'error');
     }
@@ -169,6 +178,9 @@ function renderList() {
         } else if (currentTab === 'projects') {
             primaryText = `<span class="font-mono text-xs text-zinc-400 mr-3">${item.id}</span>${item.title}`;
             secondaryText = item.category;
+        } else if (currentTab === 'topics') {
+            primaryText = item.title;
+            secondaryText = item.tag;
         }
 
         return `
@@ -215,12 +227,53 @@ function renderFormFields(item) {
     container.innerHTML = fields.map(field => {
         let value = item[field.key] || '';
 
-        // Handle images array
-        if (field.key === 'images' && Array.isArray(value)) {
-            value = value.join(', ');
-        }
-
-        if (field.type === 'textarea') {
+        if (field.type === 'image_list') {
+            const imageArray = Array.isArray(value) ? value : (value ? value.split(',').map(s => s.trim()) : []);
+            return `
+                <div>
+                    <label class="admin-label">${field.label}</label>
+                    <div id="image-preview-container" class="grid grid-cols-3 gap-2 mb-2">
+                        ${imageArray.map((img, i) => `
+                            <div class="relative aspect-square border border-zinc-200 bg-zinc-50 group">
+                                <img src="${img.startsWith('http') || img.startsWith('/') ? img : '/' + img}" class="w-full h-full object-cover" />
+                                <button type="button" onclick="removeImage(${i})" class="absolute top-1 right-1 bg-black/50 text-white p-1 rounded-full opacity-0 group-hover:opacity-100 transition-opacity">
+                                    <i data-lucide="x" class="w-3 h-3"></i>
+                                </button>
+                                <input type="hidden" name="images_hidden" value="${img}" />
+                            </div>
+                        `).join('')}
+                    </div>
+                    <div class="flex gap-2">
+                        <label class="flex-1 cursor-pointer bg-zinc-100 hover:bg-zinc-200 text-zinc-600 px-4 py-2 text-xs font-bold tracking-widest text-center transition-colors">
+                            UPLOAD IMAGE
+                            <input type="file" class="hidden" accept="image/*" onchange="uploadImage(this, 'list')" />
+                        </label>
+                    </div>
+                </div>
+            `;
+        } else if (field.type === 'image_single') {
+            const imgSrc = value ? (value.startsWith('http') || value.startsWith('/') ? value : '/' + value) : '';
+            return `
+                <div>
+                    <label class="admin-label">${field.label}</label>
+                    <div id="single-image-preview" class="mb-2 ${value ? '' : 'hidden'}">
+                        <div class="relative aspect-video max-h-40 border border-zinc-200 bg-zinc-50 group inline-block">
+                            <img src="${imgSrc}" class="h-full object-contain" />
+                            <button type="button" onclick="removeSingleImage()" class="absolute top-1 right-1 bg-black/50 text-white p-1 rounded-full opacity-0 group-hover:opacity-100 transition-opacity">
+                                <i data-lucide="x" class="w-3 h-3"></i>
+                            </button>
+                        </div>
+                    </div>
+                    <input type="hidden" id="single-image-input" name="image_single_hidden" value="${value}" />
+                    <div class="flex gap-2">
+                        <label class="flex-1 cursor-pointer bg-zinc-100 hover:bg-zinc-200 text-zinc-600 px-4 py-2 text-xs font-bold tracking-widest text-center transition-colors">
+                            ${value ? 'CHANGE IMAGE' : 'UPLOAD IMAGE'}
+                            <input type="file" class="hidden" accept="image/*" onchange="uploadImage(this, 'single')" />
+                        </label>
+                    </div>
+                </div>
+            `;
+        } else if (field.type === 'textarea') {
             return `
                 <div>
                     <label class="admin-label">${field.label}</label>
@@ -247,6 +300,82 @@ function renderFormFields(item) {
             `;
         }
     }).join('');
+    
+    if (typeof lucide !== 'undefined') lucide.createIcons();
+}
+
+async function uploadImage(input, mode = 'list') {
+    if (!input.files || !input.files[0]) return;
+    
+    const file = input.files[0];
+    const formData = new FormData();
+    formData.append('file', file);
+    
+    showToast('アップロード中...', 'info');
+    
+    try {
+        const res = await fetch('/api/upload', {
+            method: 'POST',
+            headers: {
+                'Authorization': `Bearer ${authToken}`,
+            },
+            body: formData
+        });
+        
+        if (res.ok) {
+            const data = await res.json();
+            
+            if (mode === 'list') {
+                const container = document.getElementById('image-preview-container');
+                const div = document.createElement('div');
+                div.className = 'relative aspect-square border border-zinc-200 bg-zinc-50 group';
+                div.innerHTML = `
+                    <img src="${data.url}" class="w-full h-full object-cover" />
+                    <button type="button" onclick="this.parentElement.remove()" class="absolute top-1 right-1 bg-black/50 text-white p-1 rounded-full opacity-0 group-hover:opacity-100 transition-opacity">
+                        <i data-lucide="x" class="w-3 h-3"></i>
+                    </button>
+                    <input type="hidden" name="images_hidden" value="${data.url}" />
+                `;
+                container.appendChild(div);
+            } else {
+                const preview = document.getElementById('single-image-preview');
+                const input = document.getElementById('single-image-input');
+                preview.innerHTML = `
+                    <div class="relative aspect-video max-h-40 border border-zinc-200 bg-zinc-50 group inline-block">
+                        <img src="${data.url}" class="h-full object-contain" />
+                        <button type="button" onclick="removeSingleImage()" class="absolute top-1 right-1 bg-black/50 text-white p-1 rounded-full opacity-0 group-hover:opacity-100 transition-opacity">
+                            <i data-lucide="x" class="w-3 h-3"></i>
+                        </button>
+                    </div>
+                `;
+                preview.classList.remove('hidden');
+                input.value = data.url;
+            }
+            
+            if (typeof lucide !== 'undefined') lucide.createIcons();
+            showToast('アップロード完了', 'success');
+        } else {
+            showToast('アップロードに失敗しました', 'error');
+        }
+    } catch (e) {
+        showToast('通信エラーが発生しました', 'error');
+    }
+}
+
+function removeSingleImage() {
+    const preview = document.getElementById('single-image-preview');
+    const input = document.getElementById('single-image-input');
+    preview.classList.add('hidden');
+    preview.innerHTML = '';
+    input.value = '';
+}
+
+function removeImage(index) {
+    const container = document.getElementById('image-preview-container');
+    const items = container.querySelectorAll('.relative');
+    if (items[index]) {
+        items[index].remove();
+    }
 }
 
 async function handleSave() {
@@ -256,12 +385,21 @@ async function handleSave() {
     const item = {};
 
     fields.forEach(field => {
-        let value = formData.get(field.key) || '';
-        if (field.key === 'images' && value) {
-            // Convert comma-separated string to array
-            item[field.key] = value.split(',').map(s => s.trim()).filter(s => s);
+        if (field.type === 'image_list') {
+            const images = [];
+            form.querySelectorAll('input[name="images_hidden"]').forEach(input => {
+                let path = input.value;
+                if (path.startsWith('/')) path = path.substring(1);
+                images.push(path);
+            });
+            item[field.key] = images;
+        } else if (field.type === 'image_single') {
+            const input = form.querySelector('input[name="image_single_hidden"]');
+            let path = input ? input.value : '';
+            if (path.startsWith('/')) path = path.substring(1);
+            item[field.key] = path;
         } else {
-            item[field.key] = value;
+            item[field.key] = formData.get(field.key) || '';
         }
     });
 

@@ -1,6 +1,6 @@
 globalThis.process ??= {};
 globalThis.process.env ??= {};
-import { p as projectsData } from "./projects_lnHvERnJ.mjs";
+import { h as historyData } from "./history_cVNaS2H_.mjs";
 const ADMIN_PASSWORD = "0566";
 let memoryCache = null;
 function verifyAuth(request) {
@@ -9,7 +9,10 @@ function verifyAuth(request) {
   const token = authHeader.slice(7);
   try {
     const decoded = atob(token);
-    const [timestamp, password] = decoded.split(":");
+    const colonIndex = decoded.indexOf(":");
+    if (colonIndex === -1) return false;
+    const timestamp = decoded.substring(0, colonIndex);
+    const password = decoded.substring(colonIndex + 1);
     const tokenAge = Date.now() - parseInt(timestamp);
     return password === ADMIN_PASSWORD && tokenAge < 24 * 60 * 60 * 1e3;
   } catch {
@@ -27,16 +30,20 @@ async function getKV() {
 async function getData(kv) {
   if (kv) {
     try {
-      const data = await kv.get("projects");
+      const data = await kv.get("history");
       if (data) return JSON.parse(data);
     } catch {
     }
   }
-  if (memoryCache !== null) return [...memoryCache];
-  return [...projectsData];
+  if (memoryCache !== null) {
+    return [...memoryCache];
+  }
+  return [...historyData];
 }
 async function saveData(kv, data) {
-  if (kv) await kv.put("projects", JSON.stringify(data));
+  if (kv) {
+    await kv.put("history", JSON.stringify(data));
+  }
   memoryCache = [...data];
 }
 const GET = async () => {
@@ -58,7 +65,7 @@ const POST = async ({ request }) => {
     const text = await request.text();
     const newItem = JSON.parse(text);
     const data = await getData(kv);
-    data.push(newItem);
+    data.unshift(newItem);
     await saveData(kv, data);
     return new Response(JSON.stringify(data), {
       headers: { "Content-Type": "application/json" }

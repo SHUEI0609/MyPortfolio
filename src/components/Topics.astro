@@ -1,16 +1,25 @@
 ---
-// Topic Ticker Section - Scrolling blocks from right to left
+// Topic Ticker Section — dual-direction scrolling cards
 ---
 
-<section id="topics" class="py-12 overflow-hidden border-t border-b border-zinc-200 bg-white relative">
-    <div class="flex items-center gap-4 mb-6 px-6">
-        <h4 class="text-xs font-bold tracking-widest text-zinc-400 uppercase whitespace-nowrap">TOPICS</h4>
-        <div class="h-px bg-zinc-200 flex-1"></div>
+<section id="topics" class="py-24 overflow-hidden border-t-2 border-b-2 border-black bg-white relative">
+
+    <!-- Section Header -->
+    <div class="max-w-7xl mx-auto px-6 mb-14">
+        <div class="flex flex-col md:flex-row md:items-baseline justify-between gap-3">
+            <h2 class="text-5xl md:text-8xl font-black tracking-tighter uppercase leading-none">Topics</h2>
+            <div class="flex items-center gap-6 md:pb-1">
+                <span class="text-sm font-bold tracking-widest uppercase text-zinc-400">最近の活動</span>
+                <span id="topics-count" class="font-mono text-xs text-zinc-300 hidden md:block"></span>
+            </div>
+        </div>
+        <div class="h-px bg-black mt-5"></div>
     </div>
-    
+
     <div class="topic-ticker-wrapper">
-        <div id="topics-track" class="topic-ticker-track">
-            <!-- Topics injected by JS -->
+        <div id="topics-track-1" class="topic-ticker-track">
+            <!-- JS injected -->
         </div>
     </div>
+
 </section>

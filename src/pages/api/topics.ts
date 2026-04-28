@@ -6,12 +6,16 @@ const ADMIN_PASSWORD = import.meta.env.ADMIN_PASSWORD || '';
 let memoryCache: any[] | null = null;
 
 function verifyAuth(request: Request): boolean {
+    if (!ADMIN_PASSWORD) return false;
     const authHeader = request.headers.get('Authorization');
     if (!authHeader || !authHeader.startsWith('Bearer ')) return false;
     const token = authHeader.slice(7);
     try {
         const decoded = atob(token);
-        const [timestamp, password] = decoded.split(':');
+        const colonIndex = decoded.indexOf(':');
+        if (colonIndex === -1) return false;
+        const timestamp = decoded.substring(0, colonIndex);
+        const password = decoded.substring(colonIndex + 1);
         const tokenAge = Date.now() - parseInt(timestamp);
         return password === ADMIN_PASSWORD && tokenAge < 24 * 60 * 60 * 1000;
     } catch {

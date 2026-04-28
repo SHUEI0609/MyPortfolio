@@ -123,3 +123,22 @@ textarea.admin-input {
 .admin-toast.success {
     background: #22c55e;
 }
+
+.admin-toast.info {
+    background: #3b82f6;
+}
+
+/* Image Previews */
+#image-preview-container .relative img,
+#single-image-preview .relative img {
+    transition: transform 0.3s ease;
+}
+
+#image-preview-container .relative:hover img,
+#single-image-preview .relative:hover img {
+    transform: scale(1.05);
+}
+
+.cursor-pointer input[type="file"] {
+    display: none;
+}

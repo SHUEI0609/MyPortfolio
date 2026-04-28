@@ -14,10 +14,40 @@
         <a href="#contact" class="hover:opacity-50 transition-opacity cursor-pointer"
             onclick="smoothScroll(event, 'contact')">CONTACT</a>
     </nav>
-    <div class="md:hidden">
-        <div class="w-8 h-8 flex flex-col justify-center gap-1.5">
-            <span class="w-full h-0.5 bg-white"></span>
-            <span class="w-full h-0.5 bg-white"></span>
-        </div>
-    </div>
+    <button class="md:hidden w-8 h-8 flex flex-col justify-center gap-[5px]"
+        onclick="toggleMobileMenu()" aria-label="メニューを開く">
+        <span class="block w-full h-[2px] bg-white"></span>
+        <span class="block w-full h-[2px] bg-white"></span>
+    </button>
 </header>
+
+<!-- Mobile Menu Overlay -->
+<div id="mobile-menu"
+    class="fixed inset-0 z-[60] bg-black text-white flex flex-col justify-center px-8 translate-x-full transition-transform duration-300 ease-in-out md:hidden">
+
+    <!-- Top bar inside menu -->
+    <div class="absolute top-0 left-0 right-0 flex items-center justify-between px-6 py-6">
+        <span class="text-xl font-black tracking-tighter">SHUEI<span class="opacity-50">.PF</span></span>
+        <button onclick="toggleMobileMenu()" class="w-10 h-10 flex items-center justify-center"
+            aria-label="閉じる">
+            <i data-lucide="x" class="w-6 h-6"></i>
+        </button>
+    </div>
+
+    <!-- Nav Links -->
+    <nav class="flex flex-col">
+        <a class="text-[13vw] font-black tracking-tighter uppercase cursor-pointer border-b border-zinc-800 py-4 leading-none hover:opacity-40 transition-opacity"
+            onclick="toggleMobileMenu(); smoothScroll(event, 'about')">About</a>
+        <a class="text-[13vw] font-black tracking-tighter uppercase cursor-pointer border-b border-zinc-800 py-4 leading-none hover:opacity-40 transition-opacity"
+            onclick="toggleMobileMenu(); smoothScroll(event, 'topics')">Topics</a>
+        <a class="text-[13vw] font-black tracking-tighter uppercase cursor-pointer border-b border-zinc-800 py-4 leading-none hover:opacity-40 transition-opacity"
+            onclick="toggleMobileMenu(); smoothScroll(event, 'projects')">Projects</a>
+        <a class="text-[13vw] font-black tracking-tighter uppercase cursor-pointer py-4 leading-none hover:opacity-40 transition-opacity"
+            onclick="toggleMobileMenu(); smoothScroll(event, 'contact')">Contact</a>
+    </nav>
+
+    <!-- Footer note -->
+    <div class="absolute bottom-8 left-8 text-[10px] font-mono opacity-30 tracking-widest uppercase">
+        Portfolio 2026
+    </div>
+</div>
