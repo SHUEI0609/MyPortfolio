@@ -1,4 +1,5 @@
 import type { APIRoute } from 'astro';
+import skillsData from '../../../data/skills.json';
 
 const ADMIN_PASSWORD = import.meta.env.ADMIN_PASSWORD || '';
 
@@ -29,15 +30,19 @@ async function getKV(): Promise<KVNamespace | null> {
     }
 }
 
-/** KV のみからデータを取得。KV が空なら空配列を返す。 */
+/**
+ * KV が利用可能（本番）なら KV のみを参照。
+ * KV が利用不可（ローカル開発）なら JSON ファイルを返す。
+ */
 async function getData(kv: KVNamespace | null): Promise<any[]> {
     if (kv) {
         try {
             const data = await kv.get('skills');
             if (data) return JSON.parse(data);
         } catch {}
+        return [];
     }
-    return [];
+    return [...skillsData];
 }
 
 async function saveData(kv: KVNamespace | null, data: any[]): Promise<void> {

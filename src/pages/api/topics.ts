@@ -1,4 +1,5 @@
 import type { APIRoute } from 'astro';
+import topicsData from '../../../data/topics.json';
 
 const ADMIN_PASSWORD = import.meta.env.ADMIN_PASSWORD || '';
 
@@ -29,15 +30,21 @@ async function getKV(): Promise<KVNamespace | null> {
     }
 }
 
-/** KV のみからデータを取得。KV が空なら空配列を返す。 */
+/**
+ * KV が利用可能（本番）なら KV のみを参照。
+ * KV が利用不可（ローカル開発）なら JSON ファイルを返す。
+ */
 async function getData(kv: KVNamespace | null): Promise<any[]> {
     if (kv) {
         try {
             const data = await kv.get('topics');
             if (data) return JSON.parse(data);
         } catch {}
+        // KV は利用可能だがデータがない場合（初回未シード）は空配列
+        return [];
     }
-    return [];
+    // ローカル開発環境: JSON ファイルを使用
+    return [...topicsData];
 }
 
 async function saveData(kv: KVNamespace | null, data: any[]): Promise<void> {
