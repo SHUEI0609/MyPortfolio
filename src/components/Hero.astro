@@ -9,13 +9,20 @@
         <span class="text-xs font-bold tracking-[0.2em] uppercase text-zinc-400">Portfolio 2026</span>
     </div>
 
-    <!-- Center: Main Headline -->
-    <div class="text-center z-10 animate-init delay-300">
-        <h1 class="font-black tracking-tighter leading-[0.85] uppercase select-none">
-            <span class="block text-[13vw] md:text-[12vw] lg:text-[11vw]">AI Engineer</span>
-            <span class="block text-[10vw] md:text-[9vw] lg:text-[8.5vw] text-zinc-300">/</span>
-            <span class="block text-[13vw] md:text-[12vw] lg:text-[11vw]">Bassist</span>
+    <!-- Center: Layered Text -->
+    <div class="relative flex items-center justify-center z-10 animate-init delay-300 select-none" aria-label="SHUEI KOMURO — AI Engineer / Bassist">
+
+        <!-- Background Layer: AI Engineer + Bassist (薄く、大きく) -->
+        <div class="absolute inset-0 flex flex-col items-center justify-center pointer-events-none" aria-hidden="true">
+            <span class="block font-black tracking-tighter uppercase leading-none text-[9vw] md:text-[8vw] text-black/[0.07] whitespace-nowrap">AI Engineer</span>
+            <span class="block font-black tracking-tighter uppercase leading-none text-[9vw] md:text-[8vw] text-black/[0.07] whitespace-nowrap mt-2">Bassist</span>
+        </div>
+
+        <!-- Foreground Layer: SHUEI (前面、くっきり) -->
+        <h1 class="relative font-black tracking-tighter leading-none uppercase text-[22vw] md:text-[20vw] lg:text-[18vw] z-10">
+            SHUEI
         </h1>
+
     </div>
 
     <!-- Bottom: CTA & Tags -->
@@ -47,7 +54,7 @@
     <!-- Scroll indicator -->
     <div class="absolute bottom-12 left-1/2 -translate-x-1/2 hidden md:flex flex-col items-center gap-2 animate-init delay-700" aria-hidden="true">
         <div class="w-px h-12 bg-black/20 relative overflow-hidden">
-            <div class="absolute top-0 left-0 w-full bg-black animate-[scrollLine_1.8s_ease-in-out_infinite]" style="height:40%;animation:scrollLine 1.8s ease-in-out infinite;"></div>
+            <div class="absolute top-0 left-0 w-full bg-black" style="height:40%;animation:scrollLine 1.8s ease-in-out infinite;"></div>
         </div>
     </div>
 
