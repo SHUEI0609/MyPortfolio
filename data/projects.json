@@ -5,7 +5,7 @@
         "category": "DeepLearning",
         "desc": "文章の季節感を判断するAI",
         "tech": "Python, TensorFlow, Flask",
-        "fullDesc": "任意の文章を入力し、その文章が持つ「季節感（春夏秋冬）」を確信度と共に判定するWebアプリケーションです。\n\n自然言語処理（NLP）技術を用い、季節語だけでなく文脈に含まれるニュアンスを学習させました。APIサーバーとしてFlaskを採用し、軽量なフロントエンドと連携させています。データの不足や不適による精度面の課題を抱えていますが、より多くのデータを用いて学習させることで改善を図ります。",
+        "fullDesc": "任意の文章を入力し、その文章が持つ「季節感（春夏秋冬）」を確信度と共に判定するWebアプリケーションです。\n\n自然言語処理（NLP）技術を用い、季節語だけでなく文脈に含まれるニュアンスを学習させました。APIサーバーとしてFlaskを採用し、軽量なフロントエンドと連携させています。\n\n現在の課題として、学習データの量・質の不足による精度面の限界があります。今後は、より大規模かつ多様な日本語コーパスを収集し、BERT等の事前学習済みモデルをファインチューニングすることで精度向上を図る予定です。",
         "year": "2025",
         "HuggingFace": "https://huggingface.co/spaces/SHU-KOSEN/season/tree/main",
         "GoogleColab": "https://colab.research.google.com/drive/1gwn5tZdAme4SkE4YPDazogSCeDBO9tOA?usp=sharing",
@@ -39,7 +39,7 @@
         "category": "DeepLearning",
         "desc": "ResNet50を用いて撮影物から人の距離を推定するAI",
         "tech": "Python, Deep Learning",
-        "fullDesc": "ResNet50を用いた回帰モデルで作成した距離推定AIです。最初にNYU Depth Datasetというデータセットを用いて学習させたのちに、自分たちで収集したDatasetでファインチューニングしています。1m以内であれば精度は出ますが1m以上は全く精度が出ません。学習の構造やデータセットを見直すことで改善を図ります。",
+        "fullDesc": "ResNet50を用いた回帰モデルで作成した距離推定AIです。NYU Depth Datasetで事前学習後、自チームで収集したデータセットでファインチューニングを実施しました。\n\n【現状と課題】\n1m以内の近距離では一定の精度を確認できましたが、1m超の遠距離では精度が著しく低下します。原因として、①自己収集データの距離分布の偏り（近距離サンプルが過多）、②単眼カメラによる奥行き情報の本質的な曖昧さ、③回帰ヘッドの構造がシンプルすぎる点が挙げられます。\n\n【改善計画】\n・データ収集の再設計：1〜5mの距離帯を均等にサンプリングし、照明・背景の多様性を確保する\n・モデルの高度化：Depth Anything V2等のDepth Estimation特化モデルへの移行を検討\n・損失関数の見直し：遠距離サンプルに対する重み付き損失（Weighted MSE）を導入し、遠距離精度を重点的に改善する",
         "year": "2026",
         "github": "https://github.com/SHUEI0609/Distance",
         "images": ["image/dis1.png"]

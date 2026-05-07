@@ -17,17 +17,41 @@ async function loadData() {
             fetch('/api/projects'),
             fetch('/api/topics'),
         ]);
+
+        if (!historyRes.ok || !skillsRes.ok || !projectsRes.ok || !topicsRes.ok) {
+            throw new Error('One or more API responses were not OK');
+        }
+
         HISTORY = await historyRes.json();
         SKILLS = await skillsRes.json();
         PROJECTS = await projectsRes.json();
         TOPICS = await topicsRes.json();
     } catch (e) {
-        console.error('Failed to load data from API, using fallback:', e);
-        // Fallback: try loading from data files directly
+        console.error('Failed to load data from API:', e);
+        showErrorBanner('データの読み込みに失敗しました。ページを再読み込みしてください。');
         HISTORY = [];
         SKILLS = [];
         PROJECTS = [];
+        TOPICS = [];
     }
+}
+
+// --- Error Banner ---
+function showErrorBanner(message) {
+    const existing = document.getElementById('error-banner');
+    if (existing) return;
+    const banner = document.createElement('div');
+    banner.id = 'error-banner';
+    banner.setAttribute('role', 'alert');
+    banner.style.cssText = `
+        position: fixed; bottom: 1.5rem; left: 50%; transform: translateX(-50%);
+        background: #111; color: #fff; padding: 0.75rem 1.5rem;
+        font-size: 0.8rem; font-weight: 700; letter-spacing: 0.05em;
+        border: 1px solid #333; z-index: 9999; max-width: 90vw; text-align: center;
+    `;
+    banner.textContent = message;
+    document.body.appendChild(banner);
+    setTimeout(() => banner.remove(), 6000);
 }
 
 // --- Initialization ---
@@ -155,25 +179,25 @@ function renderTopics() {
             : null;
 
         if (imgSrc) {
-            return `<div class="topic-card topic-card--image" data-tag="${t.tag}">
-                <div class="topic-card-bg" style="background-image:url('${imgSrc}')"></div>
+            return `<div class="topic-card topic-card--image" data-tag="${t.tag}" role="listitem">
+                <div class="topic-card-bg" style="background-image:url('${imgSrc}')" role="img" aria-label="${t.title}の画像"></div>
                 <div class="topic-card-overlay"></div>
                 <div class="topic-card-content">
                     <div class="topic-card-meta">
                         <span class="topic-tag-badge">${t.tag}</span>
-                        <span class="topic-date">${t.date}</span>
+                        <span class="topic-date"><time datetime="${t.date}">${t.date}</time></span>
                     </div>
                     <h5 class="topic-title">${t.title}</h5>
                 </div>
             </div>`;
         } else {
             const initial = t.tag ? t.tag.charAt(0).toUpperCase() : '#';
-            return `<div class="topic-card topic-card--text" data-tag="${t.tag}">
+            return `<div class="topic-card topic-card--text" data-tag="${t.tag}" role="listitem">
                 <div class="topic-card-initial" aria-hidden="true">${initial}</div>
                 <div class="topic-card-content">
                     <div class="topic-card-meta">
                         <span class="topic-tag-badge">${t.tag}</span>
-                        <span class="topic-date">${t.date}</span>
+                        <span class="topic-date"><time datetime="${t.date}">${t.date}</time></span>
                     </div>
                     <h5 class="topic-title">${t.title}</h5>
                 </div>
@@ -200,6 +224,10 @@ function renderProjects() {
 
         return `
         <div onclick="handleProjectClick('${p.id}')"
+            role="button"
+            tabindex="0"
+            aria-label="${p.title} の詳細を見る"
+            onkeydown="if(event.key==='Enter'||event.key===' '){handleProjectClick('${p.id}')}"
             class="group relative border-t border-black transition-all duration-500 hover:bg-black hover:text-white cursor-pointer animate-on-scroll opacity-0 translate-y-8 overflow-hidden py-12 hover:py-16"
             style="transition-delay: ${index * 100}ms">
             
@@ -219,12 +247,12 @@ function renderProjects() {
                 </div>
                 <div class="md:w-1/6 flex justify-end">
                     <div class="flex items-center gap-2 text-sm font-bold border-b border-current pb-1">
-                        VIEW WORK <i data-lucide="arrow-right" class="w-4 h-4"></i>
+                        VIEW WORK <i data-lucide="arrow-right" class="w-4 h-4" aria-hidden="true"></i>
                     </div>
                 </div>
             </div>
 
-            <div class="absolute inset-0 flex items-center justify-center overflow-hidden pointer-events-none transition-opacity duration-300 opacity-0 group-hover:opacity-100">
+            <div class="absolute inset-0 flex items-center justify-center overflow-hidden pointer-events-none transition-opacity duration-300 opacity-0 group-hover:opacity-100" aria-hidden="true">
                 <div class="animate-marquee whitespace-nowrap flex items-center">
                     ${marqueeText}
                 </div>
@@ -251,8 +279,8 @@ function handleProjectClick(id) {
         githubLinkHtml = `
             <div>
                 <h3 class="text-xs font-bold tracking-widest border-b border-black pb-2 mb-4">SOURCE</h3>
-                <a href="${project.github}" target="_blank" class="inline-flex items-center gap-2 text-lg font-bold hover:underline">
-                    <i data-lucide="github" class="w-5 h-5"></i>
+                <a href="${project.github}" target="_blank" rel="noopener noreferrer" class="inline-flex items-center gap-2 text-lg font-bold hover:underline">
+                    <i data-lucide="github" class="w-5 h-5" aria-hidden="true"></i>
                     View on GitHub
                 </a>
             </div>
@@ -265,8 +293,8 @@ function handleProjectClick(id) {
         huggingFaceLinkHtml = `
             <div>
                 <h3 class="text-xs font-bold tracking-widest border-b border-black pb-2 mb-4">HuggingFace</h3>
-                <a href="${project.HuggingFace}" target="_blank" class="inline-flex items-center gap-2 text-lg font-bold hover:underline">
-                    <i data-lucide="bot" class="w-5 h-5"></i>
+                <a href="${project.HuggingFace}" target="_blank" rel="noopener noreferrer" class="inline-flex items-center gap-2 text-lg font-bold hover:underline">
+                    <i data-lucide="bot" class="w-5 h-5" aria-hidden="true"></i>
                     View on HuggingFace
                 </a>
             </div>
@@ -279,8 +307,8 @@ function handleProjectClick(id) {
         googleColabLinkHtml = `
             <div>
                 <h3 class="text-xs font-bold tracking-widest border-b border-black pb-2 mb-4">Colab</h3>
-                <a href="${project.GoogleColab}" target="_blank" class="inline-flex items-center gap-2 text-lg font-bold hover:underline">
-                    <i data-lucide="file-code-2" class="w-5 h-5"></i>
+                <a href="${project.GoogleColab}" target="_blank" rel="noopener noreferrer" class="inline-flex items-center gap-2 text-lg font-bold hover:underline">
+                    <i data-lucide="file-code-2" class="w-5 h-5" aria-hidden="true"></i>
                     View on Colab
                 </a>
             </div>
@@ -293,28 +321,28 @@ function handleProjectClick(id) {
         currentSlideIndex = 0;
         const slidesHtml = project.images.map((img, i) => `
             <div class="min-w-full h-full relative flex items-center justify-center bg-zinc-100 p-8 md:p-12">
-                <img src="/${img}" class="h-full w-auto object-contain max-h-full drop-shadow-2xl border-[8px] border-white bg-white" alt="${project.title} Image ${i + 1}">
+                <img src="/${img}" class="h-full w-auto object-contain max-h-full drop-shadow-2xl border-[8px] border-white bg-white" alt="${project.title} スクリーンショット ${i + 1}枚目">
             </div>
         `).join('');
 
         imageSectionHtml = `
-            <div class="w-full aspect-video bg-zinc-200 mb-16 relative group overflow-hidden border border-zinc-200">
+            <div class="w-full aspect-video bg-zinc-200 mb-16 relative group overflow-hidden border border-zinc-200" role="region" aria-label="${project.title} 画像スライダー">
                 <div id="slider-track" class="flex h-full transition-transform duration-500 ease-in-out">
                     ${slidesHtml}
                 </div>
                 
                 <!-- Navigation Arrows -->
-                <button onclick="changeSlide(-1)" class="absolute left-3 top-1/2 -translate-y-1/2 w-10 h-10 md:w-12 md:h-12 bg-black/60 text-white flex items-center justify-center rounded-full opacity-100 md:opacity-0 group-hover:opacity-100 transition-opacity hover:bg-black">
-                    <i data-lucide="chevron-left" class="w-5 h-5"></i>
+                <button onclick="changeSlide(-1)" aria-label="前の画像" class="absolute left-3 top-1/2 -translate-y-1/2 w-10 h-10 md:w-12 md:h-12 bg-black/60 text-white flex items-center justify-center rounded-full opacity-100 md:opacity-0 group-hover:opacity-100 transition-opacity hover:bg-black">
+                    <i data-lucide="chevron-left" class="w-5 h-5" aria-hidden="true"></i>
                 </button>
-                <button onclick="changeSlide(1)" class="absolute right-3 top-1/2 -translate-y-1/2 w-10 h-10 md:w-12 md:h-12 bg-black/60 text-white flex items-center justify-center rounded-full opacity-100 md:opacity-0 group-hover:opacity-100 transition-opacity hover:bg-black">
-                    <i data-lucide="chevron-right" class="w-5 h-5"></i>
+                <button onclick="changeSlide(1)" aria-label="次の画像" class="absolute right-3 top-1/2 -translate-y-1/2 w-10 h-10 md:w-12 md:h-12 bg-black/60 text-white flex items-center justify-center rounded-full opacity-100 md:opacity-0 group-hover:opacity-100 transition-opacity hover:bg-black">
+                    <i data-lucide="chevron-right" class="w-5 h-5" aria-hidden="true"></i>
                 </button>
                 
                 <!-- Indicators -->
-                <div class="absolute bottom-4 left-1/2 -translate-x-1/2 flex gap-2">
+                <div class="absolute bottom-4 left-1/2 -translate-x-1/2 flex gap-2" role="tablist" aria-label="スライドインジケーター">
                     ${project.images.map((_, i) => `
-                        <div id="indicator-${i}" class="w-2 h-2 rounded-full bg-white/50 transition-colors ${i === 0 ? 'bg-white' : ''}"></div>
+                        <div id="indicator-${i}" role="tab" aria-label="${i + 1}枚目" aria-selected="${i === 0 ? 'true' : 'false'}" class="w-2 h-2 rounded-full bg-white/50 transition-colors ${i === 0 ? 'bg-white' : ''}"></div>
                     `).join('')}
                 </div>
             </div>
@@ -322,7 +350,7 @@ function handleProjectClick(id) {
     } else {
         imageSectionHtml = `
             <div class="w-full aspect-video bg-zinc-200 mb-16 flex items-center justify-center overflow-hidden relative">
-                <span class="text-[10vw] font-black text-zinc-300 opacity-50 select-none">PROJECT IMG</span>
+                <span class="text-[10vw] font-black text-zinc-300 opacity-50 select-none" aria-hidden="true">PROJECT IMG</span>
                 <div class="absolute inset-0 bg-black/5"></div>
             </div>
         `;
@@ -428,9 +456,11 @@ function changeSlide(direction) {
             if (i === currentSlideIndex) {
                 indicator.classList.remove('bg-white/50');
                 indicator.classList.add('bg-white');
+                indicator.setAttribute('aria-selected', 'true');
             } else {
                 indicator.classList.remove('bg-white');
                 indicator.classList.add('bg-white/50');
+                indicator.setAttribute('aria-selected', 'false');
             }
         }
     });

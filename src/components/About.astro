@@ -1,10 +1,10 @@
 <!-- ABOUT -->
-<section id="about" class="py-24 px-6 bg-white border-b-2 border-black">
+<section id="about" class="py-24 px-6 bg-white border-b-2 border-black" aria-labelledby="about-heading">
     <div class="max-w-7xl mx-auto">
         <!-- Title Block -->
         <div
             class="flex flex-col md:flex-row md:items-baseline justify-between gap-4 mb-20 animate-on-scroll opacity-0 translate-y-8 transition-all duration-1000">
-            <h2 class="text-4xl sm:text-6xl md:text-8xl font-black tracking-tighter uppercase leading-none">ABOUT ME</h2>
+            <h2 id="about-heading" class="text-4xl sm:text-6xl md:text-8xl font-black tracking-tighter uppercase leading-none">ABOUT ME</h2>
             <div class="text-sm font-bold tracking-widest uppercase md:text-right text-zinc-400">エンジニアとしての背景
             </div>
         </div>
@@ -18,10 +18,12 @@
                     <div
                         class="bg-zinc-100 p-2 border border-zinc-200 shadow-sm rotate-1 hover:rotate-0 transition-transform duration-500">
                         <div class="aspect-[3/4] bg-zinc-200 relative overflow-hidden group">
-                            <img src="/image/mine.jpg" alt="SHUEI KOMURO"
-                                class="absolute inset-0 w-full h-full object-cover">
+                            <img src="/image/mine.jpg" alt="SHUEI KOMURO — AIエンジニア / EdTech × Art研究者"
+                                class="absolute inset-0 w-full h-full object-cover"
+                                width="600" height="800" loading="lazy">
                             <div
-                                class="absolute inset-0 bg-gradient-to-t from-black/60 to-transparent opacity-60">
+                                class="absolute inset-0 bg-gradient-to-t from-black/60 to-transparent opacity-60"
+                                aria-hidden="true">
                             </div>
                             <div class="absolute bottom-6 left-6 text-white">
                                 <h3 class="text-2xl font-black tracking-tight">SHUEI KOMURO <span
@@ -78,10 +80,10 @@
                 <!-- Tech Stack (Grouped List) -->
                 <div class="animate-on-scroll opacity-0 translate-y-8 transition-all duration-1000 delay-200">
                     <div class="flex items-center gap-4 mb-8 border-b border-black pb-4">
-                        <i data-lucide="cpu" class="w-5 h-5"></i>
+                        <i data-lucide="cpu" class="w-5 h-5" aria-hidden="true"></i>
                         <h4 class="text-sm font-black tracking-widest uppercase">Technology Stack</h4>
                     </div>
-                    <div id="skills-container" class="space-y-8">
+                    <div id="skills-container" class="space-y-8" role="list" aria-label="技術スタック一覧">
                         <!-- Skills Injected Here -->
                     </div>
                 </div>
@@ -89,10 +91,10 @@
                 <!-- Timeline (Clean) -->
                 <div class="animate-on-scroll opacity-0 translate-y-8 transition-all duration-1000 delay-300">
                     <div class="flex items-center gap-4 mb-8 border-b border-black pb-4">
-                        <i data-lucide="history" class="w-5 h-5"></i>
+                        <i data-lucide="history" class="w-5 h-5" aria-hidden="true"></i>
                         <h4 class="text-sm font-black tracking-widest uppercase">Timeline</h4>
                     </div>
-                    <div id="history-list" class="relative pl-4 space-y-10 border-l border-zinc-200 ml-2">
+                    <div id="history-list" class="relative pl-4 space-y-10 border-l border-zinc-200 ml-2" role="list" aria-label="経歴タイムライン">
                         <!-- Timeline Items Injected Here -->
                     </div>
                 </div>
