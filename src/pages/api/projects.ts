@@ -1,9 +1,6 @@
 import type { APIRoute } from 'astro';
-import projectsData from '../../../data/projects.json';
 
 const ADMIN_PASSWORD = import.meta.env.ADMIN_PASSWORD || '';
-
-let memoryCache: any[] | null = null;
 
 function verifyAuth(request: Request): boolean {
     if (!ADMIN_PASSWORD) return false;
@@ -32,6 +29,7 @@ async function getKV(): Promise<KVNamespace | null> {
     }
 }
 
+/** KV のみからデータを取得。KV が空なら空配列を返す。 */
 async function getData(kv: KVNamespace | null): Promise<any[]> {
     if (kv) {
         try {
@@ -39,13 +37,13 @@ async function getData(kv: KVNamespace | null): Promise<any[]> {
             if (data) return JSON.parse(data);
         } catch {}
     }
-    if (memoryCache !== null) return [...memoryCache];
-    return [...projectsData];
+    return [];
 }
 
 async function saveData(kv: KVNamespace | null, data: any[]): Promise<void> {
-    if (kv) await kv.put('projects', JSON.stringify(data));
-    memoryCache = [...data];
+    if (kv) {
+        await kv.put('projects', JSON.stringify(data));
+    }
 }
 
 export const GET: APIRoute = async () => {

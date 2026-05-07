@@ -1,10 +1,6 @@
 import type { APIRoute } from 'astro';
-import historyData from '../../../data/history.json';
 
 const ADMIN_PASSWORD = import.meta.env.ADMIN_PASSWORD || '';
-
-// In-memory cache for development (persists until server restart)
-let memoryCache: any[] | null = null;
 
 function verifyAuth(request: Request): boolean {
     if (!ADMIN_PASSWORD) return false;
@@ -33,28 +29,21 @@ async function getKV(): Promise<KVNamespace | null> {
     }
 }
 
+/** KV のみからデータを取得。KV が空なら空配列を返す。 */
 async function getData(kv: KVNamespace | null): Promise<any[]> {
-    // Try KV first (production)
     if (kv) {
         try {
             const data = await kv.get('history');
             if (data) return JSON.parse(data);
         } catch {}
     }
-    // Try in-memory cache (development)
-    if (memoryCache !== null) {
-        return [...memoryCache];
-    }
-    // Fallback to JSON file
-    return [...historyData];
+    return [];
 }
 
 async function saveData(kv: KVNamespace | null, data: any[]): Promise<void> {
     if (kv) {
         await kv.put('history', JSON.stringify(data));
     }
-    // Always update in-memory cache
-    memoryCache = [...data];
 }
 
 export const GET: APIRoute = async () => {
