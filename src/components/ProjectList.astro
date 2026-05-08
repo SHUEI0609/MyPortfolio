@@ -8,7 +8,22 @@
         </div>
     </div>
 
-    <div id="projects-container" class="pb-24 border-b-2 border-black">
+    <div id="projects-container" class="pb-12">
         <!-- Projects will be injected by JS -->
+    </div>
+
+    <!-- Pagination Controls -->
+    <div id="projects-pagination" class="max-w-7xl mx-auto flex items-center justify-between py-12 border-b-2 border-black animate-on-scroll opacity-0 translate-y-8 transition-all duration-1000">
+        <div class="flex items-center gap-4">
+            <span id="project-page-info" class="text-xs font-bold tracking-widest uppercase">Page 01 / 01</span>
+        </div>
+        <div class="flex gap-4">
+            <button id="prev-projects" class="p-4 border-2 border-black hover:bg-black hover:text-white transition-all disabled:opacity-30 disabled:hover:bg-transparent disabled:hover:text-black" aria-label="前のページ">
+                <i data-lucide="arrow-left" class="w-6 h-6"></i>
+            </button>
+            <button id="next-projects" class="p-4 border-2 border-black hover:bg-black hover:text-white transition-all disabled:opacity-30 disabled:hover:bg-transparent disabled:hover:text-black" aria-label="次のページ">
+                <i data-lucide="arrow-right" class="w-6 h-6"></i>
+            </button>
+        </div>
     </div>
 </section>

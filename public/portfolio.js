@@ -7,6 +7,8 @@ let TOPICS = [];
 // --- State ---
 let currentProjectId = null;
 let currentSlideIndex = 0;
+let projectPage = 1;
+const projectsPerPage = 5;
 
 // --- Data Loading ---
 async function loadData() {
@@ -211,8 +213,30 @@ function renderTopics() {
 
 function renderProjects() {
     const container = document.getElementById('projects-container');
+    const pagination = document.getElementById('projects-pagination');
+    const pageInfo = document.getElementById('project-page-info');
+    const prevBtn = document.getElementById('prev-projects');
+    const nextBtn = document.getElementById('next-projects');
+    
     if (!container) return;
-    container.innerHTML = PROJECTS.map((p, index) => {
+
+    const totalPages = Math.ceil(PROJECTS.length / projectsPerPage);
+    if (projectPage > totalPages) projectPage = totalPages;
+    if (projectPage < 1) projectPage = 1;
+
+    const start = (projectPage - 1) * projectsPerPage;
+    const end = start + projectsPerPage;
+    const paginatedProjects = PROJECTS.slice(start, end);
+
+    // Update UI
+    if (pageInfo) pageInfo.textContent = `Page ${String(projectPage).padStart(2, '0')} / ${String(totalPages).padStart(2, '0')}`;
+    if (prevBtn) prevBtn.disabled = projectPage === 1;
+    if (nextBtn) nextBtn.disabled = projectPage === totalPages;
+    if (pagination) {
+        pagination.style.display = totalPages <= 1 ? 'none' : 'flex';
+    }
+
+    container.innerHTML = paginatedProjects.map((p, index) => {
         const marqueeText = Array(4).fill(`
             <span class="text-7xl md:text-9xl font-black uppercase px-8 tracking-tighter">
                 ${p.title}
@@ -260,7 +284,34 @@ function renderProjects() {
         </div>
         `;
     }).join('');
+
     lucide.createIcons();
+
+    // Re-observe new elements
+    if (typeof initScrollObserver === 'function') initScrollObserver();
+    
+    // Setup listeners only once
+    if (!prevBtn.dataset.listener) {
+        prevBtn.addEventListener('click', () => {
+            if (projectPage > 1) {
+                projectPage--;
+                renderProjects();
+                document.getElementById('projects').scrollIntoView({ behavior: 'smooth' });
+            }
+        });
+        prevBtn.dataset.listener = 'true';
+    }
+    if (!nextBtn.dataset.listener) {
+        nextBtn.addEventListener('click', () => {
+            const totalPages = Math.ceil(PROJECTS.length / projectsPerPage);
+            if (projectPage < totalPages) {
+                projectPage++;
+                renderProjects();
+                document.getElementById('projects').scrollIntoView({ behavior: 'smooth' });
+            }
+        });
+        nextBtn.dataset.listener = 'true';
+    }
 }
 
 // --- Navigation & Interactions ---
