@@ -10,7 +10,11 @@
     "build": "astro build",
     "preview": "astro preview",
     "astro": "astro",
-    "generate-types": "wrangler types"
+    "generate-types": "wrangler types",
+    "data:push:local": "node scripts/sync-kv.mjs push local",
+    "data:push:remote": "node scripts/sync-kv.mjs push remote",
+    "data:pull:local": "node scripts/sync-kv.mjs pull local",
+    "data:pull:remote": "node scripts/sync-kv.mjs pull remote"
   },
   "dependencies": {
     "@astrojs/cloudflare": "^13.1.8",

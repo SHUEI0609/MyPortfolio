@@ -110,21 +110,22 @@ body.loaded .animate-init {
 .topic-ticker-wrapper {
     overflow: hidden;
     position: relative;
-    mask-image: linear-gradient(to right, transparent, black 6%, black 94%, transparent);
-    -webkit-mask-image: linear-gradient(to right, transparent, black 6%, black 94%, transparent);
+    padding-block: 0.25rem 1.75rem;
+    mask-image: linear-gradient(to right, transparent, black 2.5rem, black calc(100% - 2.5rem), transparent);
+    -webkit-mask-image: linear-gradient(to right, transparent, black 2.5rem, black calc(100% - 2.5rem), transparent);
 }
 
 .topic-ticker-track {
     display: flex;
-    gap: 0.875rem;
+    gap: 1rem;
     width: max-content;
+    padding-inline: max(1.5rem, calc((100vw - 80rem) / 2 + 1.5rem));
     animation: ticker 38s linear infinite;
 }
 
 .topic-ticker-track:hover {
     animation-play-state: paused;
 }
-
 
 @keyframes ticker {
     0%   { transform: translateX(0); }
@@ -135,8 +136,8 @@ body.loaded .animate-init {
 
 .topic-card {
     flex-shrink: 0;
-    width: 310px;
-    height: 230px;
+    width: clamp(18rem, 24vw, 22rem);
+    height: clamp(13.5rem, 18vw, 16rem);
     position: relative;
     overflow: hidden;
     cursor: default;
@@ -241,6 +242,7 @@ body.loaded .animate-init {
     display: flex;
     flex-direction: column;
     gap: 0.45rem;
+    min-width: 0;
 }
 
 .topic-card-meta {
@@ -248,6 +250,7 @@ body.loaded .animate-init {
     align-items: center;
     justify-content: space-between;
     gap: 0.5rem;
+    min-width: 0;
 }
 
 .topic-tag-badge {
@@ -257,6 +260,10 @@ body.loaded .animate-init {
     text-transform: uppercase;
     padding: 2px 8px;
     flex-shrink: 0;
+    max-width: 70%;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
 }
 
 .topic-card--image .topic-tag-badge {
@@ -294,3 +301,20 @@ body.loaded .animate-init {
 
 .topic-card--image .topic-title { color: #fff; }
 .topic-card--text .topic-title  { color: #f4f4f5; }
+
+@media (max-width: 767px) {
+    .topic-ticker-wrapper {
+        mask-image: linear-gradient(to right, transparent, black 1rem, black calc(100% - 1rem), transparent);
+        -webkit-mask-image: linear-gradient(to right, transparent, black 1rem, black calc(100% - 1rem), transparent);
+    }
+
+    .topic-ticker-track {
+        gap: 0.875rem;
+        padding-inline: 1rem;
+    }
+
+    .topic-card {
+        width: 18rem;
+        height: 13.5rem;
+    }
+}

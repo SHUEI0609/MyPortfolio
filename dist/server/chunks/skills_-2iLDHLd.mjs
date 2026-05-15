@@ -1,8 +1,7 @@
 globalThis.process ??= {};
 globalThis.process.env ??= {};
-import { s as skillsData } from "./skills_hDREXqGS.mjs";
+import { s as skillsData } from "./skills_MVJtQhuk.mjs";
 const ADMIN_PASSWORD = "0566";
-let memoryCache = null;
 function verifyAuth(request) {
   const authHeader = request.headers.get("Authorization");
   if (!authHeader || !authHeader.startsWith("Bearer ")) return false;
@@ -34,13 +33,14 @@ async function getData(kv) {
       if (data) return JSON.parse(data);
     } catch {
     }
+    return [];
   }
-  if (memoryCache !== null) return [...memoryCache];
   return [...skillsData];
 }
 async function saveData(kv, data) {
-  if (kv) await kv.put("skills", JSON.stringify(data));
-  memoryCache = [...data];
+  if (kv) {
+    await kv.put("skills", JSON.stringify(data));
+  }
 }
 const GET = async () => {
   const kv = await getKV();

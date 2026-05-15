@@ -1,49 +1,46 @@
 <!-- HERO -->
 <section
-    class="relative min-h-screen flex flex-col items-center justify-center border-b-2 border-black overflow-hidden px-6"
+    class="relative min-h-[100svh] flex flex-col border-b-2 border-black overflow-hidden px-6 pt-28 pb-8 md:px-12 md:pt-32 md:pb-12"
     aria-label="ヒーローセクション">
 
     <!-- Top Label -->
-    <div class="absolute top-32 left-6 md:left-12 flex items-center gap-3 animate-init delay-200">
+    <div class="relative z-10 flex items-center gap-3 animate-init delay-200">
         <span class="w-2 h-2 bg-black rounded-full" aria-hidden="true"></span>
         <span class="text-xs font-bold tracking-[0.2em] uppercase text-zinc-400">Portfolio 2026</span>
     </div>
 
-    <!-- Center: Layered Text -->
-    <div class="relative flex items-center justify-center z-10 animate-init delay-300 select-none" aria-label="SHUEI KOMURO — AI Engineer / Bassist">
-
-        <!-- Background Layer: AI Engineer + Bassist (薄く、大きく) -->
-        <div class="absolute inset-0 flex flex-col items-center justify-center pointer-events-none" aria-hidden="true">
-            <span class="block font-black tracking-tighter uppercase leading-none text-[28vw] text-black/[0.07] whitespace-nowrap">AI Engineer</span>
-            <span class="block font-black tracking-tighter uppercase leading-none text-[28vw] text-black/[0.07] whitespace-nowrap">Bassist</span>
-        </div>
-
-        <!-- Foreground Layer: SHUEI (前面、くっきり) -->
-        <h1 class="relative font-black tracking-tighter leading-none uppercase text-[22vw] md:text-[20vw] lg:text-[18vw] z-10">
-            SHUEI
-        </h1>
-
+    <!-- Center Image -->
+    <div class="relative z-10 flex flex-1 min-h-0 items-center justify-center py-8 sm:py-10 md:py-12 animate-init delay-300 select-none" aria-label="SHUEI KOMURO">
+        <img
+            src="/image/shuei.png"
+            alt="SHUEI KOMURO"
+            class="block w-[min(68vw,42svh,640px)] min-w-[180px] max-w-full h-auto object-contain"
+            width="2048"
+            height="2048"
+            loading="eager"
+            decoding="async"
+        >
     </div>
 
     <!-- Bottom: CTA & Tags -->
-    <div class="absolute bottom-12 left-0 right-0 px-6 md:px-12 flex flex-col md:flex-row items-end md:items-center justify-between gap-6 animate-init delay-500">
+    <div class="relative z-10 flex w-full flex-col md:flex-row items-stretch sm:items-end md:items-center justify-between gap-5 md:gap-6 animate-init delay-500">
         <!-- Tags -->
-        <div class="flex flex-wrap gap-2" role="list" aria-label="主要技術スタック">
-            <span role="listitem" class="px-3 py-1 border border-black text-xs font-bold tracking-wider uppercase">Go</span>
-            <span role="listitem" class="px-3 py-1 border border-black text-xs font-bold tracking-wider uppercase">Python</span>
-            <span role="listitem" class="px-3 py-1 border border-black text-xs font-bold tracking-wider uppercase">TypeScript</span>
-            <span role="listitem" class="px-3 py-1 border border-black text-xs font-bold tracking-wider uppercase">Deep Learning</span>
+        <div class="flex flex-wrap gap-2 max-w-full" role="list" aria-label="主要技術スタック">
+            <span role="listitem" class="px-3 py-1 border border-black text-[11px] sm:text-xs font-bold tracking-wider uppercase">Go</span>
+            <span role="listitem" class="px-3 py-1 border border-black text-[11px] sm:text-xs font-bold tracking-wider uppercase">Python</span>
+            <span role="listitem" class="px-3 py-1 border border-black text-[11px] sm:text-xs font-bold tracking-wider uppercase">TypeScript</span>
+            <span role="listitem" class="px-3 py-1 border border-black text-[11px] sm:text-xs font-bold tracking-wider uppercase">Deep Learning</span>
         </div>
 
         <!-- CTA -->
-        <div class="flex flex-col sm:flex-row gap-3">
+        <div class="flex flex-col sm:flex-row gap-3 w-full sm:w-auto">
             <button onclick="smoothScroll(event, 'projects')"
-                class="group border-2 border-black px-8 py-3 font-bold text-sm tracking-widest hover:bg-black hover:text-white transition-all flex items-center justify-center gap-3">
+                class="group border-2 border-black px-6 sm:px-8 py-3 font-bold text-sm tracking-widest hover:bg-black hover:text-white transition-all flex items-center justify-center gap-3 w-full sm:w-auto whitespace-nowrap">
                 VIEW PROJECTS
                 <i data-lucide="arrow-down" class="w-4 h-4 group-hover:translate-y-1 transition-transform" aria-hidden="true"></i>
             </button>
             <a href="https://github.com/shuei0609" target="_blank" rel="noopener noreferrer"
-                class="group border-2 border-black px-8 py-3 font-bold text-sm tracking-widest hover:bg-black hover:text-white transition-all flex items-center justify-center gap-3"
+                class="group border-2 border-black px-6 sm:px-8 py-3 font-bold text-sm tracking-widest hover:bg-black hover:text-white transition-all flex items-center justify-center gap-3 w-full sm:w-auto whitespace-nowrap"
                 aria-label="GitHubプロフィールを開く（新しいタブ）">
                 VIEW GITHUB
                 <i data-lucide="github" class="w-4 h-4" aria-hidden="true"></i>
@@ -54,5 +51,3 @@
 
 
 </section>
-
-

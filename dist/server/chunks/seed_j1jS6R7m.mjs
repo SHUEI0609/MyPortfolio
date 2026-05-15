@@ -1,9 +1,9 @@
 globalThis.process ??= {};
 globalThis.process.env ??= {};
-import { h as historyData } from "./history_cVNaS2H_.mjs";
-import { s as skillsData } from "./skills_hDREXqGS.mjs";
-import { p as projectsData } from "./projects_lnHvERnJ.mjs";
-import { t as topicsData } from "./topics_B_oeesir.mjs";
+import { h as historyData } from "./history_CwDn25aE.mjs";
+import { s as skillsData } from "./skills_MVJtQhuk.mjs";
+import { p as projectsData } from "./projects_5mLH82Fd.mjs";
+import { t as topicsData } from "./topics_DPNjxy9O.mjs";
 const ADMIN_PASSWORD = "0566";
 function verifyAuth(request) {
   const authHeader = request.headers.get("Authorization");

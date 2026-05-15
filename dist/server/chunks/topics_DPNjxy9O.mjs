@@ -1,0 +1,25 @@
+globalThis.process ??= {};
+globalThis.process.env ??= {};
+const topicsData = [
+  {
+    title: "arcoba.jpの作成",
+    image: "image/arcoba.png",
+    tag: "Astro TypeScript",
+    date: "2026-04"
+  },
+  {
+    title: "AffinityNexaで長期インターン開始",
+    image: "api/images/1777344595202-affinitynexa.png",
+    tag: "Work",
+    date: "2026-04"
+  },
+  {
+    title: "Portfolioの更新をしました",
+    image: "api/images/1777346348260-Port.png",
+    tag: "Astro TypeScript",
+    date: "2026-04"
+  }
+];
+export {
+  topicsData as t
+};

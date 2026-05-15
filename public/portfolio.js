@@ -7,6 +7,7 @@ let TOPICS = [];
 // --- State ---
 let currentProjectId = null;
 let currentSlideIndex = 0;
+let aboutPhotoIndex = 0;
 let projectPage = 1;
 const projectsPerPage = 5;
 
@@ -515,6 +516,31 @@ function changeSlide(direction) {
             }
         }
     });
+}
+
+function setAboutPhoto(index) {
+    const track = document.getElementById('about-photo-track');
+    if (!track) return;
+
+    const slideCount = track.children.length;
+    if (slideCount === 0) return;
+
+    aboutPhotoIndex = ((index % slideCount) + slideCount) % slideCount;
+    track.style.transform = `translateX(-${aboutPhotoIndex * 100}%)`;
+
+    for (let i = 0; i < slideCount; i++) {
+        const indicator = document.getElementById(`about-photo-indicator-${i}`);
+        if (!indicator) continue;
+
+        const isActive = i === aboutPhotoIndex;
+        indicator.classList.toggle('bg-white', isActive);
+        indicator.classList.toggle('bg-white/50', !isActive);
+        indicator.setAttribute('aria-current', String(isActive));
+    }
+}
+
+function changeAboutPhoto(direction) {
+    setAboutPhoto(aboutPhotoIndex + direction);
 }
 
 // --- Scroll Observer ---

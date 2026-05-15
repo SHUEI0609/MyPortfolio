@@ -64,6 +64,37 @@ const projectsData = [
     images: [
       "image/dis1.png"
     ]
+  },
+  {
+    id: "05",
+    title: "arcoba.jp",
+    category: "website",
+    desc: "arcoba.jpをastroを用いて作成しました",
+    tech: "astro typescript",
+    fullDesc: "URL : arcoba.jp\nAffinityNexaの初仕事としてarcoba.jpを作成しました。Astroについて学ぶとともに社員の一人として取引先と会議をし、開発するという経験をしました。",
+    year: "2026",
+    github: "",
+    HuggingFace: "",
+    GoogleColab: "",
+    images: [
+      "image/arcoba.png"
+    ]
+  },
+  {
+    id: "06",
+    title: "MyPortfolio",
+    category: "Astro TypeScript",
+    desc: "Astroを使用してポートフォリオを作成しました。adminページを作成し簡単に内容の追加ができるようにしました。",
+    tech: "TypeScript",
+    fullDesc: "",
+    year: "",
+    github: "",
+    HuggingFace: "",
+    GoogleColab: "",
+    images: [
+      "api/images/1777350374197-Port.png",
+      "api/images/1777350393983-Screenshot 2026-04-28 at 13-26-20 PORTFOLIO CMS Admin.png"
+    ]
   }
 ];
 export {

@@ -1,8 +1,7 @@
 globalThis.process ??= {};
 globalThis.process.env ??= {};
-import { p as projectsData } from "./projects_lnHvERnJ.mjs";
+import { t as topicsData } from "./topics_DPNjxy9O.mjs";
 const ADMIN_PASSWORD = "0566";
-let memoryCache = null;
 function verifyAuth(request) {
   const authHeader = request.headers.get("Authorization");
   if (!authHeader || !authHeader.startsWith("Bearer ")) return false;
@@ -30,17 +29,18 @@ async function getKV() {
 async function getData(kv) {
   if (kv) {
     try {
-      const data = await kv.get("projects");
+      const data = await kv.get("topics");
       if (data) return JSON.parse(data);
     } catch {
     }
+    return [];
   }
-  if (memoryCache !== null) return [...memoryCache];
-  return [...projectsData];
+  return [...topicsData];
 }
 async function saveData(kv, data) {
-  if (kv) await kv.put("projects", JSON.stringify(data));
-  memoryCache = [...data];
+  if (kv) {
+    await kv.put("topics", JSON.stringify(data));
+  }
 }
 const GET = async () => {
   const kv = await getKV();
@@ -61,7 +61,7 @@ const POST = async ({ request }) => {
     const text = await request.text();
     const newItem = JSON.parse(text);
     const data = await getData(kv);
-    data.push(newItem);
+    data.unshift(newItem);
     await saveData(kv, data);
     return new Response(JSON.stringify(data), {
       headers: { "Content-Type": "application/json" }

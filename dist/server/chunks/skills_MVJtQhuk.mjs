@@ -45,6 +45,11 @@ const skillsData = [
     name: "Hugging Face",
     type: "TOOL",
     info: "学習済みモデルの管理やSpacesを用いたデモ公開に使用。(参照: Project04)"
+  },
+  {
+    name: "C",
+    type: "LANG",
+    info: "編入学のため学習開始。アルゴ式や競プロを通して学びを深めております。"
   }
 ];
 export {
