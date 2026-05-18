@@ -3,6 +3,7 @@ let HISTORY = [];
 let SKILLS = [];
 let PROJECTS = [];
 let TOPICS = [];
+let MINDMAP = [];
 
 // --- State ---
 let currentProjectId = null;
@@ -14,14 +15,15 @@ const projectsPerPage = 5;
 // --- Data Loading ---
 async function loadData() {
     try {
-        const [historyRes, skillsRes, projectsRes, topicsRes] = await Promise.all([
+        const [historyRes, skillsRes, projectsRes, topicsRes, mindmapRes] = await Promise.all([
             fetch('/api/history'),
             fetch('/api/skills'),
             fetch('/api/projects'),
             fetch('/api/topics'),
+            fetch('/api/mindmap'),
         ]);
 
-        if (!historyRes.ok || !skillsRes.ok || !projectsRes.ok || !topicsRes.ok) {
+        if (!historyRes.ok || !skillsRes.ok || !projectsRes.ok || !topicsRes.ok || !mindmapRes.ok) {
             throw new Error('One or more API responses were not OK');
         }
 
@@ -29,6 +31,7 @@ async function loadData() {
         SKILLS = await skillsRes.json();
         PROJECTS = await projectsRes.json();
         TOPICS = await topicsRes.json();
+        MINDMAP = await mindmapRes.json();
     } catch (e) {
         console.error('Failed to load data from API:', e);
         showErrorBanner('データの読み込みに失敗しました。ページを再読み込みしてください。');
@@ -36,6 +39,7 @@ async function loadData() {
         SKILLS = [];
         PROJECTS = [];
         TOPICS = [];
+        MINDMAP = [];
     }
 }
 
@@ -67,6 +71,7 @@ document.addEventListener('DOMContentLoaded', async () => {
     renderSkills();
     renderTopics();
     renderProjects();
+    renderHeroMindmap();
     initScrollObserver();
     document.getElementById('current-year').textContent = new Date().getFullYear();
 });
@@ -210,6 +215,91 @@ function renderTopics() {
 
     const forward = TOPICS.map(buildCard).join('');
     track1.innerHTML = forward + forward;
+}
+
+function renderHeroMindmap() {
+    const container = document.getElementById('hero-mindmap');
+    if (!container) return;
+
+    const escapeHtml = (value) => String(value ?? '')
+        .replace(/&/g, '&amp;')
+        .replace(/</g, '&lt;')
+        .replace(/>/g, '&gt;')
+        .replace(/"/g, '&quot;')
+        .replace(/'/g, '&#39;');
+
+    const items = Array.isArray(MINDMAP) ? MINDMAP.slice(0, 14).map((item, index) => ({
+        ...item,
+        id: item.id || `node-${index}`,
+        parentId: item.parentId || '',
+    })) : [];
+    const roots = items.filter(item => !item.parentId);
+    const positionMap = new Map();
+
+    roots.forEach((item, index) => {
+        const fallbackAngle = -135 + (index * (270 / Math.max(roots.length - 1, 1)));
+        const angle = Number.isFinite(Number(item.angle)) ? Number(item.angle) : fallbackAngle;
+        const distance = Number.isFinite(Number(item.distance)) ? Number(item.distance) : 42;
+        const safeDistance = Math.max(38, Math.min(distance, 49));
+        const radians = angle * Math.PI / 180;
+        positionMap.set(item.id, {
+            left: 50 + Math.cos(radians) * safeDistance,
+            top: 50 + Math.sin(radians) * safeDistance,
+            angle,
+            depth: 0,
+        });
+    });
+
+    items.filter(item => item.parentId).forEach((item, index) => {
+        const parent = positionMap.get(item.parentId);
+        if (!parent) return;
+        const siblings = items.filter(candidate => candidate.parentId === item.parentId);
+        const siblingIndex = siblings.findIndex(candidate => candidate.id === item.id);
+        const fallbackAngle = parent.angle + (siblings.length === 1 ? 0 : -24 + siblingIndex * (48 / Math.max(siblings.length - 1, 1)));
+        const angle = Number.isFinite(Number(item.angle)) ? Number(item.angle) : fallbackAngle;
+        const distance = Number.isFinite(Number(item.distance)) ? Number(item.distance) : 18;
+        const safeDistance = Math.max(12, Math.min(distance, 24));
+        const radians = angle * Math.PI / 180;
+        positionMap.set(item.id, {
+            left: Math.max(5, Math.min(95, parent.left + Math.cos(radians) * safeDistance)),
+            top: Math.max(5, Math.min(95, parent.top + Math.sin(radians) * safeDistance)),
+            angle,
+            depth: Math.min(parent.depth + 1, 2),
+        });
+    });
+
+    const buildBranch = (item) => {
+        const position = positionMap.get(item.id);
+        if (!position) return '';
+        const parent = item.parentId ? positionMap.get(item.parentId) : { left: 50, top: 50 };
+        if (!parent) return '';
+
+        const dx = position.left - parent.left;
+        const dy = position.top - parent.top;
+        const length = Math.hypot(dx, dy);
+        const angle = Math.atan2(dy, dx) * 180 / Math.PI;
+        const trimStart = item.parentId ? 5 : 24;
+        const trimEnd = 4;
+        const visibleLength = Math.max(length - trimStart - trimEnd, 4);
+        const startLeft = parent.left + (dx / length) * trimStart;
+        const startTop = parent.top + (dy / length) * trimStart;
+
+        return `<div class="hero-mindmap-branch" style="--branch-left: ${startLeft}%; --branch-top: ${startTop}%; --branch-angle: ${angle}deg; --branch-length: ${visibleLength}%"></div>`;
+    };
+
+    const buildNode = (item) => {
+        const position = positionMap.get(item.id);
+        if (!position) return '';
+
+        return `
+            <div class="hero-mindmap-node hero-mindmap-node--depth-${position.depth}" style="--node-left: ${position.left}%; --node-top: ${position.top}%">
+                <div class="hero-mindmap-node-title">${escapeHtml(item.title)}</div>
+                <div class="hero-mindmap-node-detail">${escapeHtml(item.detail)}</div>
+            </div>
+        `;
+    };
+
+    container.innerHTML = items.map(buildBranch).join('') + items.map(buildNode).join('');
 }
 
 function renderProjects() {

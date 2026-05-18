@@ -3,7 +3,7 @@ import { mkdtempSync, readFileSync, rmSync, writeFileSync } from 'node:fs';
 import { tmpdir } from 'node:os';
 import { join } from 'node:path';
 
-const DATA_KEYS = ['history', 'skills', 'projects', 'topics'];
+const DATA_KEYS = ['history', 'skills', 'projects', 'topics', 'mindmap'];
 const VALID_ACTIONS = new Set(['push', 'pull']);
 const VALID_TARGETS = new Set(['local', 'remote']);
 

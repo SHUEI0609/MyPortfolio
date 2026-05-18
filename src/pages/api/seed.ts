@@ -3,6 +3,7 @@ import historyData from '../../../data/history.json';
 import skillsData from '../../../data/skills.json';
 import projectsData from '../../../data/projects.json';
 import topicsData from '../../../data/topics.json';
+import mindmapData from '../../../data/mindmap.json';
 
 const ADMIN_PASSWORD = import.meta.env.ADMIN_PASSWORD || '';
 
@@ -39,6 +40,7 @@ export const POST: APIRoute = async ({ request }) => {
         await kv.put('skills', JSON.stringify(skillsData));
         await kv.put('projects', JSON.stringify(projectsData));
         await kv.put('topics', JSON.stringify(topicsData));
+        await kv.put('mindmap', JSON.stringify(mindmapData));
 
         return new Response(JSON.stringify({ message: 'Seed completed successfully' }), {
             headers: { 'Content-Type': 'application/json' },

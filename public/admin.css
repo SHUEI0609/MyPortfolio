@@ -8,6 +8,15 @@
     border-bottom-color: transparent;
 }
 
+.admin-tabs-scroll {
+    scrollbar-width: none;
+    -webkit-overflow-scrolling: touch;
+}
+
+.admin-tabs-scroll::-webkit-scrollbar {
+    display: none;
+}
+
 /* Admin form inputs */
 .admin-input {
     width: 100%;
@@ -52,6 +61,7 @@ textarea.admin-input {
     justify-content: space-between;
     align-items: center;
     transition: all 0.2s;
+    gap: 1rem;
 }
 
 .admin-card:hover {
@@ -64,6 +74,7 @@ textarea.admin-input {
     gap: 0.5rem;
     opacity: 0.3;
     transition: opacity 0.2s;
+    flex-shrink: 0;
 }
 
 .admin-card:hover .admin-card-actions {
@@ -141,4 +152,32 @@ textarea.admin-input {
 
 .cursor-pointer input[type="file"] {
     display: none;
+}
+
+@media (max-width: 640px) {
+    .admin-card {
+        align-items: flex-start;
+        padding: 0.875rem;
+    }
+
+    .admin-card-actions {
+        opacity: 1;
+    }
+
+    .admin-btn-icon {
+        width: 2.25rem;
+        height: 2.25rem;
+        border-color: #e4e4e7;
+    }
+
+    .admin-toast {
+        left: 1rem;
+        right: 1rem;
+        bottom: 1rem;
+        text-align: center;
+    }
+
+    #image-preview-container {
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+    }
 }

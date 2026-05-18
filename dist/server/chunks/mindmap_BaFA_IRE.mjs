@@ -1,0 +1,39 @@
+globalThis.process ??= {};
+globalThis.process.env ??= {};
+const mindmapData = [
+  {
+    id: "ai",
+    parentId: "",
+    title: "AI",
+    detail: "Deep Learning / NLP",
+    angle: "-130",
+    distance: "42"
+  },
+  {
+    id: "web",
+    parentId: "",
+    title: "Web",
+    detail: "Astro / React / TypeScript",
+    angle: "-45",
+    distance: "44"
+  },
+  {
+    id: "edtech",
+    parentId: "",
+    title: "EdTech",
+    detail: "AI x Art Education",
+    angle: "35",
+    distance: "43"
+  },
+  {
+    id: "bass",
+    parentId: "",
+    title: "Bass",
+    detail: "Modern Music Club",
+    angle: "125",
+    distance: "42"
+  }
+];
+export {
+  mindmapData as m
+};

@@ -2,7 +2,7 @@
 
 let authToken = localStorage.getItem('admin_token') || null;
 let currentTab = 'history';
-let currentData = { history: [], skills: [], projects: [], topics: [] };
+let currentData = { history: [], skills: [], projects: [], topics: [], mindmap: [] };
 let editIndex = null; // null = add mode, number = edit mode
 let deleteIndex = null;
 
@@ -44,6 +44,14 @@ const FIELDS = {
         { key: 'tag', label: 'Tag', type: 'text', placeholder: 'AI / Work / Hackathon' },
         { key: 'date', label: 'Date', type: 'text', placeholder: '2026-01' },
     ],
+    mindmap: [
+        { key: 'id', label: 'ID', type: 'text', placeholder: 'ai' },
+        { key: 'parentId', label: 'Parent', type: 'parent_select' },
+        { key: 'title', label: 'Title', type: 'text', placeholder: 'AI' },
+        { key: 'detail', label: 'Detail', type: 'text', placeholder: 'Deep Learning / NLP' },
+        { key: 'angle', label: 'Angle', type: 'text', placeholder: '-45' },
+        { key: 'distance', label: 'Distance', type: 'text', placeholder: '42' },
+    ],
 };
 
 const SECTION_TITLES = {
@@ -51,6 +59,7 @@ const SECTION_TITLES = {
     skills: 'Skills',
     projects: 'Projects',
     topics: 'Topics',
+    mindmap: 'Mindmap',
 };
 
 // --- Init ---
@@ -118,16 +127,18 @@ async function showDashboard() {
 
 async function loadAllData() {
     try {
-        const [historyRes, skillsRes, projectsRes, topicsRes] = await Promise.all([
+        const [historyRes, skillsRes, projectsRes, topicsRes, mindmapRes] = await Promise.all([
             fetch('/api/history'),
             fetch('/api/skills'),
             fetch('/api/projects'),
             fetch('/api/topics'),
+            fetch('/api/mindmap'),
         ]);
         currentData.history = await historyRes.json();
         currentData.skills = await skillsRes.json();
         currentData.projects = await projectsRes.json();
         currentData.topics = await topicsRes.json();
+        currentData.mindmap = await mindmapRes.json();
     } catch (e) {
         showToast('データ読み込みに失敗しました', 'error');
     }
@@ -168,6 +179,7 @@ function renderList() {
     container.innerHTML = items.map((item, index) => {
         let primaryText = '';
         let secondaryText = '';
+        let depth = 0;
 
         if (currentTab === 'history') {
             primaryText = `<span class="font-mono text-xs text-zinc-400 mr-3">${item.year}</span>${item.title}`;
@@ -181,15 +193,24 @@ function renderList() {
         } else if (currentTab === 'topics') {
             primaryText = item.title;
             secondaryText = item.tag;
+        } else if (currentTab === 'mindmap') {
+            depth = getMindmapDepth(item, items);
+            primaryText = `<span class="font-mono text-xs text-zinc-400 mr-3">${item.id || `node-${index}`}</span>${item.title}`;
+            secondaryText = `${item.parentId ? `parent: ${item.parentId} / ` : 'root / '}${item.detail || ''} / angle ${item.angle || 'auto'} / distance ${item.distance || '42'}`;
         }
 
         return `
-            <div class="admin-card">
+            <div class="admin-card" style="${currentTab === 'mindmap' ? `margin-left: ${Math.min(depth, 3) * 1.25}rem` : ''}">
                 <div class="flex-1 min-w-0">
                     <div class="font-bold text-sm truncate">${primaryText}</div>
                     <div class="text-xs text-zinc-500 mt-0.5">${secondaryText}</div>
                 </div>
                 <div class="admin-card-actions">
+                    ${currentTab === 'mindmap' ? `
+                    <button onclick="handleAddChild(${index})" class="admin-btn-icon" title="子を追加">
+                        <i data-lucide="plus" class="w-4 h-4"></i>
+                    </button>
+                    ` : ''}
                     <button onclick="handleEdit(${index})" class="admin-btn-icon" title="編集">
                         <i data-lucide="pencil" class="w-4 h-4"></i>
                     </button>
@@ -205,10 +226,38 @@ function renderList() {
 }
 
 // --- Add / Edit ---
+function getMindmapDepth(item, items) {
+    let depth = 0;
+    let parentId = item.parentId;
+    const seen = new Set();
+
+    while (parentId && !seen.has(parentId)) {
+        seen.add(parentId);
+        const parent = items.find(candidate => candidate.id === parentId);
+        if (!parent) break;
+        depth++;
+        parentId = parent.parentId;
+    }
+
+    return depth;
+}
+
 function handleAdd() {
     editIndex = null;
     document.getElementById('modal-title').textContent = '新規追加';
-    renderFormFields({});
+    renderFormFields(currentTab === 'mindmap' ? { id: createMindmapId(), parentId: '' } : {});
+    openModal();
+}
+
+function handleAddChild(index) {
+    const parent = currentData.mindmap[index];
+    editIndex = null;
+    document.getElementById('modal-title').textContent = `子を追加: ${parent.title}`;
+    renderFormFields({
+        id: createMindmapId(parent.id || parent.title),
+        parentId: parent.id || '',
+        distance: '18',
+    });
     openModal();
 }
 
@@ -273,6 +322,21 @@ function renderFormFields(item) {
                     </div>
                 </div>
             `;
+        } else if (field.type === 'parent_select') {
+            const options = (currentData.mindmap || [])
+                .filter(node => node.id && node.id !== item.id)
+                .map(node => `<option value="${node.id}" ${value === node.id ? 'selected' : ''}>${node.title || node.id} (${node.id})</option>`)
+                .join('');
+
+            return `
+                <div>
+                    <label class="admin-label">${field.label}</label>
+                    <select name="${field.key}" class="admin-input">
+                        <option value="" ${value === '' ? 'selected' : ''}>サインから生やす（root）</option>
+                        ${options}
+                    </select>
+                </div>
+            `;
         } else if (field.type === 'textarea') {
             return `
                 <div>
@@ -302,6 +366,23 @@ function renderFormFields(item) {
     }).join('');
     
     if (typeof lucide !== 'undefined') lucide.createIcons();
+}
+
+function createMindmapId(seed = 'node') {
+    const base = String(seed || 'node')
+        .toLowerCase()
+        .replace(/[^a-z0-9]+/g, '-')
+        .replace(/^-+|-+$/g, '') || 'node';
+    const existing = new Set((currentData.mindmap || []).map(item => item.id));
+    let candidate = base;
+    let count = 1;
+
+    while (existing.has(candidate)) {
+        count++;
+        candidate = `${base}-${count}`;
+    }
+
+    return candidate;
 }
 
 async function uploadImage(input, mode = 'list') {
@@ -402,6 +483,10 @@ async function handleSave() {
             item[field.key] = formData.get(field.key) || '';
         }
     });
+
+    if (currentTab === 'mindmap' && !item.id) {
+        item.id = createMindmapId(item.title);
+    }
 
     try {
         const url = `/api/${currentTab}`;
