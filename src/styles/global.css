@@ -110,9 +110,9 @@ body.loaded .animate-init {
 .hero-mindmap {
     position: absolute;
     left: 50%;
-    top: 50%;
-    width: min(88vw, 68svh, 860px);
-    aspect-ratio: 1;
+    top: 48%;
+    width: min(100vw, 1440px);
+    height: min(66svh, 720px);
     transform: translate(-50%, -50%);
     pointer-events: none;
     z-index: 0;
@@ -121,7 +121,11 @@ body.loaded .animate-init {
 .hero-mindmap::before {
     content: '';
     position: absolute;
-    inset: 24%;
+    left: 50%;
+    top: 50%;
+    width: clamp(18rem, 34vw, 32rem);
+    aspect-ratio: 1;
+    transform: translate(-50%, -50%);
     border: 1px solid rgba(0, 0, 0, 0.38);
     border-radius: 999px;
 }
@@ -174,14 +178,16 @@ body.loaded .animate-init {
 }
 
 .hero-mindmap-node--depth-1 {
-    width: clamp(4.6rem, 7vw, 5.75rem);
-    min-height: clamp(4.6rem, 7vw, 5.75rem);
+    width: clamp(4.25rem, 6.1vw, 5.25rem);
+    min-height: clamp(4.25rem, 6.1vw, 5.25rem);
+    padding: 0.62rem;
 }
 
 
 .hero-mindmap-node--depth-2 {
-    width: clamp(4rem, 6vw, 5rem);
-    min-height: clamp(4rem, 6vw, 5rem);
+    width: clamp(3.75rem, 5.2vw, 4.55rem);
+    min-height: clamp(3.75rem, 5.2vw, 4.55rem);
+    padding: 0.5rem;
 }
 
 .hero-mindmap-node-title {
@@ -200,27 +206,19 @@ body.loaded .animate-init {
     overflow-wrap: anywhere;
 }
 
-@media (max-width: 767px) {
+.hero-mindmap-node--depth-1 .hero-mindmap-node-title,
+.hero-mindmap-node--depth-2 .hero-mindmap-node-title {
+    font-size: clamp(0.62rem, 0.88vw, 0.76rem);
+}
+
+.hero-mindmap-node--depth-1 .hero-mindmap-node-detail,
+.hero-mindmap-node--depth-2 .hero-mindmap-node-detail {
+    font-size: clamp(0.48rem, 0.65vw, 0.56rem);
+    line-height: 1.15;
+}
+
+@media (max-width: 1023px) {
     .hero-mindmap {
-        width: min(92vw, 54svh);
-        opacity: 0.72;
-    }
-
-    .hero-mindmap::before {
-        inset: 20%;
-    }
-
-    .hero-mindmap-branch {
-        display: none;
-    }
-
-    .hero-mindmap-node {
-        width: 4.75rem;
-        min-height: 4.75rem;
-        padding: 0.65rem;
-    }
-
-    .hero-mindmap-node-detail {
         display: none;
     }
 }

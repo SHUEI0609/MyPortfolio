@@ -49,8 +49,8 @@ const FIELDS = {
         { key: 'parentId', label: 'Parent', type: 'parent_select' },
         { key: 'title', label: 'Title', type: 'text', placeholder: 'AI' },
         { key: 'detail', label: 'Detail', type: 'text', placeholder: 'Deep Learning / NLP' },
-        { key: 'angle', label: 'Angle', type: 'text', placeholder: '-45' },
-        { key: 'distance', label: 'Distance', type: 'text', placeholder: '42' },
+        { key: 'angle', label: 'Angle (optional)', type: 'text', placeholder: '空欄なら自動配置' },
+        { key: 'distance', label: 'Distance', type: 'text', placeholder: 'root: 42 / child: 18' },
     ],
 };
 
@@ -267,6 +267,7 @@ function handleAddChild(index) {
     renderFormFields({
         id: createMindmapId(parent.id || parent.title),
         parentId: parent.id || '',
+        angle: '',
         distance: '18',
     });
     openModal();

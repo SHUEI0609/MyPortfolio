@@ -105,14 +105,14 @@ function renderHistory() {
     const container = document.getElementById('history-list');
     if (!container) return;
     container.innerHTML = HISTORY.map(h => `
-        <div class="relative pl-8 group">
+        <div class="relative pl-8 group" role="listitem">
             <div class="absolute -left-[5px] top-1.5 w-2.5 h-2.5 bg-white border-2 border-zinc-300 rounded-full group-hover:border-black group-hover:bg-black transition-colors z-10"></div>
             
             <div class="grid md:grid-cols-4 gap-2 mb-2 items-baseline">
-                <div class="md:col-span-1 font-mono text-xs font-bold text-zinc-400">${h.year}</div>
+                <div class="md:col-span-1 font-mono text-xs font-bold text-zinc-600">${h.year}</div>
                 <div class="md:col-span-3">
-                    <h5 class="font-bold text-lg leading-tight">${h.title}</h5>
-                    <div class="text-xs font-bold text-zinc-500 uppercase tracking-wider mb-2">${h.sub ? h.sub : ''}</div>
+                    <h4 class="font-bold text-lg leading-tight">${h.title}</h4>
+                    <div class="text-xs font-bold text-zinc-600 uppercase tracking-wider mb-2">${h.sub ? h.sub : ''}</div>
                     <p class="text-sm text-zinc-600 leading-relaxed">${h.desc}</p>
                 </div>
             </div>
@@ -143,13 +143,13 @@ function renderSkills() {
     order.forEach(type => {
         if (grouped[type]) {
             html += `
-                <div class="grid md:grid-cols-4 gap-4 items-start group">
+                <div class="grid md:grid-cols-4 gap-4 items-start group" role="listitem">
                     <div class="md:col-span-1 pt-1">
-                        <h5 class="text-xs font-bold text-zinc-400 uppercase tracking-widest group-hover:text-black transition-colors">${categories[type]}</h5>
+                        <div class="text-xs font-bold text-zinc-600 uppercase tracking-widest group-hover:text-black transition-colors">${categories[type]}</div>
                     </div>
-                    <div class="md:col-span-3 flex flex-wrap gap-2">
+                    <div class="md:col-span-3 flex flex-wrap gap-2" role="list" aria-label="${categories[type]}">
                         ${grouped[type].map(s => `
-                            <div class="relative group/skill cursor-help">
+                            <div class="relative group/skill cursor-help" role="listitem">
                                 <span class="px-3 py-1 bg-zinc-50 text-sm font-bold text-zinc-700 border border-zinc-200 rounded-sm group-hover/skill:border-black group-hover/skill:bg-white transition-all block">
                                     ${s.name}
                                 </span>
@@ -195,7 +195,7 @@ function renderTopics() {
                         <span class="topic-tag-badge">${t.tag}</span>
                         <span class="topic-date"><time datetime="${t.date}">${t.date}</time></span>
                     </div>
-                    <h5 class="topic-title">${t.title}</h5>
+                    <h3 class="topic-title">${t.title}</h3>
                 </div>
             </div>`;
         } else {
@@ -207,7 +207,7 @@ function renderTopics() {
                         <span class="topic-tag-badge">${t.tag}</span>
                         <span class="topic-date"><time datetime="${t.date}">${t.date}</time></span>
                     </div>
-                    <h5 class="topic-title">${t.title}</h5>
+                    <h3 class="topic-title">${t.title}</h3>
                 </div>
             </div>`;
         }
@@ -220,6 +220,11 @@ function renderTopics() {
 function renderHeroMindmap() {
     const container = document.getElementById('hero-mindmap');
     if (!container) return;
+    const rect = container.getBoundingClientRect();
+    if (rect.width <= 0 || rect.height <= 0) {
+        container.innerHTML = '';
+        return;
+    }
 
     const escapeHtml = (value) => String(value ?? '')
         .replace(/&/g, '&amp;')
@@ -243,29 +248,139 @@ function renderHeroMindmap() {
         const safeDistance = Math.max(38, Math.min(distance, 49));
         const radians = angle * Math.PI / 180;
         positionMap.set(item.id, {
-            left: 50 + Math.cos(radians) * safeDistance,
-            top: 50 + Math.sin(radians) * safeDistance,
+            left: Math.max(14, Math.min(86, 50 + Math.cos(radians) * safeDistance)),
+            top: Math.max(14, Math.min(86, 50 + Math.sin(radians) * safeDistance)),
             angle,
             depth: 0,
         });
     });
 
-    items.filter(item => item.parentId).forEach((item, index) => {
+    const childrenByParent = items.reduce((acc, item) => {
+        if (item.parentId) {
+            if (!acc.has(item.parentId)) acc.set(item.parentId, []);
+            acc.get(item.parentId).push(item);
+        }
+        return acc;
+    }, new Map());
+
+    const childCounts = new Map();
+
+    items.filter(item => item.parentId).forEach((item) => {
         const parent = positionMap.get(item.parentId);
         if (!parent) return;
-        const siblings = items.filter(candidate => candidate.parentId === item.parentId);
-        const siblingIndex = siblings.findIndex(candidate => candidate.id === item.id);
-        const fallbackAngle = parent.angle + (siblings.length === 1 ? 0 : -24 + siblingIndex * (48 / Math.max(siblings.length - 1, 1)));
-        const angle = Number.isFinite(Number(item.angle)) ? Number(item.angle) : fallbackAngle;
-        const distance = Number.isFinite(Number(item.distance)) ? Number(item.distance) : 18;
-        const safeDistance = Math.max(12, Math.min(distance, 24));
+        const siblings = childrenByParent.get(item.parentId) || [];
+        const count = childCounts.get(item.parentId) || 0;
+        childCounts.set(item.parentId, count + 1);
+
+        const parentFromCenter = Math.atan2(parent.top - 50, parent.left - 50) * 180 / Math.PI;
+        const nearHorizontalEdge = parent.left < 28 || parent.left > 72;
+        const nearVerticalEdge = parent.top < 28 || parent.top > 72;
+        const edgeAngles = parent.left < 28
+            ? [-120, 120, -60, 60, -150, 150]
+            : parent.left > 72
+                ? [-60, 60, -120, 120, -30, 30]
+                : parent.top < 28
+                    ? [160, 20, -160, -20, 120, 60]
+                    : parent.top > 72
+                        ? [-160, -20, 160, 20, -120, -60]
+                        : null;
+        const fanCenter = nearHorizontalEdge
+            ? (parent.left < 50 ? 180 : 0)
+            : nearVerticalEdge
+                ? (parent.top < 50 ? -90 : 90)
+                : parentFromCenter;
+        const spread = Math.min(140, 52 + (siblings.length - 1) * 28);
+        const step = siblings.length <= 1 ? 0 : spread / (siblings.length - 1);
+        const fallbackAngle = edgeAngles
+            ? edgeAngles[count % edgeAngles.length]
+            : fanCenter - (spread / 2) + (count * step);
+        const angle = item.angle !== '' && Number.isFinite(Number(item.angle)) ? Number(item.angle) : fallbackAngle;
+        const distance = Number.isFinite(Number(item.distance)) ? Number(item.distance) : 28;
+        const safeDistance = Math.max(24, Math.min(distance + (edgeAngles ? Math.floor(count / edgeAngles.length) * 7 : 0), 36));
         const radians = angle * Math.PI / 180;
         positionMap.set(item.id, {
-            left: Math.max(5, Math.min(95, parent.left + Math.cos(radians) * safeDistance)),
-            top: Math.max(5, Math.min(95, parent.top + Math.sin(radians) * safeDistance)),
+            left: Math.max(12, Math.min(88, parent.left + Math.cos(radians) * safeDistance)),
+            top: Math.max(12, Math.min(88, parent.top + Math.sin(radians) * safeDistance)),
             angle,
             depth: Math.min(parent.depth + 1, 2),
         });
+    });
+
+    const clamp = (min, value, max) => Math.max(min, Math.min(value, max));
+    const rootFontSize = parseFloat(getComputedStyle(document.documentElement).fontSize) || 16;
+    const viewportUnit = window.innerWidth / 100;
+    const nodeSize = (depth) => {
+        if (depth === 0) return clamp(5.5 * rootFontSize, 9 * viewportUnit, 7.25 * rootFontSize);
+        if (depth === 1) return clamp(4.25 * rootFontSize, 6.1 * viewportUnit, 5.25 * rootFontSize);
+        return clamp(3.75 * rootFontSize, 5.2 * viewportUnit, 4.55 * rootFontSize);
+    };
+    const centerCircleRadius = clamp(18 * rootFontSize, window.innerWidth * 0.34, 32 * rootFontSize) / 2;
+    const layoutNodes = Array.from(positionMap.entries()).map(([id, position]) => {
+        const size = nodeSize(position.depth);
+        return {
+            id,
+            position,
+            x: position.left * rect.width / 100,
+            y: position.top * rect.height / 100,
+            radius: (size / 2) + 18,
+        };
+    });
+    const clampNode = (node) => {
+        node.x = clamp(node.radius + 10, node.x, rect.width - node.radius - 10);
+        node.y = clamp(node.radius + 10, node.y, rect.height - node.radius - 10);
+    };
+    const pushFromSignature = (node) => {
+        const centerX = rect.width / 2;
+        const centerY = rect.height / 2;
+        const dx = node.x - centerX;
+        const dy = node.y - centerY;
+        const distance = Math.hypot(dx, dy) || 1;
+        const minimum = centerCircleRadius + node.radius + 18;
+        if (distance >= minimum) return;
+        node.x = centerX + (dx / distance) * minimum;
+        node.y = centerY + (dy / distance) * minimum;
+        clampNode(node);
+    };
+
+    layoutNodes.forEach((node) => {
+        pushFromSignature(node);
+        clampNode(node);
+    });
+    for (let iteration = 0; iteration < 56; iteration += 1) {
+        layoutNodes.forEach(pushFromSignature);
+        for (let i = 0; i < layoutNodes.length; i += 1) {
+            for (let j = i + 1; j < layoutNodes.length; j += 1) {
+                const a = layoutNodes[i];
+                const b = layoutNodes[j];
+                let dx = b.x - a.x;
+                let dy = b.y - a.y;
+                let distance = Math.hypot(dx, dy);
+                const minimum = a.radius + b.radius + 14;
+                if (distance >= minimum) continue;
+
+                if (distance < 1) {
+                    const fallbackAngle = ((i * 97) + (j * 53)) * Math.PI / 180;
+                    dx = Math.cos(fallbackAngle);
+                    dy = Math.sin(fallbackAngle);
+                    distance = 1;
+                }
+                const push = (minimum - distance) / 2;
+                const unitX = dx / distance;
+                const unitY = dy / distance;
+                a.x -= unitX * push;
+                a.y -= unitY * push;
+                b.x += unitX * push;
+                b.y += unitY * push;
+                clampNode(a);
+                clampNode(b);
+            }
+        }
+    }
+    layoutNodes.forEach((node) => {
+        pushFromSignature(node);
+        clampNode(node);
+        node.position.left = node.x * 100 / rect.width;
+        node.position.top = node.y * 100 / rect.height;
     });
 
     const buildBranch = (item) => {
@@ -274,17 +389,21 @@ function renderHeroMindmap() {
         const parent = item.parentId ? positionMap.get(item.parentId) : { left: 50, top: 50 };
         if (!parent) return '';
 
-        const dx = position.left - parent.left;
-        const dy = position.top - parent.top;
-        const length = Math.hypot(dx, dy);
-        const angle = Math.atan2(dy, dx) * 180 / Math.PI;
-        const trimStart = item.parentId ? 5 : 24;
-        const trimEnd = 4;
-        const visibleLength = Math.max(length - trimStart - trimEnd, 4);
-        const startLeft = parent.left + (dx / length) * trimStart;
-        const startTop = parent.top + (dy / length) * trimStart;
+        const dxPercent = position.left - parent.left;
+        const dyPercent = position.top - parent.top;
+        const dxPixels = dxPercent * rect.width / 100;
+        const dyPixels = dyPercent * rect.height / 100;
+        const length = Math.hypot(dxPixels, dyPixels);
+        if (!Number.isFinite(length) || length <= 1) return '';
 
-        return `<div class="hero-mindmap-branch" style="--branch-left: ${startLeft}%; --branch-top: ${startTop}%; --branch-angle: ${angle}deg; --branch-length: ${visibleLength}%"></div>`;
+        const angle = Math.atan2(dyPixels, dxPixels) * 180 / Math.PI;
+        const trimStart = item.parentId ? 34 : Math.min(Math.max(rect.width * 0.17, 150), 270);
+        const trimEnd = item.parentId ? 28 : 42;
+        const visibleLength = Math.max(length - trimStart - trimEnd, 12);
+        const startLeft = parent.left + (dxPercent * trimStart / length);
+        const startTop = parent.top + (dyPercent * trimStart / length);
+
+        return `<div class="hero-mindmap-branch" style="--branch-left: ${startLeft}%; --branch-top: ${startTop}%; --branch-angle: ${angle}deg; --branch-length: ${visibleLength}px"></div>`;
     };
 
     const buildNode = (item) => {
