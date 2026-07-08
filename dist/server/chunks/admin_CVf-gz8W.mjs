@@ -1,8 +1,8 @@
 globalThis.process ??= {};
 globalThis.process.env ??= {};
-import { c as createComponent } from "./astro-component_CA82xHCq.mjs";
-import { k as renderComponent, r as renderTemplate, m as maybeRenderHead } from "./worker-entry_smDQw5PZ.mjs";
-import { $ as $$BaseLayout } from "./BaseLayout_CRTOgj3K.mjs";
+import { c as createComponent } from "./astro-component_C_v-luec.mjs";
+import { k as renderComponent, r as renderTemplate, m as maybeRenderHead } from "./worker-entry_fe6JQDnp.mjs";
+import { $ as $$BaseLayout } from "./BaseLayout_WEd34lcG.mjs";
 var __freeze = Object.freeze;
 var __defProp = Object.defineProperty;
 var __template = (cooked, raw) => __freeze(__defProp(cooked, "raw", { value: __freeze(cooked.slice()) }));
@@ -24,6 +24,8 @@ PROJECTS
 TOPICS
 </button> <button onclick="switchTab('mindmap')" id="tab-mindmap" class="admin-tab px-4 sm:px-6 py-4 text-xs font-bold tracking-widest border-b-2 border-transparent text-zinc-400 hover:text-black transition-colors whitespace-nowrap shrink-0">
 MINDMAP
+</button> <button onclick="switchTab('about')" id="tab-about" class="admin-tab px-4 sm:px-6 py-4 text-xs font-bold tracking-widest border-b-2 border-transparent text-zinc-400 hover:text-black transition-colors whitespace-nowrap shrink-0">
+ABOUT
 </button> </div> </div> <!-- Content Area --> <div class="max-w-5xl mx-auto px-4 sm:px-6 py-6 sm:py-8"> <!-- Action Bar --> <div class="flex flex-col sm:flex-row sm:justify-between sm:items-center gap-4 mb-6 sm:mb-8"> <h2 id="section-title" class="text-2xl font-black tracking-tight">History</h2> <button onclick="handleAdd()" class="bg-black text-white px-6 py-3 sm:py-2.5 text-xs font-bold tracking-widest hover:bg-zinc-800 transition-colors flex items-center justify-center gap-2 w-full sm:w-auto"> <i data-lucide="plus" class="w-4 h-4"></i> 新規追加
 </button> </div> <!-- Data List --> <div id="data-list" class="space-y-3"> <!-- Items injected here --> </div> </div> </div>  <div id="modal-overlay" class="hidden fixed inset-0 bg-black/60 z-[100] flex items-end sm:items-center justify-center p-0 sm:p-4"> <div class="bg-white w-full sm:max-w-lg max-h-[92vh] sm:max-h-[90vh] overflow-y-auto shadow-2xl"> <div class="flex justify-between items-center px-4 sm:px-6 py-4 border-b border-zinc-200 sticky top-0 bg-white z-10"> <h3 id="modal-title" class="font-bold text-lg">編集</h3> <button onclick="closeModal()" class="text-zinc-400 hover:text-black transition-colors"> <i data-lucide="x" class="w-5 h-5"></i> </button> </div> <form id="modal-form" class="p-4 sm:p-6 space-y-4"> <div id="modal-fields"> <!-- Form fields injected here --> </div> <div class="flex flex-col-reverse sm:flex-row gap-3 pt-4 border-t border-zinc-100"> <button type="submit" class="flex-1 bg-black text-white py-3 text-xs font-bold tracking-widest hover:bg-zinc-800 transition-colors">
 保存

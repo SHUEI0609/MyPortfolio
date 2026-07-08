@@ -4,6 +4,7 @@ let SKILLS = [];
 let PROJECTS = [];
 let TOPICS = [];
 let MINDMAP = [];
+let ABOUT = [];
 
 // --- State ---
 let currentProjectId = null;
@@ -11,19 +12,25 @@ let currentSlideIndex = 0;
 let aboutPhotoIndex = 0;
 let projectPage = 1;
 const projectsPerPage = 5;
+const heroMindmapHiddenQuery = '(max-width: 1023px), (pointer: coarse) and (max-width: 1366px)';
+
+function shouldRenderHeroMindmap() {
+    return !window.matchMedia(heroMindmapHiddenQuery).matches;
+}
 
 // --- Data Loading ---
 async function loadData() {
     try {
-        const [historyRes, skillsRes, projectsRes, topicsRes, mindmapRes] = await Promise.all([
+        const [historyRes, skillsRes, projectsRes, topicsRes, mindmapRes, aboutRes] = await Promise.all([
             fetch('/api/history'),
             fetch('/api/skills'),
             fetch('/api/projects'),
             fetch('/api/topics'),
             fetch('/api/mindmap'),
+            fetch('/api/about'),
         ]);
 
-        if (!historyRes.ok || !skillsRes.ok || !projectsRes.ok || !topicsRes.ok || !mindmapRes.ok) {
+        if (!historyRes.ok || !skillsRes.ok || !projectsRes.ok || !topicsRes.ok || !mindmapRes.ok || !aboutRes.ok) {
             throw new Error('One or more API responses were not OK');
         }
 
@@ -32,6 +39,7 @@ async function loadData() {
         PROJECTS = await projectsRes.json();
         TOPICS = await topicsRes.json();
         MINDMAP = await mindmapRes.json();
+        ABOUT = await aboutRes.json();
     } catch (e) {
         console.error('Failed to load data from API:', e);
         showErrorBanner('データの読み込みに失敗しました。ページを再読み込みしてください。');
@@ -40,6 +48,7 @@ async function loadData() {
         PROJECTS = [];
         TOPICS = [];
         MINDMAP = [];
+        ABOUT = [];
     }
 }
 
@@ -68,6 +77,7 @@ document.addEventListener('DOMContentLoaded', async () => {
     initCanvas();
     await loadData();
     renderHistory();
+    renderAbout();
     renderSkills();
     renderTopics();
     renderProjects();
@@ -118,6 +128,43 @@ function renderHistory() {
             </div>
         </div>
     `).join('');
+}
+
+function renderAbout() {
+    const profile = Array.isArray(ABOUT) ? ABOUT[0] : ABOUT;
+    if (!profile) return;
+
+    const setText = (id, value) => {
+        const element = document.getElementById(id);
+        if (element && value) element.textContent = value;
+    };
+
+    setText('about-name', profile.name);
+    setText('about-age', profile.age);
+    setText('about-location', profile.location);
+    setText('about-role', profile.role);
+    setText('about-focus', profile.focus);
+
+    const affiliations = Array.isArray(profile.affiliations)
+        ? profile.affiliations
+        : String(profile.affiliations || '').split('\n');
+    const list = document.getElementById('about-affiliations');
+    if (list && affiliations.length > 0) {
+        list.innerHTML = affiliations
+            .map(item => item.trim())
+            .filter(Boolean)
+            .map(item => `<li>${escapeHtml(item)}</li>`)
+            .join('');
+    }
+}
+
+function escapeHtml(value) {
+    return String(value ?? '')
+        .replace(/&/g, '&amp;')
+        .replace(/</g, '&lt;')
+        .replace(/>/g, '&gt;')
+        .replace(/"/g, '&quot;')
+        .replace(/'/g, '&#39;');
 }
 
 function renderSkills() {
@@ -220,18 +267,15 @@ function renderTopics() {
 function renderHeroMindmap() {
     const container = document.getElementById('hero-mindmap');
     if (!container) return;
+    if (!shouldRenderHeroMindmap()) {
+        container.innerHTML = '';
+        return;
+    }
     const rect = container.getBoundingClientRect();
     if (rect.width <= 0 || rect.height <= 0) {
         container.innerHTML = '';
         return;
     }
-
-    const escapeHtml = (value) => String(value ?? '')
-        .replace(/&/g, '&amp;')
-        .replace(/</g, '&lt;')
-        .replace(/>/g, '&gt;')
-        .replace(/"/g, '&quot;')
-        .replace(/'/g, '&#39;');
 
     const items = Array.isArray(MINDMAP) ? MINDMAP.slice(0, 14).map((item, index) => ({
         ...item,

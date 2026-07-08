@@ -2,7 +2,7 @@
 
 let authToken = localStorage.getItem('admin_token') || null;
 let currentTab = 'history';
-let currentData = { history: [], skills: [], projects: [], topics: [], mindmap: [] };
+let currentData = { history: [], skills: [], projects: [], topics: [], mindmap: [], about: [] };
 let editIndex = null; // null = add mode, number = edit mode
 let deleteIndex = null;
 
@@ -52,6 +52,14 @@ const FIELDS = {
         { key: 'angle', label: 'Angle (optional)', type: 'text', placeholder: '空欄なら自動配置' },
         { key: 'distance', label: 'Distance', type: 'text', placeholder: 'root: 42 / child: 18' },
     ],
+    about: [
+        { key: 'name', label: 'Name', type: 'text', placeholder: 'SHUEI KOMURO' },
+        { key: 'age', label: 'Age', type: 'text', placeholder: '18歳' },
+        { key: 'location', label: 'Location', type: 'text', placeholder: 'Osaka, Japan' },
+        { key: 'role', label: 'Role', type: 'text', placeholder: 'AI Engineer' },
+        { key: 'focus', label: 'Focus', type: 'text', placeholder: 'EdTech / Art' },
+        { key: 'affiliations', label: 'Affiliations (one per line)', type: 'textarea', placeholder: '大阪公立大学工業高等専門学校 知能情報コース\n株式会社Affinitynexa' },
+    ],
 };
 
 const SECTION_TITLES = {
@@ -60,6 +68,7 @@ const SECTION_TITLES = {
     projects: 'Projects',
     topics: 'Topics',
     mindmap: 'Mindmap',
+    about: 'About',
 };
 
 // --- Init ---
@@ -127,18 +136,20 @@ async function showDashboard() {
 
 async function loadAllData() {
     try {
-        const [historyRes, skillsRes, projectsRes, topicsRes, mindmapRes] = await Promise.all([
+        const [historyRes, skillsRes, projectsRes, topicsRes, mindmapRes, aboutRes] = await Promise.all([
             fetch('/api/history'),
             fetch('/api/skills'),
             fetch('/api/projects'),
             fetch('/api/topics'),
             fetch('/api/mindmap'),
+            fetch('/api/about'),
         ]);
         currentData.history = await historyRes.json();
         currentData.skills = await skillsRes.json();
         currentData.projects = await projectsRes.json();
         currentData.topics = await topicsRes.json();
         currentData.mindmap = await mindmapRes.json();
+        currentData.about = await aboutRes.json();
     } catch (e) {
         showToast('データ読み込みに失敗しました', 'error');
     }
@@ -197,6 +208,9 @@ function renderList() {
             depth = getMindmapDepth(item, items);
             primaryText = `<span class="font-mono text-xs text-zinc-400 mr-3">${item.id || `node-${index}`}</span>${item.title}`;
             secondaryText = `${item.parentId ? `parent: ${item.parentId} / ` : 'root / '}${item.detail || ''} / angle ${item.angle || 'auto'} / distance ${item.distance || '42'}`;
+        } else if (currentTab === 'about') {
+            primaryText = item.name || 'About Profile';
+            secondaryText = `${item.role || ''}${item.focus ? ` / ${item.focus}` : ''}`;
         }
 
         return `
@@ -339,10 +353,11 @@ function renderFormFields(item) {
                 </div>
             `;
         } else if (field.type === 'textarea') {
+            const textareaValue = Array.isArray(value) ? value.join('\n') : value;
             return `
                 <div>
                     <label class="admin-label">${field.label}</label>
-                    <textarea name="${field.key}" class="admin-input" placeholder="${field.placeholder || ''}">${value}</textarea>
+                    <textarea name="${field.key}" class="admin-input" placeholder="${field.placeholder || ''}">${textareaValue}</textarea>
                 </div>
             `;
         } else if (field.type === 'select') {
@@ -480,6 +495,12 @@ async function handleSave() {
             let path = input ? input.value : '';
             if (path.startsWith('/')) path = path.substring(1);
             item[field.key] = path;
+        } else if (currentTab === 'about' && field.key === 'affiliations') {
+            const affiliations = String(formData.get(field.key) || '')
+                .split('\n')
+                .map(line => line.trim())
+                .filter(Boolean);
+            item[field.key] = affiliations;
         } else {
             item[field.key] = formData.get(field.key) || '';
         }

@@ -5,6 +5,7 @@ import { s as skillsData } from "./skills_MVJtQhuk.mjs";
 import { p as projectsData } from "./projects_5mLH82Fd.mjs";
 import { t as topicsData } from "./topics_DPNjxy9O.mjs";
 import { m as mindmapData } from "./mindmap_BaFA_IRE.mjs";
+import { a as aboutData } from "./about_DF3a-Zvv.mjs";
 const ADMIN_PASSWORD = "0566";
 function verifyAuth(request) {
   const authHeader = request.headers.get("Authorization");
@@ -40,6 +41,7 @@ const POST = async ({ request }) => {
     await kv.put("projects", JSON.stringify(projectsData));
     await kv.put("topics", JSON.stringify(topicsData));
     await kv.put("mindmap", JSON.stringify(mindmapData));
+    await kv.put("about", JSON.stringify(aboutData));
     return new Response(JSON.stringify({ message: "Seed completed successfully" }), {
       headers: { "Content-Type": "application/json" }
     });
