@@ -1,23 +1,7 @@
 globalThis.process ??= {};
 globalThis.process.env ??= {};
 import { h as historyData } from "./history_CwDn25aE.mjs";
-const ADMIN_PASSWORD = "0566";
-function verifyAuth(request) {
-  const authHeader = request.headers.get("Authorization");
-  if (!authHeader || !authHeader.startsWith("Bearer ")) return false;
-  const token = authHeader.slice(7);
-  try {
-    const decoded = atob(token);
-    const colonIndex = decoded.indexOf(":");
-    if (colonIndex === -1) return false;
-    const timestamp = decoded.substring(0, colonIndex);
-    const password = decoded.substring(colonIndex + 1);
-    const tokenAge = Date.now() - parseInt(timestamp);
-    return password === ADMIN_PASSWORD && tokenAge < 24 * 60 * 60 * 1e3;
-  } catch {
-    return false;
-  }
-}
+import { v as verifyAdminRequest } from "./adminAuth_kZerk0bA.mjs";
 async function getKV() {
   try {
     const { env } = await import("cloudflare:workers");
@@ -50,7 +34,7 @@ const GET = async () => {
   });
 };
 const POST = async ({ request }) => {
-  if (!verifyAuth(request)) {
+  if (!await verifyAdminRequest(request)) {
     return new Response(JSON.stringify({ error: "Unauthorized" }), {
       status: 401,
       headers: { "Content-Type": "application/json" }
@@ -74,7 +58,7 @@ const POST = async ({ request }) => {
   }
 };
 const PUT = async ({ request }) => {
-  if (!verifyAuth(request)) {
+  if (!await verifyAdminRequest(request)) {
     return new Response(JSON.stringify({ error: "Unauthorized" }), {
       status: 401,
       headers: { "Content-Type": "application/json" }
@@ -104,7 +88,7 @@ const PUT = async ({ request }) => {
   }
 };
 const DELETE = async ({ request }) => {
-  if (!verifyAuth(request)) {
+  if (!await verifyAdminRequest(request)) {
     return new Response(JSON.stringify({ error: "Unauthorized" }), {
       status: 401,
       headers: { "Content-Type": "application/json" }

@@ -1,11 +1,17 @@
 {
 	"compatibility_date": "2026-04-16",
 	"compatibility_flags": [
+		"nodejs_compat",
 		"global_fetch_strictly_public"
 	],
 	"name": "my-portfolio",
 	"account_id": "16ad5a0c520847dcf427f8b5c756a9c3",
+	"keep_vars": true,
+	"send_metrics": false,
 	"main": "@astrojs/cloudflare/entrypoints/server",
+	"secrets": {
+		"required": ["ADMIN_PASSWORD"]
+	},
 	"assets": {
 		"directory": "./dist",
 		"binding": "ASSETS"

@@ -1,23 +1,7 @@
 globalThis.process ??= {};
 globalThis.process.env ??= {};
-import { t as topicsData } from "./topics_DPNjxy9O.mjs";
-const ADMIN_PASSWORD = "0566";
-function verifyAuth(request) {
-  const authHeader = request.headers.get("Authorization");
-  if (!authHeader || !authHeader.startsWith("Bearer ")) return false;
-  const token = authHeader.slice(7);
-  try {
-    const decoded = atob(token);
-    const colonIndex = decoded.indexOf(":");
-    if (colonIndex === -1) return false;
-    const timestamp = decoded.substring(0, colonIndex);
-    const password = decoded.substring(colonIndex + 1);
-    const tokenAge = Date.now() - parseInt(timestamp);
-    return password === ADMIN_PASSWORD && tokenAge < 24 * 60 * 60 * 1e3;
-  } catch {
-    return false;
-  }
-}
+import { p as projectsData } from "./projects_5mLH82Fd.mjs";
+import { v as verifyAdminRequest } from "./adminAuth_kZerk0bA.mjs";
 async function getKV() {
   try {
     const { env } = await import("cloudflare:workers");
@@ -29,17 +13,17 @@ async function getKV() {
 async function getData(kv) {
   if (kv) {
     try {
-      const data = await kv.get("topics");
+      const data = await kv.get("projects");
       if (data) return JSON.parse(data);
     } catch {
     }
     return [];
   }
-  return [...topicsData];
+  return [...projectsData];
 }
 async function saveData(kv, data) {
   if (kv) {
-    await kv.put("topics", JSON.stringify(data));
+    await kv.put("projects", JSON.stringify(data));
   }
 }
 const GET = async () => {
@@ -50,7 +34,7 @@ const GET = async () => {
   });
 };
 const POST = async ({ request }) => {
-  if (!verifyAuth(request)) {
+  if (!await verifyAdminRequest(request)) {
     return new Response(JSON.stringify({ error: "Unauthorized" }), {
       status: 401,
       headers: { "Content-Type": "application/json" }
@@ -61,7 +45,7 @@ const POST = async ({ request }) => {
     const text = await request.text();
     const newItem = JSON.parse(text);
     const data = await getData(kv);
-    data.unshift(newItem);
+    data.push(newItem);
     await saveData(kv, data);
     return new Response(JSON.stringify(data), {
       headers: { "Content-Type": "application/json" }
@@ -74,7 +58,7 @@ const POST = async ({ request }) => {
   }
 };
 const PUT = async ({ request }) => {
-  if (!verifyAuth(request)) {
+  if (!await verifyAdminRequest(request)) {
     return new Response(JSON.stringify({ error: "Unauthorized" }), {
       status: 401,
       headers: { "Content-Type": "application/json" }
@@ -104,7 +88,7 @@ const PUT = async ({ request }) => {
   }
 };
 const DELETE = async ({ request }) => {
-  if (!verifyAuth(request)) {
+  if (!await verifyAdminRequest(request)) {
     return new Response(JSON.stringify({ error: "Unauthorized" }), {
       status: 401,
       headers: { "Content-Type": "application/json" }

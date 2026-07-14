@@ -1,36 +1,12 @@
 globalThis.process ??= {};
 globalThis.process.env ??= {};
-function generateToken(password) {
-  const payload = `${Date.now()}:${password}`;
-  return btoa(payload);
-}
-function getAdminPassword() {
-  return "0566";
-}
+import { v as verifyAdminRequest, a as verifyAdminPassword, c as createAdminToken } from "./adminAuth_kZerk0bA.mjs";
 const GET = async ({ request }) => {
-  const authHeader = request.headers.get("Authorization");
-  if (!authHeader || !authHeader.startsWith("Bearer ")) {
-    return new Response(JSON.stringify({ error: "Unauthorized" }), {
-      status: 401,
+  if (await verifyAdminRequest(request)) {
+    return new Response(JSON.stringify({ ok: true }), {
+      status: 200,
       headers: { "Content-Type": "application/json" }
     });
-  }
-  const token = authHeader.slice(7);
-  try {
-    const decoded = atob(token);
-    const colonIndex = decoded.indexOf(":");
-    if (colonIndex === -1) throw new Error("invalid token");
-    const timestamp = decoded.substring(0, colonIndex);
-    const password = decoded.substring(colonIndex + 1);
-    const tokenAge = Date.now() - parseInt(timestamp);
-    const adminPassword = getAdminPassword();
-    if (adminPassword && password === adminPassword && tokenAge < 24 * 60 * 60 * 1e3) {
-      return new Response(JSON.stringify({ ok: true }), {
-        status: 200,
-        headers: { "Content-Type": "application/json" }
-      });
-    }
-  } catch {
   }
   return new Response(JSON.stringify({ error: "Unauthorized" }), {
     status: 401,
@@ -48,14 +24,13 @@ const POST = async ({ request }) => {
         headers: { "Content-Type": "application/json" }
       });
     }
-    const adminPassword = getAdminPassword();
-    if (password !== adminPassword) {
+    if (!await verifyAdminPassword(password)) {
       return new Response(JSON.stringify({ error: "Invalid password" }), {
         status: 401,
         headers: { "Content-Type": "application/json" }
       });
     }
-    const token = generateToken(adminPassword);
+    const token = await createAdminToken();
     return new Response(JSON.stringify({ token }), {
       status: 200,
       headers: { "Content-Type": "application/json" }

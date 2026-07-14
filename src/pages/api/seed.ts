@@ -1,36 +1,21 @@
 import type { APIRoute } from 'astro';
+import { env } from 'cloudflare:workers';
 import historyData from '../../../data/history.json';
 import skillsData from '../../../data/skills.json';
 import projectsData from '../../../data/projects.json';
 import topicsData from '../../../data/topics.json';
 import mindmapData from '../../../data/mindmap.json';
 import aboutData from '../../../data/about.json';
-
-const ADMIN_PASSWORD = import.meta.env.ADMIN_PASSWORD || '';
-
-function verifyAuth(request: Request): boolean {
-    const authHeader = request.headers.get('Authorization');
-    if (!authHeader || !authHeader.startsWith('Bearer ')) return false;
-    const token = authHeader.slice(7);
-    try {
-        const decoded = atob(token);
-        const [timestamp, password] = decoded.split(':');
-        const tokenAge = Date.now() - parseInt(timestamp);
-        return password === ADMIN_PASSWORD && tokenAge < 24 * 60 * 60 * 1000;
-    } catch {
-        return false;
-    }
-}
+import { verifyAdminRequest } from '../../utils/adminAuth';
 
 export const POST: APIRoute = async ({ request }) => {
-    if (!verifyAuth(request)) {
+    if (!(await verifyAdminRequest(request))) {
         return new Response(JSON.stringify({ error: 'Unauthorized' }), {
             status: 401, headers: { 'Content-Type': 'application/json' },
         });
     }
     try {
-        const { env } = await import('cloudflare:workers');
-        const kv = (env as any).PORTFOLIO_DATA;
+        const kv = env.PORTFOLIO_DATA;
         if (!kv) {
             return new Response(JSON.stringify({ error: 'KV not available' }), {
                 status: 500, headers: { 'Content-Type': 'application/json' },

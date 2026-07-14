@@ -1,34 +1,21 @@
 globalThis.process ??= {};
 globalThis.process.env ??= {};
+import { env } from "cloudflare:workers";
 import { h as historyData } from "./history_CwDn25aE.mjs";
 import { s as skillsData } from "./skills_MVJtQhuk.mjs";
 import { p as projectsData } from "./projects_5mLH82Fd.mjs";
 import { t as topicsData } from "./topics_DPNjxy9O.mjs";
 import { m as mindmapData } from "./mindmap_BaFA_IRE.mjs";
 import { a as aboutData } from "./about_DF3a-Zvv.mjs";
-const ADMIN_PASSWORD = "0566";
-function verifyAuth(request) {
-  const authHeader = request.headers.get("Authorization");
-  if (!authHeader || !authHeader.startsWith("Bearer ")) return false;
-  const token = authHeader.slice(7);
-  try {
-    const decoded = atob(token);
-    const [timestamp, password] = decoded.split(":");
-    const tokenAge = Date.now() - parseInt(timestamp);
-    return password === ADMIN_PASSWORD && tokenAge < 24 * 60 * 60 * 1e3;
-  } catch {
-    return false;
-  }
-}
+import { v as verifyAdminRequest } from "./adminAuth_kZerk0bA.mjs";
 const POST = async ({ request }) => {
-  if (!verifyAuth(request)) {
+  if (!await verifyAdminRequest(request)) {
     return new Response(JSON.stringify({ error: "Unauthorized" }), {
       status: 401,
       headers: { "Content-Type": "application/json" }
     });
   }
   try {
-    const { env } = await import("cloudflare:workers");
     const kv = env.PORTFOLIO_DATA;
     if (!kv) {
       return new Response(JSON.stringify({ error: "KV not available" }), {

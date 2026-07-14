@@ -1,23 +1,6 @@
 import type { APIRoute } from 'astro';
-
-const ADMIN_PASSWORD = import.meta.env.ADMIN_PASSWORD || '';
-
-function verifyAuth(request: Request): boolean {
-    const authHeader = request.headers.get('Authorization');
-    if (!authHeader || !authHeader.startsWith('Bearer ')) return false;
-    const token = authHeader.slice(7);
-    try {
-        const decoded = atob(token);
-        const colonIndex = decoded.indexOf(':');
-        if (colonIndex === -1) return false;
-        const timestamp = decoded.substring(0, colonIndex);
-        const password = decoded.substring(colonIndex + 1);
-        const tokenAge = Date.now() - parseInt(timestamp);
-        return password === ADMIN_PASSWORD && tokenAge < 24 * 60 * 60 * 1000;
-    } catch {
-        return false;
-    }
-}
+import { env } from 'cloudflare:workers';
+import { verifyAdminRequest } from '../../utils/adminAuth';
 
 /**
  * ArrayBuffer の画像データを WebP に変換する。
@@ -63,7 +46,7 @@ async function convertToWebP(
 }
 
 export const POST: APIRoute = async ({ request }) => {
-    if (!verifyAuth(request)) {
+    if (!(await verifyAdminRequest(request))) {
         return new Response(JSON.stringify({ error: 'Unauthorized' }), {
             status: 401,
             headers: { 'Content-Type': 'application/json' },
@@ -81,8 +64,7 @@ export const POST: APIRoute = async ({ request }) => {
             });
         }
 
-        const { env } = await import('cloudflare:workers');
-        const kv = (env as any).PORTFOLIO_DATA;
+        const kv = env.PORTFOLIO_DATA;
 
         const originalBuffer = await file.arrayBuffer();
 

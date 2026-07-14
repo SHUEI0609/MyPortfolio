@@ -1,22 +1,7 @@
 globalThis.process ??= {};
 globalThis.process.env ??= {};
-const ADMIN_PASSWORD = "0566";
-function verifyAuth(request) {
-  const authHeader = request.headers.get("Authorization");
-  if (!authHeader || !authHeader.startsWith("Bearer ")) return false;
-  const token = authHeader.slice(7);
-  try {
-    const decoded = atob(token);
-    const colonIndex = decoded.indexOf(":");
-    if (colonIndex === -1) return false;
-    const timestamp = decoded.substring(0, colonIndex);
-    const password = decoded.substring(colonIndex + 1);
-    const tokenAge = Date.now() - parseInt(timestamp);
-    return password === ADMIN_PASSWORD && tokenAge < 24 * 60 * 60 * 1e3;
-  } catch {
-    return false;
-  }
-}
+import { env } from "cloudflare:workers";
+import { v as verifyAdminRequest } from "./adminAuth_kZerk0bA.mjs";
 async function convertToWebP(arrayBuffer, mimeType, quality = 0.85) {
   try {
     if (mimeType === "image/webp") {
@@ -41,7 +26,7 @@ async function convertToWebP(arrayBuffer, mimeType, quality = 0.85) {
   }
 }
 const POST = async ({ request }) => {
-  if (!verifyAuth(request)) {
+  if (!await verifyAdminRequest(request)) {
     return new Response(JSON.stringify({ error: "Unauthorized" }), {
       status: 401,
       headers: { "Content-Type": "application/json" }
@@ -56,7 +41,6 @@ const POST = async ({ request }) => {
         headers: { "Content-Type": "application/json" }
       });
     }
-    const { env } = await import("cloudflare:workers");
     const kv = env.PORTFOLIO_DATA;
     const originalBuffer = await file.arrayBuffer();
     const { data: imageData, contentType } = await convertToWebP(

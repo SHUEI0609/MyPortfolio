@@ -1,25 +1,6 @@
 import type { APIRoute } from 'astro';
 import skillsData from '../../../data/skills.json';
-
-const ADMIN_PASSWORD = import.meta.env.ADMIN_PASSWORD || '';
-
-function verifyAuth(request: Request): boolean {
-    if (!ADMIN_PASSWORD) return false;
-    const authHeader = request.headers.get('Authorization');
-    if (!authHeader || !authHeader.startsWith('Bearer ')) return false;
-    const token = authHeader.slice(7);
-    try {
-        const decoded = atob(token);
-        const colonIndex = decoded.indexOf(':');
-        if (colonIndex === -1) return false;
-        const timestamp = decoded.substring(0, colonIndex);
-        const password = decoded.substring(colonIndex + 1);
-        const tokenAge = Date.now() - parseInt(timestamp);
-        return password === ADMIN_PASSWORD && tokenAge < 24 * 60 * 60 * 1000;
-    } catch {
-        return false;
-    }
-}
+import { verifyAdminRequest } from '../../utils/adminAuth';
 
 async function getKV(): Promise<KVNamespace | null> {
     try {
@@ -60,7 +41,7 @@ export const GET: APIRoute = async () => {
 };
 
 export const POST: APIRoute = async ({ request }) => {
-    if (!verifyAuth(request)) {
+    if (!(await verifyAdminRequest(request))) {
         return new Response(JSON.stringify({ error: 'Unauthorized' }), {
             status: 401, headers: { 'Content-Type': 'application/json' },
         });
@@ -83,7 +64,7 @@ export const POST: APIRoute = async ({ request }) => {
 };
 
 export const PUT: APIRoute = async ({ request }) => {
-    if (!verifyAuth(request)) {
+    if (!(await verifyAdminRequest(request))) {
         return new Response(JSON.stringify({ error: 'Unauthorized' }), {
             status: 401, headers: { 'Content-Type': 'application/json' },
         });
@@ -111,7 +92,7 @@ export const PUT: APIRoute = async ({ request }) => {
 };
 
 export const DELETE: APIRoute = async ({ request }) => {
-    if (!verifyAuth(request)) {
+    if (!(await verifyAdminRequest(request))) {
         return new Response(JSON.stringify({ error: 'Unauthorized' }), {
             status: 401, headers: { 'Content-Type': 'application/json' },
         });

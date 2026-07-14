@@ -1,8 +1,8 @@
 globalThis.process ??= {};
 globalThis.process.env ??= {};
-import { c as createComponent } from "./astro-component_D4BDLQxa.mjs";
-import { m as maybeRenderHead, r as renderTemplate, k as renderComponent } from "./worker-entry_aC5akfUX.mjs";
-import { $ as $$BaseLayout } from "./BaseLayout_DhUgbk0V.mjs";
+import { c as createComponent } from "./astro-component_4FgfMSSv.mjs";
+import { m as maybeRenderHead, r as renderTemplate, k as renderComponent } from "./worker-entry_wFVmvASI.mjs";
+import { $ as $$BaseLayout } from "./BaseLayout_BrAiDLLY.mjs";
 const $$LoadingScreen = createComponent(($$result, $$props, $$slots) => {
   return renderTemplate`<!-- Loading Screen -->${maybeRenderHead()}<div id="loading-screen" class="fixed inset-0 z-[100] bg-black flex flex-col items-center justify-center text-white transition-transform duration-700 ease-in-out"> <div id="loading-progress" class="text-9xl font-black tracking-tighter tabular-nums">0%</div> <div class="mt-4 text-xs font-bold tracking-[0.5em] animate-pulse">LOADING PORTFOLIO</div> </div>`;
 }, "/Users/shuei/Documents/MyPortfolio/src/components/LoadingScreen.astro", void 0);

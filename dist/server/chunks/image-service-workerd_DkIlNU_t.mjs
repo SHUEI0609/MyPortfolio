@@ -1,6 +1,6 @@
 globalThis.process ??= {};
 globalThis.process.env ??= {};
-import { b as baseService } from "./image-transform-endpoint_DM8YBCJk.mjs";
+import { b as baseService } from "./image-transform-endpoint_OrCWNWg4.mjs";
 const service = {
   ...baseService,
   async transform(inputBuffer, transform) {

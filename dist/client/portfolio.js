@@ -107,9 +107,6 @@ function initRLCursorAgent() {
     const mouse = { x: 0, y: 0, active: false };
     const position = { x: 0, y: 0 };
     const velocity = { x: 0, y: 0 };
-    let previousState = null;
-    let previousAction = 0;
-    let previousDistance = 0;
     let frame = 0;
     let obstacleRects = [];
     let lastPolicySave = performance.now();
@@ -119,6 +116,8 @@ function initRLCursorAgent() {
     const collisionDistance = radius + safetyMargin;
     const warningDistance = 40;
     const sensorDistance = 56;
+    const maxFollowDistance = 120;
+    const followRewardDistance = 36;
     // Obstacles are visible interactive controls, section headings, explicitly
     // marked photos, and portfolio cards/nodes.
     // Generic images are intentionally excluded because transparent image bounds
@@ -127,7 +126,7 @@ function initRLCursorAgent() {
 
     function loadCursorPolicy() {
         try {
-            return JSON.parse(localStorage.getItem('rl-cursor-policy-v5')) || {};
+            return JSON.parse(localStorage.getItem('rl-cursor-policy-v7')) || {};
         } catch (_) {
             return {};
         }
@@ -135,7 +134,7 @@ function initRLCursorAgent() {
 
     function saveCursorPolicy() {
         try {
-            localStorage.setItem('rl-cursor-policy-v5', JSON.stringify(qTable));
+            localStorage.setItem('rl-cursor-policy-v7', JSON.stringify(qTable));
         } catch (_) {
             // The animation still works when storage is unavailable.
         }
@@ -196,6 +195,51 @@ function initRLCursorAgent() {
             dy: nearestInside ? nearestY - point.y : point.y - nearestY,
             collision: nearestDistance < collisionDistance,
         };
+    }
+
+    function clampToViewport(point) {
+        return {
+            x: Math.max(radius, Math.min(window.innerWidth - radius, point.x)),
+            y: Math.max(radius, Math.min(window.innerHeight - radius, point.y)),
+        };
+    }
+
+    function minimumSafeFollowDistance() {
+        const cursorObstacle = obstacleReading(mouse);
+        return cursorObstacle.distance < 0
+            ? -cursorObstacle.distance + collisionDistance + 2
+            : 0;
+    }
+
+    function applyCursorLeash(point) {
+        const dx = point.x - mouse.x;
+        const dy = point.y - mouse.y;
+        const distance = Math.hypot(dx, dy);
+        const cursorObstacle = obstacleReading(mouse);
+        const requiredExitDistance = minimumSafeFollowDistance();
+        const distanceLimit = Math.max(maxFollowDistance, requiredExitDistance);
+        if (distance <= distanceLimit) return point;
+
+        const preferredAngle = requiredExitDistance > maxFollowDistance
+            ? Math.atan2(cursorObstacle.dy, cursorObstacle.dx)
+            : Math.atan2(dy, dx);
+        const angleOffsets = [0];
+        for (let step = 1; step <= 12; step += 1) {
+            const offset = step * Math.PI / 12;
+            angleOffsets.push(offset, -offset);
+        }
+
+        for (const offset of angleOffsets) {
+            const angle = preferredAngle + offset;
+            const leashedPoint = clampToViewport({
+                x: mouse.x + Math.cos(angle) * distanceLimit,
+                y: mouse.y + Math.sin(angle) * distanceLimit,
+            });
+            if (!obstacleReading(leashedPoint).collision) return leashedPoint;
+        }
+
+        // In a fully enclosed space, preserving collision avoidance takes priority.
+        return point;
     }
 
     function directionBin(dx, dy) {
@@ -293,22 +337,28 @@ function initRLCursorAgent() {
             candidateReading = obstacleReading(candidate);
         }
 
+        candidate = applyCursorLeash(clampToViewport(candidate));
+        candidateReading = obstacleReading(candidate);
+
         position.x = candidate.x;
         position.y = candidate.y;
         const nextState = stateFor(position);
-        const progress = previousDistance - nextState.targetDistance;
+        const rawProgress = state.targetDistance - nextState.targetDistance;
+        const progress = Math.max(-10, Math.min(10, rawProgress));
+        const idealFollowDistance = minimumSafeFollowDistance();
+        const followError = Math.max(0, nextState.targetDistance - idealFollowDistance);
+        const followReward = followError < followRewardDistance
+            ? 1.4 * (1 - followError / followRewardDistance)
+            : 0;
         const proximityPenalty = nextState.obstacle.distance < warningDistance
             ? (warningDistance - nextState.obstacle.distance) * 0.035
             : 0;
         const reward = progress * 0.22
+            + followReward
             - proximityPenalty
-            - (candidateReading.collision ? 10 : 0)
-            + (nextState.targetDistance < 18 ? 0.7 : 0);
+            - (candidateReading.collision ? 10 : 0);
 
-        if (previousState !== null) learn(previousState, previousAction, reward, nextState.key);
-        previousState = state.key;
-        previousAction = actionIndex;
-        previousDistance = nextState.targetDistance;
+        learn(state.key, actionIndex, reward, nextState.key);
 
         agent.style.transform = `translate3d(${position.x}px, ${position.y}px, 0)`;
         agent.classList.toggle('is-near-obstacle', nextState.obstacle.distance < warningDistance);
@@ -324,7 +374,6 @@ function initRLCursorAgent() {
         if (event.pointerType && event.pointerType !== 'mouse' && event.pointerType !== 'pen') return;
         mouse.x = event.clientX;
         mouse.y = event.clientY;
-        previousDistance = Math.hypot(mouse.x - position.x, mouse.y - position.y);
         if (!mouse.active) {
             position.x = Math.max(radius, Math.min(window.innerWidth - radius, event.clientX + 34));
             position.y = Math.max(radius, Math.min(window.innerHeight - radius, event.clientY + 34));
