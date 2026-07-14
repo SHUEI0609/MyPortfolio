@@ -12,6 +12,65 @@ body {
     color: #fff;
 }
 
+/* --- Reinforcement-learning cursor agent --- */
+.rl-cursor-agent {
+    position: fixed;
+    top: 0;
+    left: 0;
+    z-index: 10000;
+    width: 18px;
+    height: 18px;
+    margin: -9px 0 0 -9px;
+    border: 1px solid rgba(255, 255, 255, 0.9);
+    border-radius: 50%;
+    background: #111;
+    box-shadow: 0 3px 12px rgba(0, 0, 0, 0.28), 0 0 0 5px rgba(17, 17, 17, 0.08);
+    opacity: 0;
+    pointer-events: none;
+    will-change: transform;
+    transition: opacity 180ms ease, background-color 160ms ease, box-shadow 160ms ease;
+}
+
+.rl-cursor-agent.is-visible {
+    opacity: 1;
+}
+
+.rl-cursor-agent__core {
+    position: absolute;
+    inset: 5px;
+    border-radius: 50%;
+    background: #fff;
+}
+
+.rl-cursor-agent__label {
+    position: absolute;
+    left: 50%;
+    top: calc(100% + 5px);
+    transform: translateX(-50%);
+    padding: 1px 4px;
+    border-radius: 2px;
+    background: rgba(17, 17, 17, 0.82);
+    color: #fff;
+    font: 700 7px/1.4 ui-monospace, SFMono-Regular, Menlo, monospace;
+    letter-spacing: 0.08em;
+}
+
+.rl-cursor-agent.is-near-obstacle {
+    background: #ef4444;
+    box-shadow: 0 3px 12px rgba(239, 68, 68, 0.32), 0 0 0 7px rgba(239, 68, 68, 0.1);
+}
+
+.rl-cursor-agent.is-on-target {
+    background: #16a34a;
+    box-shadow: 0 3px 12px rgba(22, 163, 74, 0.28), 0 0 0 4px rgba(22, 163, 74, 0.09);
+}
+
+@media (hover: none), (pointer: coarse), (prefers-reduced-motion: reduce) {
+    .rl-cursor-agent {
+        display: none;
+    }
+}
+
 /* --- Custom Scrollbar --- */
 ::-webkit-scrollbar {
     width: 8px;

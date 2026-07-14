@@ -1,5 +1,5 @@
 import { spawnSync } from 'node:child_process';
-import { mkdtempSync, readFileSync, rmSync, writeFileSync } from 'node:fs';
+import { mkdirSync, mkdtempSync, readFileSync, rmSync, writeFileSync } from 'node:fs';
 import { tmpdir } from 'node:os';
 import { join } from 'node:path';
 
@@ -40,6 +40,27 @@ function assertJson(text, label) {
 }
 
 if (action === 'push') {
+  if (target === 'remote') {
+    const timestamp = new Date().toISOString().replace(/[:.]/g, '-');
+    const backupDir = join('data', 'backups', `remote-${timestamp}`);
+    mkdirSync(backupDir, { recursive: true });
+
+    for (const key of DATA_KEYS) {
+      const output = runWrangler([
+        'kv',
+        'key',
+        'get',
+        key,
+        '--binding=PORTFOLIO_DATA',
+        '--remote',
+      ]);
+      const formatted = `${JSON.stringify(assertJson(output, key), null, 2)}\n`;
+      writeFileSync(join(backupDir, `${key}.json`), formatted);
+    }
+
+    console.log(`backed up remote KV -> ${backupDir}`);
+  }
+
   const tempDir = mkdtempSync(join(tmpdir(), 'portfolio-kv-'));
 
   try {

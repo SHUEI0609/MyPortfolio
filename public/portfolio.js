@@ -75,6 +75,7 @@ document.addEventListener('DOMContentLoaded', async () => {
     lucide.createIcons();
     initLoading();
     initCanvas();
+    initRLCursorAgent();
     await loadData();
     renderHistory();
     renderAbout();
@@ -85,6 +86,262 @@ document.addEventListener('DOMContentLoaded', async () => {
     initScrollObserver();
     document.getElementById('current-year').textContent = new Date().getFullYear();
 });
+
+// --- Reinforcement-learning cursor follower ---
+function initRLCursorAgent() {
+    const finePointer = window.matchMedia('(hover: hover) and (pointer: fine)');
+    const reducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)');
+    if (!finePointer.matches || reducedMotion.matches) return;
+
+    const agent = document.createElement('div');
+    agent.className = 'rl-cursor-agent';
+    agent.setAttribute('aria-hidden', 'true');
+    agent.innerHTML = '<span class="rl-cursor-agent__core"></span><span class="rl-cursor-agent__label">RL</span>';
+    document.body.appendChild(agent);
+
+    const actions = Array.from({ length: 8 }, (_, index) => {
+        const angle = index * Math.PI / 4;
+        return { x: Math.cos(angle), y: Math.sin(angle) };
+    });
+    const qTable = loadCursorPolicy();
+    const mouse = { x: 0, y: 0, active: false };
+    const position = { x: 0, y: 0 };
+    const velocity = { x: 0, y: 0 };
+    let previousState = null;
+    let previousAction = 0;
+    let previousDistance = 0;
+    let frame = 0;
+    let obstacleRects = [];
+    let lastPolicySave = performance.now();
+
+    const radius = 9;
+    const safetyMargin = 13;
+    const collisionDistance = radius + safetyMargin;
+    const warningDistance = 40;
+    const sensorDistance = 56;
+    // Obstacles are visible interactive controls, section headings, explicitly
+    // marked photos, and portfolio cards/nodes.
+    // Generic images are intentionally excluded because transparent image bounds
+    // do not match the pixels visitors can actually see.
+    const obstacleSelector = 'a, button, h2, [role="button"], [onclick], [data-rl-obstacle], [data-rl-photo], .topic-card, .hero-mindmap-node';
+
+    function loadCursorPolicy() {
+        try {
+            return JSON.parse(localStorage.getItem('rl-cursor-policy-v5')) || {};
+        } catch (_) {
+            return {};
+        }
+    }
+
+    function saveCursorPolicy() {
+        try {
+            localStorage.setItem('rl-cursor-policy-v5', JSON.stringify(qTable));
+        } catch (_) {
+            // The animation still works when storage is unavailable.
+        }
+    }
+
+    function refreshObstacles() {
+        const uniqueElements = [...new Set(document.querySelectorAll(obstacleSelector))];
+        obstacleRects = uniqueElements
+            .filter((element) => element !== agent && element.offsetParent !== null)
+            .map((element) => element.getBoundingClientRect())
+            .filter((rect) => rect.width > 4 && rect.height > 4
+                && rect.bottom > 0 && rect.right > 0
+                && rect.top < window.innerHeight && rect.left < window.innerWidth);
+    }
+
+    function obstacleReading(point) {
+        let nearestDistance = Infinity;
+        let nearestX = point.x;
+        let nearestY = point.y;
+        let nearestInside = false;
+
+        obstacleRects.forEach((rect) => {
+            const closestX = Math.max(rect.left, Math.min(point.x, rect.right));
+            const closestY = Math.max(rect.top, Math.min(point.y, rect.bottom));
+            const dx = point.x - closestX;
+            const dy = point.y - closestY;
+            const outsideDistance = Math.hypot(dx, dy);
+            const inside = point.x > rect.left && point.x < rect.right
+                && point.y > rect.top && point.y < rect.bottom;
+            const distance = inside ? -Math.min(
+                point.x - rect.left,
+                rect.right - point.x,
+                point.y - rect.top,
+                rect.bottom - point.y
+            ) : outsideDistance;
+
+            if (distance < nearestDistance) {
+                nearestDistance = distance;
+                nearestX = closestX;
+                nearestY = closestY;
+                nearestInside = inside;
+                if (inside) {
+                    const edges = [
+                        { distance: point.x - rect.left, x: rect.left, y: point.y },
+                        { distance: rect.right - point.x, x: rect.right, y: point.y },
+                        { distance: point.y - rect.top, x: point.x, y: rect.top },
+                        { distance: rect.bottom - point.y, x: point.x, y: rect.bottom },
+                    ].sort((a, b) => a.distance - b.distance);
+                    nearestX = edges[0].x;
+                    nearestY = edges[0].y;
+                }
+            }
+        });
+
+        return {
+            distance: nearestDistance,
+            dx: nearestInside ? nearestX - point.x : point.x - nearestX,
+            dy: nearestInside ? nearestY - point.y : point.y - nearestY,
+            collision: nearestDistance < collisionDistance,
+        };
+    }
+
+    function directionBin(dx, dy) {
+        const angle = Math.atan2(dy, dx);
+        return Math.round((angle + Math.PI * 2) / (Math.PI / 4)) % 8;
+    }
+
+    function stateFor(point) {
+        const targetDx = mouse.x - point.x;
+        const targetDy = mouse.y - point.y;
+        const targetDistance = Math.hypot(targetDx, targetDy);
+        const obstacle = obstacleReading(point);
+        const obstacleBin = obstacle.distance < sensorDistance
+            ? directionBin(obstacle.dx, obstacle.dy)
+            : 8;
+        const distanceBin = targetDistance < 45 ? 0 : targetDistance < 150 ? 1 : 2;
+        return {
+            key: `${directionBin(targetDx, targetDy)}:${obstacleBin}:${distanceBin}`,
+            targetDistance,
+            targetDx,
+            targetDy,
+            obstacle,
+        };
+    }
+
+    function valuesFor(stateKey) {
+        if (!qTable[stateKey]) qTable[stateKey] = Array(8).fill(0);
+        return qTable[stateKey];
+    }
+
+    function chooseAction(state) {
+        if (Math.random() < 0.075) return Math.floor(Math.random() * actions.length);
+
+        const targetLength = Math.max(1, state.targetDistance);
+        const obstacleLength = Math.max(1, Math.hypot(state.obstacle.dx, state.obstacle.dy));
+        const qValues = valuesFor(state.key);
+        let bestAction = 0;
+        let bestScore = -Infinity;
+
+        actions.forEach((action, index) => {
+            const targetAlignment = (action.x * state.targetDx + action.y * state.targetDy) / targetLength;
+            const avoidanceUrgency = Math.max(0, Math.min(1,
+                (sensorDistance - state.obstacle.distance) / (sensorDistance - collisionDistance)
+            ));
+            const awayFromObstacle = avoidanceUrgency
+                * (action.x * state.obstacle.dx + action.y * state.obstacle.dy) / obstacleLength;
+            const probe = {
+                x: position.x + action.x * 16,
+                y: position.y + action.y * 16,
+            };
+            const probeReading = obstacleReading(probe);
+            const safetyScore = probeReading.collision ? -8 : Math.min(probeReading.distance, 60) / 60;
+            const score = qValues[index] * 0.28 + targetAlignment * 1.8 + awayFromObstacle * 3.2 + safetyScore * 2.4;
+            if (score > bestScore) {
+                bestScore = score;
+                bestAction = index;
+            }
+        });
+        return bestAction;
+    }
+
+    function learn(state, action, reward, nextState) {
+        const learningRate = 0.18;
+        const discount = 0.88;
+        const values = valuesFor(state);
+        const nextBest = Math.max(...valuesFor(nextState));
+        values[action] += learningRate * (reward + discount * nextBest - values[action]);
+        values[action] = Math.max(-20, Math.min(20, values[action]));
+    }
+
+    function animate() {
+        requestAnimationFrame(animate);
+        if (!mouse.active) return;
+
+        if (frame++ % 24 === 0) refreshObstacles();
+        const state = stateFor(position);
+        const actionIndex = chooseAction(state);
+        const action = actions[actionIndex];
+        const speed = Math.min(14, Math.max(3.4, state.targetDistance * 0.11));
+        velocity.x = velocity.x * 0.52 + action.x * speed * 0.48;
+        velocity.y = velocity.y * 0.52 + action.y * speed * 0.48;
+
+        let candidate = {
+            x: Math.max(radius, Math.min(window.innerWidth - radius, position.x + velocity.x)),
+            y: Math.max(radius, Math.min(window.innerHeight - radius, position.y + velocity.y)),
+        };
+        let candidateReading = obstacleReading(candidate);
+
+        if (candidateReading.collision) {
+            const pushLength = Math.max(1, Math.hypot(candidateReading.dx, candidateReading.dy));
+            candidate.x += (candidateReading.dx / pushLength) * (collisionDistance - candidateReading.distance + 1);
+            candidate.y += (candidateReading.dy / pushLength) * (collisionDistance - candidateReading.distance + 1);
+            velocity.x *= 0.35;
+            velocity.y *= 0.35;
+            candidateReading = obstacleReading(candidate);
+        }
+
+        position.x = candidate.x;
+        position.y = candidate.y;
+        const nextState = stateFor(position);
+        const progress = previousDistance - nextState.targetDistance;
+        const proximityPenalty = nextState.obstacle.distance < warningDistance
+            ? (warningDistance - nextState.obstacle.distance) * 0.035
+            : 0;
+        const reward = progress * 0.22
+            - proximityPenalty
+            - (candidateReading.collision ? 10 : 0)
+            + (nextState.targetDistance < 18 ? 0.7 : 0);
+
+        if (previousState !== null) learn(previousState, previousAction, reward, nextState.key);
+        previousState = state.key;
+        previousAction = actionIndex;
+        previousDistance = nextState.targetDistance;
+
+        agent.style.transform = `translate3d(${position.x}px, ${position.y}px, 0)`;
+        agent.classList.toggle('is-near-obstacle', nextState.obstacle.distance < warningDistance);
+        agent.classList.toggle('is-on-target', nextState.targetDistance < 18);
+
+        if (performance.now() - lastPolicySave > 5000) {
+            saveCursorPolicy();
+            lastPolicySave = performance.now();
+        }
+    }
+
+    window.addEventListener('pointermove', (event) => {
+        if (event.pointerType && event.pointerType !== 'mouse' && event.pointerType !== 'pen') return;
+        mouse.x = event.clientX;
+        mouse.y = event.clientY;
+        previousDistance = Math.hypot(mouse.x - position.x, mouse.y - position.y);
+        if (!mouse.active) {
+            position.x = Math.max(radius, Math.min(window.innerWidth - radius, event.clientX + 34));
+            position.y = Math.max(radius, Math.min(window.innerHeight - radius, event.clientY + 34));
+            mouse.active = true;
+            agent.classList.add('is-visible');
+            refreshObstacles();
+        }
+    }, { passive: true });
+    window.addEventListener('blur', () => agent.classList.remove('is-visible'));
+    window.addEventListener('focus', () => {
+        if (mouse.active) agent.classList.add('is-visible');
+    });
+    window.addEventListener('pagehide', saveCursorPolicy);
+    window.addEventListener('resize', refreshObstacles, { passive: true });
+    window.addEventListener('scroll', refreshObstacles, { passive: true });
+    animate();
+}
 
 // --- Loading Screen ---
 function initLoading() {
@@ -626,7 +883,7 @@ function handleProjectClick(id) {
         currentSlideIndex = 0;
         const slidesHtml = project.images.map((img, i) => `
             <div class="min-w-full h-full relative flex items-center justify-center bg-zinc-100 p-8 md:p-12">
-                <img src="/${img}" class="h-full w-auto object-contain max-h-full drop-shadow-2xl border-[8px] border-white bg-white" alt="${project.title} スクリーンショット ${i + 1}枚目">
+                <img src="/${img}" data-rl-photo class="h-full w-auto object-contain max-h-full drop-shadow-2xl border-[8px] border-white bg-white" alt="${project.title} スクリーンショット ${i + 1}枚目">
             </div>
         `).join('');
 

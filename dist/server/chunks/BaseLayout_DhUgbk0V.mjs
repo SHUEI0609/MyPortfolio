@@ -1,7 +1,7 @@
 globalThis.process ??= {};
 globalThis.process.env ??= {};
-import { c as createComponent } from "./astro-component_C_v-luec.mjs";
-import { r as renderTemplate, l as renderSlot, n as renderHead, g as addAttribute } from "./worker-entry_fe6JQDnp.mjs";
+import { c as createComponent } from "./astro-component_D4BDLQxa.mjs";
+import { r as renderTemplate, l as renderSlot, n as renderHead, g as addAttribute } from "./worker-entry_aC5akfUX.mjs";
 var __freeze = Object.freeze;
 var __defProp = Object.defineProperty;
 var __template = (cooked, raw) => __freeze(__defProp(cooked, "raw", { value: __freeze(cooked.slice()) }));
